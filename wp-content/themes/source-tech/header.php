@@ -1,0 +1,120 @@
+<?php
+/**
+ * The header for our theme
+ *
+ * This is the template that displays all of the <head> section and everything up until <div id="content">
+ *
+ * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
+ *
+ * @package Source_Tech
+ */
+
+?>
+<!doctype html>
+<html <?php language_attributes(); ?>>
+<head>
+	<meta charset="<?php bloginfo( 'charset' ); ?>">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="https://gmpg.org/xfn/11">
+
+	<?php wp_head(); ?>
+
+    <!-- Global site tag (gtag.js) - Google Ads: 1033984787 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1033984787"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'AW-1033984787');
+    </script>
+
+    <!-- Google Adwords forwarding phone number snippet  -->
+    <script>
+        gtag('config', 'AW-1033984787/8p-5CPax_ZQBEJO2he0D', {
+            'phone_conversion_number': '800-932-0657'
+        });
+    </script>
+
+
+</head>
+
+<body <?php body_class(); ?>>
+<div id="page" class="site">
+	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'source-tech' ); ?></a>
+
+	<header id="masthead" class="site-header">
+		<div class="row top-row">
+			<div class="item">
+				<?php
+				if (is_active_sidebar( 'widget-header-left' )) {
+					dynamic_sidebar( 'widget-header-left' );
+				}
+				?>
+			</div>
+			<div class="item">
+			<?php
+				if (is_active_sidebar( 'widget-header-right' )) {
+					dynamic_sidebar( 'widget-header-right' );
+				}
+				?>
+			</div>
+		</div>
+		<div class="row bottom-row">
+			<div class="item site-branding">
+				<?php
+				the_custom_logo();
+				if ( is_front_page() && is_home() ) :
+					?>
+					<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
+					<?php
+				else :
+					?>
+					<p class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></p>
+					<?php
+				endif;
+				$source_tech_description = get_bloginfo( 'description', 'display' );
+				if ( $source_tech_description || is_customize_preview() ) :
+					?>
+					<p class="site-description"><?php echo $source_tech_description; /* WPCS: xss ok. */ ?></p>
+				<?php endif; ?>
+			</div><!-- .site-branding -->
+			<div class="item" id="middle-column">
+			<a href="https://www.source-tech.net/contact">Give Feedback on our Website</a><span class="icon icon-angle-right"></span>
+			</div>
+			<div class="item" id="right-column">
+			<?php get_search_form(); ?>
+			<!-- <form role="search" method="get" class="header-search search-form" action="<?php echo home_url( '/' ); ?>">
+				<label>
+					<span class="screen-reader-text"><?php echo _x( 'Search for:', 'label' ) ?></span>
+					<input type="search" class="search-field"
+						placeholder="<?php echo esc_attr_x( 'Search …', 'placeholder' ) ?>"
+						value="<?php echo get_search_query() ?>" name="s"
+						title="<?php echo esc_attr_x( 'Search for:', 'label' ) ?>" />
+				</label>
+				<input type="submit" class="icon-search search-submit"
+					value="&#xe800;" />
+			</form> -->
+			<a href="https://www.source-tech.net/cart/" class="button cart"><span class="icon icon-basket"></span>Cart</a>
+			</div>
+		</div>
+		
+
+		<nav id="site-navigation" class="main-navigation">
+			<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e( 'Menu', 'source-tech' ); ?></button>
+			<?php
+			wp_nav_menu( array(
+				'theme_location' => 'menu-1',
+				'menu_id'        => 'primary-menu',
+			) );
+			?>
+		</nav><!-- #site-navigation -->
+	</header><!-- #masthead -->
+	
+	<?php
+	if(function_exists('bcn_display') && !is_front_page()) {
+		echo '<div class="breadcrumbs" typeof="BreadcrumbList" vocab="https://schema.org/">';
+		bcn_display();
+		echo '</div>';
+	}?>
+	<div id="content" class="site-content">

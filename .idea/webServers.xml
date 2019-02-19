@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="b25ddde3-f96a-43f9-a047-92c27c1221a5" name="SourceTech (Production)" url="http://ftp.source-tech.net">
+        <fileTransfer host="ftp.source-tech.net" port="21" rootFolder="/www" accessType="FTPS">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
