@@ -161,6 +161,8 @@ add_action( 'widgets_init', 'source_tech_widgets_init' );
  */
 function source_tech_scripts() {
 	wp_enqueue_style( 'source-tech-style', get_stylesheet_uri() );
+	
+	wp_enqueue_style( 'ri_custom_styles', get_stylesheet_directory_uri() . '/css/ri-styles.css' );
 
 	wp_enqueue_style( 'fontello', get_template_directory_uri() . '/css/fontello.css');
 
