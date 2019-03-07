@@ -2,7 +2,9 @@
 (function($) {
     
     var productImage = $('.woocommerce-product-gallery__wrapper > div > a >img').attr('src');
+    console.log(productImage);
     var productImageQueryString = 'image=' + productImage;
+    console.log(productImageQueryString);
     
     $('a.button.request-quote').each(function() {
         var href = $(this).attr('href');
