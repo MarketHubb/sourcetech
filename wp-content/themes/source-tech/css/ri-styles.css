@@ -2,6 +2,10 @@
 #menu-item-766 {
 	background: #ea662b;
 }
+/* WooCommerce */
+.woocommerce-product-gallery {
+	opacity: 1 !important;
+}
 /* Gravity Form */
 body .gform_wrapper h2.gsection_title {
 	font-size: 2em !important;
