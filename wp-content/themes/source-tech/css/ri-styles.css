@@ -1,0 +1,43 @@
+/* Gravity Form */
+body .gform_wrapper h2.gsection_title {
+	font-size: 2em !important;
+	border-bottom: 1px dashed !important;
+	border-color: #cbd6e2 !important;
+	padding-bottom: 5px !important;
+	margin-top: 2em !important;
+}
+.gform_body input {
+	/*width: 100% !important;
+	border-radius: 3px !important;
+	background-color: #fff !important;*/
+	background-color: #f5f8fa !important;
+	color: #33475b !important;
+	font-size: 1rem !important;
+	line-height: 1.375 !important;
+	border: 1px solid !important;
+	border-color: #cbd6e2 !important;
+	border-radius: .1875rem !important;
+	width: 100% !important;
+	min-height: 2.5rem !important;
+	padding: 0.5625rem 0.625rem !important;
+	transition: all 0.15s ease-out !important;
+}
+.gform_body .ginput_container {
+	margin-top: 8px !important;
+}
+.gform_body li.gfield {
+	margin-top: 16px !important;
+}
+.gform_footer input[type="submit"] {
+	background-color: #ea662b !important;
+	padding: .75em 1em !important;
+	color: #fff !important;
+	font-size: 1.25em !important;
+	border-radius: 3px !important;
+	font-weight: bold !important;
+	margin-top: 1em !important;
+}
+.gform_footer input[type="submit"]:hover {
+	cursor: pointer !important;
+	background-color: #C3470F !important;
+}

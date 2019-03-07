@@ -375,7 +375,11 @@ add_action( 'woocommerce_single_product_summary', 'add_request_quote', 30);
 function add_request_quote() {
     global $product;
     if ( '' === $product->price || 0 == $product->price ) {
-        echo '<a href="/request-a-quote.html" class="button request-quote"><span>Request a Quote</span></a>';
+    	// Add model details via query args
+    	$rfq_uri = add_query_arg( array(
+    	    'model' => get_the_title()
+    	), get_permalink (726));
+        echo '<a href="' . $rfq_uri . '" class="button request-quote"><span>Request a Quote</span></a>';
     } else {
         echo woocommerce_template_single_price();
         echo woocommerce_simple_add_to_cart();

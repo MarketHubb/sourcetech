@@ -1,0 +1,41 @@
+body {
+	color: rgb(51, 71, 91) !important;
+}
+.site-content .content-area {
+	flex-basis: 90%;
+}
+.et_pb_row.et_pb_row_0 {
+	margin-left: 0 !important;
+}
+.site-header {
+	background: #fff;
+}
+div#page {
+	background-color: #f5f8fa !important;
+}
+.entry-header {
+	display: none !important;
+}
+#rfq-title-text-container {
+	position: relative;
+	bottom: 1em;
+}
+.page-title.rfq {
+	margin-bottom: 10px !important;
+}
+.product-name-header {
+	border-bottom: 2px solid !important;
+}
+#form-container, #rfq-content-brand, #rfq-content-product {
+	background-color: #fff !important;
+	border-radius: 4px !important;
+	box-shadow: 0 10px 50px -5px rgba(51,71,91,0.12) !important;
+}
+#rfq-content-brand, #rfq-content-product {
+	padding: 2em !important;
+}
+#product-name {
+	/*background-color: #f5f8fa !important;
+    padding: 15px 5px !important;
+    border-radius: 4px;*/
+}
