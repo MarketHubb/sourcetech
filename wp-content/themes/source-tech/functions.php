@@ -170,9 +170,13 @@ function source_tech_scripts() {
 
 	wp_enqueue_script( 'source-tech-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
 	
-	wp_enqueue_script( 'ri_custom_product_scripts', get_template_directory_uri() . '/js/ri-custom-product-scripts.js', array(), '', true );
+	wp_register_script( 'ri_custom_global_scripts', get_template_directory_uri() . '/js/ri-custom-global-scripts.js', array(), '', true );
 	
-	wp_enqueue_script( 'ri_custom_rfq_scripts', get_template_directory_uri() . '/js/ri-custom-rfq-scripts.js', array(), '', true );
+	wp_register_script( 'ri_custom_product_scripts', get_template_directory_uri() . '/js/ri-custom-product-scripts.js', array(), '', true );
+	
+	wp_register_script( 'ri_custom_rfq_scripts', get_template_directory_uri() . '/js/ri-custom-rfq-scripts.js', array(), '', true );
+	
+	wp_enqueue_script( 'ri_custom_global_scripts' );
 	
 	if (is_singular( 'product' )) {
 		wp_enqueue_script( 'ri_custom_product_scripts' );
