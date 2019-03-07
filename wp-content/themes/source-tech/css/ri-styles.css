@@ -1,3 +1,7 @@
+/* Navigation */
+#primary-menu li:last-of-type a {
+	background: #ea662b;
+}
 /* Gravity Form */
 body .gform_wrapper h2.gsection_title {
 	font-size: 2em !important;
