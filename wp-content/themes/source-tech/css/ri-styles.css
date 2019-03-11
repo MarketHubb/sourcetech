@@ -49,3 +49,7 @@ body .gform_wrapper h2.gsection_title {
 	cursor: pointer !important;
 	background-color: #C3470F !important;
 }
+.gsection_description {
+	padding-top: 10px;
+	font-style: italic;
+}
