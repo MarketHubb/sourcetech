@@ -14,7 +14,7 @@ body .gform_wrapper h2.gsection_title {
 	padding-bottom: 5px !important;
 	margin-top: 2em !important;
 }
-.gform_body input {
+.gform_body input, .gform_body textarea {
 	/*width: 100% !important;
 	border-radius: 3px !important;
 	background-color: #fff !important;*/
