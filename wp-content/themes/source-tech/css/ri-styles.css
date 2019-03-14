@@ -2,6 +2,13 @@
 #menu-item-766 {
 	background: #ea662b;
 }
+/* Homepage Slider */
+#n2-ss-2.n2-ss-load-fade.n2-ss-loaded {
+	opacity: 1 !important;
+}
+#n2-ss-2.n2-ss-load-fade {
+	transition: none !important;
+}
 /* WooCommerce */
 .woocommerce-product-gallery {
 	opacity: 1 !important;
