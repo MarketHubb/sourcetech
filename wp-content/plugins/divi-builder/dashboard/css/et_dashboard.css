@@ -217,6 +217,22 @@ span.et_pb_value_text.et_pb_on_value {  color: #FFF;  }
 .et_dashboard_hidden_input .et_pb_yes_no_button_wrapper { display: none; }
 
 
+.et_pb_prompt_field--checkbox-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	grid-gap: 10px;
+}
+
+.et_pb_prompt_field--checkbox-list > * {
+	  margin: 0;
+}
+
+.et-panel-box__checkbox-list-label {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+
 /*------------------------------------------------*/
 /*--------------------[ICONS]---------------------*/
 /*------------------------------------------------*/

@@ -532,6 +532,7 @@ class ET_Dashboard_v2 {
 								} else {
 									$current_option_value = isset( $output[ $current_option_name ] ) ? $output[ $current_option_name ] : false;
 								}
+
 								if ( isset( $option[ 'validation_type' ] ) ) {
 									switch( $option[ 'validation_type' ] ) {
 										case 'simple_array' :
@@ -539,6 +540,19 @@ class ET_Dashboard_v2 {
 												? array_map( 'sanitize_text_field', $current_option_value )
 												: array();
 										break;
+
+										case 'on_off_array' :
+											$dashboard_options_temp[ $current_option_name ] = ! empty( $current_option_value )
+												? array_map( 'sanitize_text_field', $current_option_value )
+												: array();
+
+											// Sanitize stored values to be 'on' or 'off' only.
+											foreach ( $dashboard_options_temp[ $current_option_name ] as $option_key => $option_value ) {
+												$dashboard_options_temp[ $current_option_name ][ $option_key ] = 'on' === $option_value
+													? 'on'
+													: 'off';
+											}
+											break;
 
 										case 'simple_text':
 											$dashboard_options_temp[ $current_option_name ] = ! empty( $current_option_value )
@@ -610,6 +624,17 @@ class ET_Dashboard_v2 {
 								}
 
 								do_action( 'et_' . $this->plugin_name . '_after_save_options', $dashboard_options_temp, $current_option_name, $option, $output );
+
+								// Save Global Option
+								if ( isset( $option['is_global'] ) && $option['is_global'] && isset( $option['main_setting_name'] ) && isset( $option['sub_setting_name'] ) ) {
+									$sanitized_value = $dashboard_options_temp[ $current_option_name ];
+									$main_setting_name = $option['main_setting_name'];
+									$sub_setting_name = $option['sub_setting_name'];
+									et_update_option( '', $sanitized_value, true, $main_setting_name, $sub_setting_name );
+									
+									// Remove global option from the options array
+									unset( $dashboard_options_temp[ $current_option_name ] );
+								}
 							} // end foreach( $options_array as $option )
 						} //if ( isset( $options_array ) )
 					} // end foreach( $value[ 'contents' ] as $key => $value )
@@ -761,7 +786,12 @@ class ET_Dashboard_v2 {
 								}
 							}
 
-							if ( '' !== $sub_array ) {
+							if ( isset( $option['is_global'] ) && $option['is_global'] && isset( $option['main_setting_name'] ) && isset( $option['sub_setting_name'] ) ) {
+								$main_setting_name = $option['main_setting_name'];
+								$sub_setting_name = $option['sub_setting_name'];
+								$global_setting = get_option( $main_setting_name );
+								$current_option_value = isset( $global_setting[$sub_setting_name] ) ? $global_setting[$sub_setting_name] : '';
+							} else if ( '' !== $sub_array ) {
 								$current_option_value = isset( $dashboard_options[$sub_array][$current_option_name] ) ? $dashboard_options[$sub_array][$current_option_name] : '';
 
 								if ( ! isset( $dashboard_options[$sub_array][$current_option_name] ) && isset( $option[ 'default' ] ) ) {
@@ -921,6 +951,68 @@ class ET_Dashboard_v2 {
 										}
 									}
 								break;
+
+								case 'checkbox_list' :
+									if ( empty( $option['options'] ) ) {
+										break;
+									}
+
+									$defaults = ( isset( $option['default'] ) && is_array( $option['default'] ) ) ? $option['default'] : array();
+									$stored_values = isset( $current_option_value ) ? $current_option_value : array();
+									$value_options = $option['options'];
+									if ( is_callable( $value_options ) ) {
+										$value_options = call_user_func( $value_options );
+									}
+
+									printf(
+										'<li class="input clearfix">
+											<p>%1$s</p>
+											<div class="et_pb_prompt_field et_pb_prompt_field--checkbox-list">
+										',
+										esc_html( $option['label'] )
+									);
+
+									foreach ( $value_options as $option_key => $option_name ) {
+										$option_value = isset( $option['et_save_values'] ) && $option['et_save_values'] ? sanitize_text_field( $option_key ) : sanitize_text_field( $option_name );
+										$option_label = sanitize_text_field( $option_name );
+										$checked = isset( $defaults[ $option_value ] ) ? $defaults[ $option_value ] : 'off';
+										if ( isset( $stored_values[ $option_value ] ) ) {
+											$checked = $stored_values[ $option_value ];
+										}
+										$checkbox_list_id = sanitize_text_field( $option['id'] . '-' . $option_key );
+
+										printf(
+											'<div class="et_pb_yes_no_button_wrapper">
+												<span class="et-panel-box__checkbox-list-label">
+													%1$s
+												</span>
+												<div class="et_pb_yes_no_button">
+													<span class="et_pb_value_text et_pb_on_value">%7$s</span>
+													<span class="et_pb_button_slider"></span>
+													<span class="et_pb_value_text et_pb_off_value">%8$s</span>
+												</div>
+
+												<select name="et_dashboard[%2$s][%4$s]" id="et_dashboard_%3$s" class="et-pb-main-setting regular-text">
+													<option value="on"%5$s>%7$s</option>
+													<option value="off"%6$s>%8$s</option>
+												</select>
+											</div>',
+											esc_html( $option_label ),
+											esc_attr( $current_option_name ),
+											esc_attr( $checkbox_list_id ),
+											esc_attr( $option_value ),
+											selected( $checked, 'on', false ),
+											selected( $checked, 'off', false ),
+											esc_html__( 'Enabled', 'et_dashboard' ),
+											esc_html__( 'Disabled', 'et_dashboard' )
+										);
+									}
+
+									echo '
+										</div>
+									</li>
+									';
+									break;
 
 								case 'input_field' :
 									printf(

@@ -85,6 +85,7 @@ class ET_Builder_Theme_Compat_Loader {
 			'The7',
 			'Salient',
 			'Foxy',
+			'Twenty Nineteen',
 		) );
 	}
 

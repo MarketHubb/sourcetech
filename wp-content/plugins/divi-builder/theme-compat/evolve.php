@@ -53,8 +53,8 @@ class ET_Builder_Theme_Compat_evolve {
 	 * @return void
 	 */
 	function add_styling_fix() {
-		$style = '.et_builder_outer_content .widget-content{ margin: 0 0px 35px 0px; padding: 10px 0 21px 0; } \n';
-		$style .= '.et_builder_outer_content input[type="submit"], .et_builder_outer_content button, .et_builder_outer_content .button, .et_builder_outer_content input#submit { color: inherit !important; }';
+		$style = '.et-boc .widget-content{ margin: 0 0px 35px 0px; padding: 10px 0 21px 0; } \n';
+		$style .= '.et-boc input[type="submit"], .et-boc button, .et-boc .button, .et-boc input#submit { color: inherit !important; }';
 		wp_add_inline_style( 'et-builder-modules-style', $style );
 	}
 }

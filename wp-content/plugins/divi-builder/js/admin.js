@@ -36,6 +36,7 @@
 				$this_spinner = $this_container.find( 'span.spinner' ),
 				api_key = $this_container.find( '.google_api_key' ).val(),
 				enqueue_google_maps_script = $this_container.find('.enqueue_google_maps_script').is(':checked') ? 'on' : false;
+				use_google_fonts = $this_container.find('.use_google_fonts').is(':checked') ? 'on' : false;
 
 			$.ajax({
 				type: 'POST',
@@ -44,7 +45,8 @@
 					action : 'et_builder_save_google_api_settings',
 					et_builder_nonce : builder_settings.et_builder_nonce,
 					et_builder_google_api_key : api_key,
-					et_builder_enqueue_google_maps_script : enqueue_google_maps_script
+					et_builder_enqueue_google_maps_script : enqueue_google_maps_script,
+					et_builder_use_google_fonts : use_google_fonts
 				},
 				beforeSend: function( data ) {
 					$this_spinner.addClass( 'et_dashboard_spinner_visible' );

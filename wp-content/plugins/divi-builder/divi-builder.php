@@ -3,7 +3,7 @@
  * Plugin Name: Divi Builder
  * Plugin URI: http://elegantthemes.com
  * Description: A drag and drop page builder for any WordPress theme.
- * Version: 2.0.67
+ * Version: 2.21
  * Author: Elegant Themes
  * Author URI: http://elegantthemes.com
  * License: GPLv2 or later
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'ET_BUILDER_PLUGIN_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'ET_BUILDER_PLUGIN_URI', plugins_url('', __FILE__) );
-define( 'ET_BUILDER_PLUGIN_VERSION', '2.0.67' );
+define( 'ET_BUILDER_PLUGIN_VERSION', '2.21' );
 
 if ( ! class_exists( 'ET_Dashboard_v2' ) ) {
 	require_once( ET_BUILDER_PLUGIN_DIR . 'dashboard/dashboard.php' );
@@ -47,6 +47,8 @@ class ET_Builder_Plugin extends ET_Dashboard_v2 {
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'register_scripts' ) );
 
+		add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts_styles' ) );
+
 		add_action( 'admin_init', array( $this, 'construct_dashboard' ) );
 
 		add_action( 'wp_ajax_et_builder_save_settings', array( $this, 'builder_save_settings' ) );
@@ -57,21 +59,13 @@ class ET_Builder_Plugin extends ET_Dashboard_v2 {
 
 		add_action( 'wp_ajax_et_builder_save_google_api_settings', array( $this, 'save_google_api_settings' ) );
 
-		add_filter( 'body_class', array( $this, 'add_body_class' ) );
-
 		add_action( 'admin_enqueue_scripts', array( $this, 'et_pb_hide_options_menu' ) );
-
-		add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts_styles' ) );
 
 		add_filter( 'et_shortcodes_strings_handle', array( $this, 'shortcodes_strings_handle' ) );
 
 		add_filter( 'et_builder_modules_script_handle', array( $this, 'builder_modules_script_handle' ) );
 
 		add_filter( 'et_builder_optimized_style_handle', array( $this, 'builder_optimized_style_handle' ) );
-
-		add_filter( 'the_content', array( $this, 'add_builder_content_wrapper' ) );
-
-		add_filter( 'et_builder_inner_content_class', array( $this, 'add_builder_inner_content_class' ) );
 
 		add_filter( 'et_pb_builder_options_array', array( $this, 'get_builder_options' ) );
 
@@ -81,54 +75,6 @@ class ET_Builder_Plugin extends ET_Dashboard_v2 {
 			add_action( 'et_pb_shop_before_print_shop', array( $this, 'force_woocommerce_default_templates' ) );
 			add_action( 'et_pb_shop_after_print_shop', array( $this, 'return_woocommerce_default_templates' ) );
 		}
-	}
-
-	function add_builder_content_wrapper( $content ) {
-		if ( ! et_pb_is_pagebuilder_used( get_the_ID() ) && ! is_et_pb_preview() ) {
-			return $content;
-		}
-
-		// Divi builder layout should only be used in singular template
-		if ( ! is_singular() ) {
-			return $content;
-		}
-
-		$outer_class   = apply_filters( 'et_builder_outer_content_class', array( 'et_builder_outer_content' ) );
-		$outer_classes = implode( ' ', $outer_class );
-
-		$outer_id      = apply_filters( "et_builder_outer_content_id", "et_builder_outer_content" );
-
-		$inner_class   = apply_filters( 'et_builder_inner_content_class', array( 'et_builder_inner_content' ) );
-		$inner_classes = implode( ' ', $inner_class );
-
-		$content = sprintf(
-			'<div class="%2$s" id="%4$s">
-				<div class="%3$s">
-					%1$s
-				</div>
-			</div>',
-			$content,
-			esc_attr( $outer_classes ),
-			esc_attr( $inner_classes ),
-			esc_attr( $outer_id )
-		);
-
-		return $content;
-	}
-
-	function add_body_class( $classes ) {
-		$classes[] = 'et_divi_builder';
-
-		return $classes;
-	}
-
-	function add_builder_inner_content_class( $classes ) {
-		$page_custom_gutter = get_post_meta( get_the_ID(), '_et_pb_gutter_width', true );
-		$valid_gutter_width = array( '1', '2', '3', '4' );
-		$gutter_width       = in_array( $page_custom_gutter, $valid_gutter_width ) ? $page_custom_gutter : '3';
-		$classes[]          = "et_pb_gutters{$gutter_width}";
-
-		return $classes;
 	}
 
 	function construct_dashboard() {
@@ -166,6 +112,7 @@ class ET_Builder_Plugin extends ET_Dashboard_v2 {
 		// prepare array of Google API settings
 		$processed_updates_settings['api_main_google_api_key'] = isset( $google_api_settings['api_key'] ) ? $google_api_settings['api_key'] : '';
 		$processed_updates_settings['api_main_enqueue_google_maps_script'] = isset( $google_api_settings['enqueue_google_maps_script'] ) ? $google_api_settings['enqueue_google_maps_script'] : false;
+		$processed_updates_settings['api_main_use_google_fonts'] = isset( $google_api_settings['use_google_fonts'] ) ? $google_api_settings['use_google_fonts'] : false;
 
 		$complete_options_set = array_merge( $builder_options, $processed_updates_settings );
 		return $complete_options_set;
@@ -309,10 +256,12 @@ class ET_Builder_Plugin extends ET_Dashboard_v2 {
 
 		$api_key = ! empty( $_POST['et_builder_google_api_key'] ) ? sanitize_text_field( $_POST['et_builder_google_api_key'] ) : '';
 		$enqueue_google_maps_script = ( isset( $_POST['et_builder_enqueue_google_maps_script'] ) && 'on' === $_POST['et_builder_enqueue_google_maps_script'] ) ? 'on' : 'off';
+		$use_google_fonts = ( isset( $_POST['et_builder_use_google_fonts'] ) && 'on' === $_POST['et_builder_use_google_fonts'] ) ? 'on' : 'off';
 
 		update_option( 'et_google_api_settings', array(
 			'api_key'                    => $api_key,
 			'enqueue_google_maps_script' => $enqueue_google_maps_script,
+			'use_google_fonts'           => $use_google_fonts,
 		));
 
 		die();
@@ -352,6 +301,8 @@ add_action( 'plugins_loaded', 'et_divi_builder_maybe_load_core' );
 
 if ( ! function_exists( 'et_divi_builder_setup_thumbnails' ) ) :
 function et_divi_builder_setup_thumbnails() {
+	add_filter( 'theme_locale', 'et_fb_set_builder_locale' );
+
 	add_theme_support( 'post-thumbnails' );
 
 	global $et_theme_image_sizes;
@@ -390,78 +341,27 @@ add_action( 'after_setup_theme', 'et_divi_builder_setup_thumbnails' );
  * @return void
  */
 if ( ! function_exists( 'et_fb_set_builder_locale' ) ) :
-function et_fb_set_builder_locale() {
+function et_fb_set_builder_locale( $locale ) {
 	// apply translations inside VB only
-	if ( empty( $_GET['et_fb'] ) ) {
-		return;
+	if ( empty( $_GET['et_fb'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
+		return $locale;
 	}
 
-	// make sure switch_to_locale() funciton exists. It was introduced in WP 4.7
+	$user = get_user_locale();
+
+	if ( $user === $locale ) {
+		return $locale;
+	}
+
 	if ( ! function_exists( 'switch_to_locale' ) ) {
-		return;
+		return $locale;
 	}
 
-	// do not proceed if user language == website language
-	if ( get_user_locale() === get_locale() ) {
-		return;
-	}
+	switch_to_locale( $user );
 
-	// switch the translation to user language
-	switch_to_locale( get_user_locale() );
-
-	// manually restore the translation for all domains except for the 'et_builder' domain
-	// otherwise entire page will be translated to user language, but we need to apply it to VB interface only.
-
-	/* The below code adapted from WordPress
-
-	  wp-includes/class-wp-locale-switcher.php:
-	    * load_translations()
-
-	  @copyright 2015 by the WordPress contributors.
-	  This program is free software; you can redistribute it and/or modify
-	  it under the terms of the GNU General Public License as published by
-	  the Free Software Foundation; either version 2 of the License, or
-	  (at your option) any later version.
-
-	  This program is distributed in the hope that it will be useful,
-	  but WITHOUT ANY WARRANTY; without even the implied warranty of
-	  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	  GNU General Public License for more details.
-
-	  You should have received a copy of the GNU General Public License
-	  along with this program; if not, write to the Free Software
-	  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-	  This program incorporates work covered by the following copyright and
-	  permission notices:
-
-	  b2 is (c) 2001, 2002 Michel Valdrighi - m@tidakada.com - http://tidakada.com
-
-	  b2 is released under the GPL
-
-	  WordPress - Web publishing software
-
-	  Copyright 2003-2010 by the contributors
-
-	  WordPress is released under the GPL */
-
-	global $l10n;
-
-	$domains = $l10n ? array_keys( $l10n ) : array();
-
-	load_default_textdomain( get_locale() );
-
-	foreach ( $domains as $domain ) {
-		if ( 'et_builder' === $domain ) {
-			continue;
-		}
-
-		unload_textdomain( $domain );
-		get_translations_for_domain( $domain );
-	}
+	return $user;
 }
 endif;
-add_action( 'after_setup_theme', 'et_fb_set_builder_locale' );
 
 if ( ! function_exists( 'et_divi_builder_minify_combine_scripts' ) ) :
 function et_divi_builder_minify_combine_scripts( $load ) {
@@ -497,3 +397,12 @@ function et_divi_builder_after_theme_setup() {
 }
 endif;
 add_action( 'wp_enqueue_scripts', 'et_divi_builder_after_theme_setup', 5 );
+
+if ( ! function_exists( 'et_dbp_body_class_backwards_compatibility' ) ):
+function et_dbp_body_class_backwards_compatibility( $classes ) {
+	$classes[] = 'et_divi_builder';
+
+	return $classes;
+}
+add_filter( 'body_class', 'et_dbp_body_class_backwards_compatibility' );
+endif;
