@@ -83,6 +83,11 @@ body .gform_wrapper h2.gsection_title {
 }
 /*** Responsive Styles Smartphone Portrait ***/
 @media all and (max-width: 479px) {
+	.main-navigation .menu-toggle {
+		font-size: 1.25em;
+		background: #006494;
+		text-decoration: underline;
+	}
 	header #right-column {
 		display: none;
 	}
