@@ -2,6 +2,9 @@
 #menu-item-766 {
 	background: #ea662b;
 }
+header #middle-column {
+	display: none;
+}
 /* Homepage Slider */
 #n2-ss-2.n2-ss-load-fade.n2-ss-loaded {
 	opacity: 1 !important;
@@ -59,4 +62,37 @@ body .gform_wrapper h2.gsection_title {
 .gsection_description {
 	padding-top: 10px;
 	font-style: italic;
+}
+
+/*** Small Devices, Tablets  ***/
+@media only screen and (max-width : 768px) {
+	.modal-features-container {
+		margin-top: 2em;
+	}
+	#modal-body-headline {
+		font-size: 23px !important;
+		line-height: 26px !important;
+	}
+	#modal-body-subheadline {
+		font-size: 14px !important;
+	}
+	#modal-form-container-title {
+		margin-bottom: 1.5em;
+		line-height: 1.3;
+	}
+}
+/*** Responsive Styles Smartphone Portrait ***/
+@media all and (max-width: 479px) {
+	header #right-column {
+		display: none;
+	}
+	div.breadcrumbs {
+		display: none;
+	}
+	a.woocommerce-product-gallery__trigger {
+		display: none !important;
+	}
+	figure.woocommerce-product-gallery__wrapper {
+		margin: 0 10px;
+	}
 }
