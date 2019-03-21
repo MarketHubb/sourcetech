@@ -95,4 +95,7 @@ body .gform_wrapper h2.gsection_title {
 	figure.woocommerce-product-gallery__wrapper {
 		margin: 0 10px;
 	}
+	.gform_button {
+		text-align: center !important;
+	}
 }
