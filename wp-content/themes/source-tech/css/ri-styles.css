@@ -16,6 +16,9 @@ header #middle-column {
 .woocommerce-product-gallery {
 	opacity: 1 !important;
 }
+.mobile-model-title {
+	display: none;
+}
 /* Gravity Form */
 body .gform_wrapper h2.gsection_title {
 	font-size: 2em !important;
@@ -83,6 +86,15 @@ body .gform_wrapper h2.gsection_title {
 }
 /*** Responsive Styles Smartphone Portrait ***/
 @media all and (max-width: 479px) {
+	.mobile-model-title {
+		display: inherit;
+		margin-bottom: 0;
+		text-align: center;
+		line-height: 120%;
+	}
+	.desktop-model-title{
+		display: none;
+	}
 	.main-navigation .menu-toggle {
 		font-size: 1.25em;
 		background: #006494;
