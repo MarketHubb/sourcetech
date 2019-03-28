@@ -8,9 +8,7 @@
     // Trigger GA event on CTA button click
     $('a.button.request-quote').click(function() {
         ga('send', 'event', 'CTA Button', 'Click', cta_button_copy);
-    })
-    
-    
+    });
     
     // Pass model # and image to RFQ form
     var productImage = $('.woocommerce-product-gallery__wrapper > div > a >img').attr('src');
