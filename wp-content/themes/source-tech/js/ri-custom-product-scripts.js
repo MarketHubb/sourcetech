@@ -7,8 +7,8 @@
     
     // Trigger GA event on CTA button click
     $('a.button.request-quote').click(function() {
-        gtag('event', 'click', {
-               'event_category' : 'button',
+        gtag('event', 'Click', {
+               'event_category' : 'CTA Button',
                'event_label' : variant
              });
     });
