@@ -7,7 +7,10 @@
     
     // Trigger GA event on CTA button click
     $('a.button.request-quote').click(function() {
-        ga('send', 'event', 'CTA Button', 'Click', variant);
+        gtag('event', 'click', {
+               'event_category' : 'button',
+               'event_label' : variant
+             });
     });
     
     // Pass model # and image to RFQ form
