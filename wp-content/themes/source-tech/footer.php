@@ -36,14 +36,14 @@
 </div><!-- #page -->
 
 <script>
-  window.addEventListener('load',function(){
-    jQuery('[class="button request-quote"]').click(function(){
-      gtag('event', 'click', {
-        'event_category' : 'button',
-        'event_label' : window.location.pathname
-      });
-    })
-  });
+  // window.addEventListener('load',function(){
+  //   jQuery('[class="button request-quote"]').click(function(){
+  //     gtag('event', 'click', {
+  //       'event_category' : 'button',
+  //       'event_label' : window.location.pathname
+  //     });
+  //   })
+  // });
 </script>
 
 <?php wp_footer(); ?>
