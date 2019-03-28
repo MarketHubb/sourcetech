@@ -18,6 +18,16 @@
 	<link rel="profile" href="https://gmpg.org/xfn/11">
 
 	<?php wp_head(); ?>
+	
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-8718028-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-8718028-1');
+	</script>
 
     <!-- Global site tag (gtag.js) - Google Ads: 1033984787 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1033984787"></script>
