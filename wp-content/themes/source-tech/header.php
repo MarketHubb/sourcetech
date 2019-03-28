@@ -41,9 +41,22 @@
 
 <body <?php body_class(); ?>>
 <div id="page" class="site">
+	<?php 
+	// Variant copy testing for primary CTA button
+		if (is_singular( 'product' )) {
+			$variants_array = array(
+				'Request a Quote',
+				'Configure this Server',
+				'Customize this Server',
+				'Configure to Order'
+			);
+			$rand = rand(0, 3);
+			$variant = $variants_array[$rand];
+		}
+	 ?>
 	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'source-tech' ); ?></a>
 
-	<header id="masthead" class="site-header">
+	<header id="masthead" class="site-header" data-buttonvariant="<?php echo $variant; ?>">
 		<div class="row top-row">
 			<div class="item">
 				<?php
