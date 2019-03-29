@@ -86,6 +86,11 @@ body .gform_wrapper h2.gsection_title {
 }
 /*** Responsive Styles Smartphone Portrait ***/
 @media all and (max-width: 479px) {
+	.single-product div.product .summary-block .entry-summary .request-quote {
+		font-size: 1.2rem;
+		padding: 12px 15px;
+		border-radius: 3px;
+	}
 	.mobile-model-title {
 		display: inherit;
 		margin-bottom: 0;
