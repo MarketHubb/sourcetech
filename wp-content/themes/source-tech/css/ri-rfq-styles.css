@@ -23,9 +23,6 @@ div#page {
 .page-title.rfq {
 	margin-bottom: 10px !important;
 }
-.product-name {
-	color: #0087c7 !important;
-}
 #form-container, #rfq-content-brand, #rfq-content-product {
 	background-color: #fff !important;
 	border-radius: 4px !important;
