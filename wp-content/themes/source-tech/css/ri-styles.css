@@ -19,6 +19,11 @@ header #middle-column {
 .mobile-model-title {
 	display: none;
 }
+/* Global Elements */
+.page-title {
+	font-size: 3em;
+	line-height: 120% !important;
+}
 /* Gravity Form */
 body .gform_wrapper h2.gsection_title {
 	font-size: 2em !important;
@@ -86,6 +91,12 @@ body .gform_wrapper h2.gsection_title {
 }
 /*** Responsive Styles Smartphone Portrait ***/
 @media all and (max-width: 479px) {
+	.et-db #et-boc .et_pb_section {
+		padding: 25px 0 !important;
+	}
+	.page-title {
+		font-size: 2em;
+	}
 	.single-product div.product .summary-block .entry-summary .request-quote {
 		font-size: 1.2rem;
 		padding: 12px 15px;
