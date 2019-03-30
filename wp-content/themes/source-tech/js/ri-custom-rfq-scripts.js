@@ -29,7 +29,7 @@
       var byName = $.getUrlVar('name');
       
       // Change headline lead-in copy
-      if (headlineLeadIn != 'Request') {
+      if (headlineLeadIn != 'undefined' && headlineLeadIn != 'Request') {
         var leadInText = headlineLeadIn + ' your';
         $('#request-lead-in').text(leadInText);
       }
