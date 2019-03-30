@@ -13,15 +13,20 @@
              });
     });
     
+    // Get first word of CTA button
+    var cta_button_words = variant.split(' ');
+    var cta_button_first_word = cta_button_words.shift();
+    
     // Pass model # and image to RFQ form
     var productImage = $('.woocommerce-product-gallery__wrapper > div > a >img').attr('src');
     var productImageQueryString = 'image=' + productImage;
+    var headlineLeadIn = '&lead=' + cta_button_first_word;
     
     $('a.button.request-quote').each(function() {
         var href = $(this).attr('href');
 
         if (href) {
-            href += (href.match(/\?/) ? '&' : '?') + productImageQueryString;
+            href += (href.match(/\?/) ? '&' : '?') + productImageQueryString + headlineLeadIn;
             $(this).attr('href', href);
         }
     });

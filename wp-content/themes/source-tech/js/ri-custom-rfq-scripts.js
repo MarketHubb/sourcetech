@@ -23,16 +23,24 @@
       
       var productName = decodeURIComponent(allVars['model']);
       var productImage = decodeURIComponent(allVars['image']);
-      console.log(productName);
-      console.log(productImage);
+      var headlineLeadIn = decodeURIComponent(allVars['lead']);
 
       // Getting URL var by its name
       var byName = $.getUrlVar('name');
       
+      // Change headline lead-in copy
+      if (headlineLeadIn != 'Request') {
+        var leadInText = headlineLeadIn + ' the';
+        $('#request-lead-in').text(leadInText);
+      }
+      $('')
+      
+      // Output product image 
       if (productImage != 'undefined') {
       	$('#product-logo-image').attr('src', productImage);
       }
       
+      // Output product model #
       if (productName != 'undefined') {
       	$('.product-name').each(function(i, el) {
       		$(this).text(productName);
