@@ -15,7 +15,7 @@
 
 	<footer id="colophon" class="site-footer">
 		<div class="quote-block">
-			<h3><a href="https://www.source-tech.net/request-a-quote/" class="button request-quote">Request a Quote</a></h3>
+			<h3><a href="http://sourcetech.test/custom-configuration/" class="button request-quote">Request a Quote</a></h3>
 			<p>Top Quality Servers, Networking & Storage Equipment at Great Prices.</p>
 		</div>
 
