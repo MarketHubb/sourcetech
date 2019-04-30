@@ -17,6 +17,15 @@ Primary blue: #0087c7;
 .centered-content-section .et_pb_module {
 	text-align: center !important;
 }
+.grey-background-section {
+	background-color: #f5f8fa !important;
+}
+.panel-column-section .et_pb_column {
+	background-color: #fff !important;
+	border-radius: 4px !important;
+	box-shadow: 0 10px 50px -5px rgba(51,71,91,0.12) !important;
+	padding: 3em;
+}
 .testimonials-section .et_pb_testimonial_description {
 	max-width: 1200px;
 	margin: 0 auto !important;
@@ -41,6 +50,13 @@ header #middle-column {
 }
 #n2-ss-2.n2-ss-load-fade {
 	transition: none !important;
+}
+/* Homepage (DEMO) */
+.homepage-brands-logo {
+	width: 100%;
+}
+.homepage-brands-server {
+	width: 100%;
 }
 /* WooCommerce */
 .woocommerce-product-gallery {
