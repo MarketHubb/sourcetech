@@ -57,7 +57,7 @@ header #middle-column {
 	margin: 0 auto !important;
 	display: block !important;
 }
-.brands-section .panel-column-section .et_pb_column {
+#brands-section .panel-column-section .et_pb_column {
 	padding: 3em 0em !important;
 }
 /* WooCommerce */
