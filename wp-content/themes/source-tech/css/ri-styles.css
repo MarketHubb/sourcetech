@@ -24,7 +24,6 @@ Primary blue: #0087c7;
 	background-color: #fff !important;
 	border-radius: 4px !important;
 	box-shadow: 0 10px 50px -5px rgba(51,71,91,0.12) !important;
-	padding: 3em !important;
 }
 .testimonials-section .et_pb_testimonial_description {
 	max-width: 1200px;
@@ -54,9 +53,12 @@ header #middle-column {
 /* Homepage (DEMO) */
 .homepage-brands-logo, .homepage-brands-server {
 	max-height: 175px !important;
-	width: auto;
+	width: 75%;
 	margin: 0 auto !important;
 	display: block !important;
+}
+.brands-section .panel-column-section .et_pb_column {
+	padding: 3em 0em !important;
 }
 /* WooCommerce */
 .woocommerce-product-gallery {
