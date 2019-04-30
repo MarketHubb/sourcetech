@@ -1,3 +1,33 @@
+/* 
+Primary blue: #0087c7;
+ */
+ 
+/* Global Elements */
+#custom-content h1, #custom-content h2, #custom-content h3, #custom-content h4, #custom-content h5 {
+	font-family: 'Montserrat',Helvetica,Arial,Lucida,sans-serif;
+	font-weight: bold !important;
+}
+#custom-content .et_pb_row {
+	max-width: 1200px !important;
+}
+.page-title {
+	font-size: 3em;
+	line-height: 120% !important;
+}
+.centered-content-section .et_pb_module {
+	text-align: center !important;
+}
+.testimonials-section .et_pb_testimonial_description {
+	max-width: 1200px;
+	margin: 0 auto !important;
+	text-align: center !important;
+	position: relative;
+	top: 10px;
+	font-style: italic;
+}
+.icons-blue i {
+	color: #0087c7;
+}
 /* Navigation */
 #menu-item-766 {
 	background: #ea662b;
@@ -18,11 +48,6 @@ header #middle-column {
 }
 .mobile-model-title {
 	display: none;
-}
-/* Global Elements */
-.page-title {
-	font-size: 3em;
-	line-height: 120% !important;
 }
 /* Gravity Form */
 body .gform_wrapper h2.gsection_title {
@@ -90,7 +115,36 @@ body .gform_wrapper h2.gsection_title {
 	}
 }
 /*** Responsive Styles Smartphone Portrait ***/
+
+/* Responsive Styles Desktop Only */
+@media all and (min-width: 981px) {
+	.sub-heading {
+		font-size: 24px !important;
+	}
+	.et-db #et-boc .et_pb_testimonial:before {
+		font-size: 50px !important;
+		margin-left: -25px !important;
+		top: -25px !important;
+		color: #0087c7;
+	}
+	.testimonials-section .et_pb_testimonial_description {
+		font-size: 26px;
+	}
+	.testimonials-section .et_pb_testimonial_author {
+		font-size: 20px;
+		font-style: normal;
+		font-weight: bolder;
+	}
+}
+
 @media all and (max-width: 479px) {
+	.textwidget .menu li:last-of-type {
+		display: none;
+	}
+	span.icon-phone {
+		display: inherit !important;
+		float: left;
+	}
 	.et-db #et-boc .et_pb_section {
 		padding: 25px 0 !important;
 	}
@@ -98,7 +152,7 @@ body .gform_wrapper h2.gsection_title {
 		font-size: 2em;
 	}
 	.single-product div.product .summary-block .entry-summary .request-quote {
-		font-size: 1.2rem;
+		font-size: 1.2rem !important;
 		padding: 12px 15px;
 		border-radius: 3px;
 	}
