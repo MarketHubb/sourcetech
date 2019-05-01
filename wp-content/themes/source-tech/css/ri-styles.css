@@ -1,7 +1,7 @@
 /* 
 Primary blue: #0087c7;
- */
- 
+*/
+
 /* Global Elements */
 #custom-content h1, #custom-content h2, #custom-content h3, #custom-content h4, #custom-content h5 {
 	font-family: 'Montserrat',Helvetica,Arial,Lucida,sans-serif;
@@ -51,14 +51,37 @@ header #middle-column {
 	transition: none !important;
 }
 /* Homepage (DEMO) */
+#homepage-hero-image {
+	margin-bottom: -10em !important;
+}
+#homepage-hero-image img {
+	position: relative !important;
+	bottom: 22em !important;
+	margin-bottom: -20em !important;
+}
+#brands-section .et_pb_text_inner a {
+	position: relative;
+	top: 1em;
+}
+.homepage-brands-logo {
+	width: 50%;
+}
+.homepage-brands-server {
+	width: 75%;
+}
 .homepage-brands-logo, .homepage-brands-server {
 	max-height: 175px !important;
-	width: 75%;
 	margin: 0 auto !important;
 	display: block !important;
 }
+#homepage-services-container .panel-column-section .et_pb_column {
+	padding: 3em !important;
+}
 #brands-section .panel-column-section .et_pb_column {
 	padding: 3em 0em !important;
+}
+#homepage-about-section .et_pb_text_inner {
+	text-align: center;
 }
 /* WooCommerce */
 .woocommerce-product-gallery {
@@ -137,7 +160,9 @@ body .gform_wrapper h2.gsection_title {
 /* Responsive Styles Desktop Only */
 @media all and (min-width: 981px) {
 	.sub-heading {
-		font-size: 24px !important;
+		font-size: 1.5em !important;
+		line-height: 120% !important;
+		margin-bottom: .5em !important;
 	}
 	.et-db #et-boc .et_pb_testimonial:before {
 		font-size: 50px !important;
