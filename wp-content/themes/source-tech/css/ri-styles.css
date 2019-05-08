@@ -59,6 +59,11 @@ header #middle-column {
 	bottom: 22em !important;
 	margin-bottom: -20em !important;
 }
+#homepage-featured-products p > a {
+	font-weight: bold !important;
+	position: relative;
+	bottom: 2em;
+}
 #brands-section .et_pb_text_inner a {
 	position: relative;
 	top: 1em;
@@ -171,7 +176,10 @@ body .gform_wrapper h2.gsection_title {
 		color: #0087c7;
 	}
 	.testimonials-section .et_pb_testimonial_description {
-		font-size: 26px;
+		font-size: 21px;
+		position: relative;
+		top: 1em;
+		font-style: normal;
 	}
 	.testimonials-section .et_pb_testimonial_author {
 		font-size: 20px;
