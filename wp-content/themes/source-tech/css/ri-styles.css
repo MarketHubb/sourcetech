@@ -64,6 +64,9 @@ Primary blue: #0087c7;
 	color: #0087c7 !important;
 }
 /* Navigation */
+.button.cart {
+	display: none !important;
+}
 #menu-item-766 {
 	background: #ea662b;
 }
