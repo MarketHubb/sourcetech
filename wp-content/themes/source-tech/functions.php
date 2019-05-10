@@ -248,3 +248,28 @@ if ( '' === $product->get_price() || 0 == $product->get_price() ) {
 return $price;
 }
 */
+
+/**
+	RI - PAGE CONTENT
+**/
+function ri_model_phone_cta($post) {
+	$terms = get_the_terms( $post->ID, 'product_cat' );
+	$term_names = array();
+	
+	foreach ($terms as $term) {
+		$terms_array[] = $term->name;
+	}
+	
+	if (in_array('Networking', $terms_array)) {
+		$lead = 'Call to order this networking equipment'; 
+	} else {
+		$lead = 'Need help configuring this server?';
+	}
+	
+	$model_phone_cta  = '<div class="model-phone-cta-container">';
+	$model_phone_cta .= '<p class="model-phone-lead">' . $lead . '</p>';
+	$model_phone_cta .= '<a href="tel:800-932-0657" class="model-phone">800-932-0657</a>';
+	$model_phone_cta .= '</div>';
+	
+	return $model_phone_cta;
+}

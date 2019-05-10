@@ -345,7 +345,13 @@ function add_open_singleproduct_row_div() {
    echo '<div class="row product-summary">';
 }
 function add_open_productsumm_item_div() {
-	echo '<div class="item summary-block">';
+	$post = get_post();
+	$phone_cta = ri_model_phone_cta($post);
+	
+	$summary_block  = '<div class="item summary-block">';
+	$summary_block .= $phone_cta;
+	
+	echo $summary_block;
 }
 function add_close_singleproduct_row_div() {
 	echo '</div><!-- .summary-block --></div><!-- .product-summary -->';

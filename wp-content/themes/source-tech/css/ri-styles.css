@@ -36,6 +36,33 @@ Primary blue: #0087c7;
 .icons-blue i {
 	color: #0087c7;
 }
+/* CTA */
+.button.request-quote {
+	font-size: 1.25rem !important;
+	padding-top: 10px !important;
+	padding-bottom: 10px !important;
+	-webkit-box-shadow: 0 20px 28px 0 rgba(241,99,52,.13) !important;
+	box-shadow: 0 20px 28px 0 rgba(241,99,52,.13) !important;
+	border-radius: 3px !important;
+}
+.model-phone-cta-container {
+	padding: .5em;
+	text-align: center;
+	color: #0087c7;
+	margin-bottom: 1em;
+}
+.model-phone-lead {
+	font-weight: bold;
+	margin: 0;
+}
+.model-phone {
+	color: #0087c7;
+	font-size: 2em;
+	font-weight: bold;
+}
+.model-phone:hover {
+	color: #0087c7 !important;
+}
 /* Navigation */
 #menu-item-766 {
 	background: #ea662b;
@@ -92,8 +119,14 @@ header #middle-column {
 .woocommerce-product-gallery {
 	opacity: 1 !important;
 }
-.mobile-model-title {
+.desktop-model-title {
 	display: none;
+}
+.mobile-model-title {
+	/*display: none;*/
+	position: relative;
+	/*margin-bottom: -2em;*/
+	font-size: 2.5em;
 }
 /* Gravity Form */
 body .gform_wrapper h2.gsection_title {
