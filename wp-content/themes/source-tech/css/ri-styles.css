@@ -3,6 +3,15 @@ Primary blue: #0087c7;
 */
 
 /* Global Elements */
+.text-center {
+	text-align: center !important;
+}
+.panel {
+	padding: 2em !important;
+	background-color: #fff !important;
+	border-radius: 4px !important;
+	box-shadow: 0 10px 50px -5px rgba(51,71,91,0.12) !important;
+}
 #custom-content h1, #custom-content h2, #custom-content h3, #custom-content h4, #custom-content h5 {
 	font-family: 'Montserrat',Helvetica,Arial,Lucida,sans-serif;
 	font-weight: bold !important;
@@ -133,10 +142,13 @@ header #middle-column {
 }
 /* Gravity Form */
 body .gform_wrapper h2.gsection_title {
-	font-size: 2em !important;
+	font-size: 1.25em !important;
 	border-bottom: 1px dashed !important;
 	border-color: #cbd6e2 !important;
 	padding-bottom: 5px !important;
+	margin-top: 1em !important;
+}
+.gform_fields li.gsection:not(:first-of-type) h2 {
 	margin-top: 2em !important;
 }
 .gform_body input, .gform_body textarea {

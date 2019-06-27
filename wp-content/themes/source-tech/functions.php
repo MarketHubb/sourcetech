@@ -178,6 +178,8 @@ function source_tech_scripts() {
 	
 	wp_enqueue_script( 'ri_custom_global_scripts' );
 	
+	wp_register_style( 'font-awesome-pro', get_stylesheet_directory_uri() . '/fontawesome/css/all.css' );
+	
 	if (is_singular( 'product' )) {
 		wp_enqueue_script( 'ri_custom_product_scripts' );
 	}
@@ -186,9 +188,12 @@ function source_tech_scripts() {
 		wp_enqueue_script( 'comment-reply' );
 	}
 	
-	if (is_page(726)) {
+	if (is_page(726) || is_page(1234)) {
 		wp_enqueue_style( 'ri_custom_rfq_styles', get_stylesheet_directory_uri() . '/css/ri-rfq-styles.css' );
 		wp_enqueue_script( 'ri_custom_rfq_scripts' );
+	}
+	if (!is_admin()) {
+		wp_enqueue_style('font-awesome-pro');
 	}
 }
 add_action( 'wp_enqueue_scripts', 'source_tech_scripts', 1);

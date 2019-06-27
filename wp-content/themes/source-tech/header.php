@@ -47,7 +47,7 @@
     </script>
     
     <!-- Font Awesome CDN -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"> -->
 
 
 
@@ -140,7 +140,7 @@
 	</header><!-- #masthead -->
 	
 	<?php
-	if(function_exists('bcn_display') && !is_front_page() && !is_page(777)) {
+	if(function_exists('bcn_display') && !is_front_page() && !is_page(777) && !is_page(1234)) {
 		echo '<div class="breadcrumbs" typeof="BreadcrumbList" vocab="https://schema.org/">';
 		bcn_display();
 		echo '</div>';
