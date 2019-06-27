@@ -253,10 +253,30 @@ if ( '' === $product->get_price() || 0 == $product->get_price() ) {
 return $price;
 }
 */
+//-----------------------------------------------------
+// RI - Global Helpers
+//-----------------------------------------------------
+function ri_get_single_post_type($post_id) {
+	$terms = get_the_terms( $post_id, 'product_cat' );
+	$term_names = array();
+	
+	foreach ($terms as $term) {
+		$terms_array[] = $term->name;
+	}
+	
+	if (in_array('Networking', $terms_array)) {
+		$type = 'Networking';
+	} 
+	if (in_array('Used Servers', $terms_array)) {
+		$type = 'Servers';
+	} 
+	
+	return $type;
+}
 
-/**
-	RI - PAGE CONTENT
-**/
+//-----------------------------------------------------
+// RI - Page & Post Content
+//-----------------------------------------------------
 function ri_model_phone_cta($post) {
 	$terms = get_the_terms( $post->ID, 'product_cat' );
 	$term_names = array();

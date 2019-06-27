@@ -22,32 +22,32 @@
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-8718028-1"></script>
 	<script>
-	  window.dataLayer = window.dataLayer || [];
-	  function gtag(){dataLayer.push(arguments);}
-	  gtag('js', new Date());
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
 
-	  gtag('config', 'UA-8718028-1');
+		gtag('config', 'UA-8718028-1');
 	</script>
 
-    <!-- Global site tag (gtag.js) - Google Ads: 1033984787 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1033984787"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+	<!-- Global site tag (gtag.js) - Google Ads: 1033984787 -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=AW-1033984787"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
 
-        gtag('config', 'AW-1033984787');
-    </script>
+		gtag('config', 'AW-1033984787');
+	</script>
 
-    <!-- Google Adwords forwarding phone number snippet  -->
-    <script>
-        gtag('config', 'AW-1033984787/8p-5CPax_ZQBEJO2he0D', {
-            'phone_conversion_number': '800-932-0657'
-        });
-    </script>
-    
-    <!-- Font Awesome CDN -->
-    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"> -->
+	<!-- Google Adwords forwarding phone number snippet  -->
+	<script>
+		gtag('config', 'AW-1033984787/8p-5CPax_ZQBEJO2he0D', {
+			'phone_conversion_number': '800-932-0657'
+		});
+	</script>
+	
+	<!-- Font Awesome CDN -->
+	<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"> -->
 
 
 
@@ -55,45 +55,49 @@
 </head>
 
 <body <?php body_class(); ?>>
-<div id="page" class="site">
-	<?php 
-	// Variant copy testing for primary CTA button
-		if (is_singular( 'product' )) {
+	<div id="page" class="site">
+		<?php 
+	// Variant copy testing for primary CTA button on Server model pages
+		$type = ri_get_single_post_type(get_the_ID());
+		
+		if ($type == 'Servers') {
 			$variants_array = array(
 				'Request a Quote',
 				'Configure this Server',
-				'Customize this Server',
 				'Configure to Order'
 			);
-			$rand = rand(0, 3);
-			$variant = $variants_array[$rand];
+			$rand = rand(0, 2);
+			$cta_copy = $variants_array[$rand];
+			
+		} else {
+			$cta_copy = 'Request a Quote';
 		}
-	 ?>
-	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'source-tech' ); ?></a>
+		?>
+		<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'source-tech' ); ?></a>
 
-	<header id="masthead" class="site-header" data-buttonvariant="<?php echo $variant; ?>">
-		<div class="row top-row">
-			<div class="item">
-				<?php
-				if (is_active_sidebar( 'widget-header-left' )) {
-					dynamic_sidebar( 'widget-header-left' );
-				}
-				?>
-			</div>
-			<div class="item">
-			<?php
-				if (is_active_sidebar( 'widget-header-right' )) {
-					dynamic_sidebar( 'widget-header-right' );
-				}
-				?>
-			</div>
-		</div>
-		<div class="row bottom-row">
-			<div class="item site-branding">
-				<?php
-				the_custom_logo();
-				if ( is_front_page() && is_home() ) :
+		<header id="masthead" class="site-header" data-buttonvariant="<?php echo $cta_copy; ?>">
+			<div class="row top-row">
+				<div class="item">
+					<?php
+					if (is_active_sidebar( 'widget-header-left' )) {
+						dynamic_sidebar( 'widget-header-left' );
+					}
 					?>
+				</div>
+				<div class="item">
+					<?php
+					if (is_active_sidebar( 'widget-header-right' )) {
+						dynamic_sidebar( 'widget-header-right' );
+					}
+					?>
+				</div>
+			</div>
+			<div class="row bottom-row">
+				<div class="item site-branding">
+					<?php
+					the_custom_logo();
+					if ( is_front_page() && is_home() ) :
+						?>
 					<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
 					<?php
 				else :
@@ -108,10 +112,10 @@
 				<?php endif; ?>
 			</div><!-- .site-branding -->
 			<div class="item" id="middle-column">
-			<a href="https://www.source-tech.net/contact">Give Feedback on our Website</a><span class="icon icon-angle-right"></span>
+				<a href="https://www.source-tech.net/contact">Give Feedback on our Website</a><span class="icon icon-angle-right"></span>
 			</div>
 			<div class="item" id="right-column">
-			<?php get_search_form(); ?>
+				<?php get_search_form(); ?>
 			<!-- <form role="search" method="get" class="header-search search-form" action="<?php echo home_url( '/' ); ?>">
 				<label>
 					<span class="screen-reader-text"><?php echo _x( 'Search for:', 'label' ) ?></span>
@@ -122,8 +126,8 @@
 				</label>
 				<input type="submit" class="icon-search search-submit"
 					value="&#xe800;" />
-			</form> -->
-			<a href="https://www.source-tech.net/cart/" class="button cart"><span class="icon icon-basket"></span>Cart</a>
+				</form> -->
+				<a href="https://www.source-tech.net/cart/" class="button cart"><span class="icon icon-basket"></span>Cart</a>
 			</div>
 		</div>
 		
@@ -148,6 +152,6 @@
 	
 	<?php if (is_page(777)) { ?>
 		<div id="custom-content" class="custom-site-content">
-	<?php } else { ?>
-		<div id="content" class="site-content">
-	<?php } ?>
+		<?php } else { ?>
+			<div id="content" class="site-content">
+			<?php } ?>
