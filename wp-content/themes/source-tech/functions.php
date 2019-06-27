@@ -270,6 +270,9 @@ function ri_get_single_post_type($post_id) {
 	if (in_array('Used Servers', $terms_array)) {
 		$type = 'Servers';
 	} 
+	if (in_array('Storwize', $terms_array)) {
+		$type = 'Storage';
+	} 
 	
 	return $type;
 }
