@@ -17,10 +17,6 @@ div#page {
 .entry-header {
 	display: none !important;
 }
-#rfq-title-text-container {
-	position: relative;
-	bottom: 1em;
-}
 /* Page */
 .rfq-form-container {
 	display: none;
