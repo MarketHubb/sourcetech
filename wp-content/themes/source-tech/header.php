@@ -57,20 +57,23 @@
 <body <?php body_class(); ?>>
 	<div id="page" class="site">
 		<?php 
-	// Variant copy testing for primary CTA button on Server model pages
-		$type = ri_get_single_post_type(get_the_ID());
-		
-		if ($type == 'Servers') {
-			$variants_array = array(
-				'Request a Quote',
-				'Configure this Server',
-				'Configure to Order'
-			);
-			$rand = rand(0, 2);
-			$cta_copy = $variants_array[$rand];
+		// Variant copy testing for primary CTA button on Server model pages
+		if (is_singular( 'product' )) {		
 			
-		} else {
-			$cta_copy = 'Request a Quote';
+			$type = ri_get_single_post_type(get_the_ID());
+			
+			if ($type == 'Servers') {
+				$variants_array = array(
+					'Request a Quote',
+					'Configure this Server',
+					'Configure to Order'
+				);
+				$rand = rand(0, 2);
+				$cta_copy = $variants_array[$rand];
+				
+			} else {
+				$cta_copy = 'Request a Quote';
+			}
 		}
 		?>
 		<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'source-tech' ); ?></a>
