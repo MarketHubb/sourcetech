@@ -18,7 +18,7 @@
     var cta_button_first_word = cta_button_words.shift();
     
     // Pass model # and image to RFQ form
-    var productImage = trim($('.woocommerce-product-gallery__wrapper > div > a >img').attr('src'));
+    var productImage = $('.woocommerce-product-gallery__wrapper > div > a >img').attr('src');
     var productImageQueryString = 'image=' + productImage;
     var headlineLeadIn = '&lead=' + cta_button_first_word;
     
