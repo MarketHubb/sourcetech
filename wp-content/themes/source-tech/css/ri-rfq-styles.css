@@ -49,6 +49,9 @@ div#page {
 }
 
 /* Selection */
+#rfq-selection-container {
+	display: none;
+}
 #rfq-selection-container h2 {
 	margin-bottom: 1em !important;
 	margin-top: .5em !important;

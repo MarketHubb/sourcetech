@@ -383,8 +383,9 @@ function add_request_quote() {
     if ( '' === $product->price || 0 == $product->price ) {
     	// Add model details via query args
     	$rfq_uri = add_query_arg( array(
+    	    'type' => strtolower(ri_get_single_post_type(get_the_ID())),
     	    'model' => get_the_title()
-    	), get_permalink (726));
+    	), get_permalink (1234));
         echo '<a href="' . $rfq_uri . '" class="button request-quote"><span>Request a Quote</span></a>';
     } else {
         echo woocommerce_template_single_price();
