@@ -22,7 +22,7 @@
     var productImageQueryString = 'image=' + productImage;
     var headlineLeadIn = '&lead=' + cta_button_first_word;
     
-    $('a.button.request-quote').each(function() {
+    $('.summary a.button.request-quote').each(function() {
         var href = $(this).attr('href');
 
         if (href) {
@@ -30,5 +30,8 @@
             $(this).attr('href', href);
         }
     });
+    
+    var model_rfq_href = $('.summary a.button.request-quote').attr('href');
+    $('.site-footer .button.request-quote').attr('href', model_rfq_href);
 
 })( jQuery );
