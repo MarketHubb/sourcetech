@@ -69,7 +69,8 @@
 					'Configure to Order'
 				);
 				$rand = rand(0, 2);
-				$cta_copy = $variants_array[$rand];
+				// $cta_copy = $variants_array[$rand];
+				$cta_copy = 'Request a Quote';
 				
 			} else {
 				$cta_copy = 'Request a Quote';
