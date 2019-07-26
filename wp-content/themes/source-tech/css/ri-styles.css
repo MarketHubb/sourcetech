@@ -6,7 +6,7 @@ Primary blue: #0087c7;
 .text-center {
 	text-align: center !important;
 }
-.panel {
+.custom-panel {
 	padding: 2em !important;
 	background-color: #fff !important;
 	border-radius: 4px !important;
