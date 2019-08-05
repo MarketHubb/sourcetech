@@ -2,6 +2,40 @@
 Primary blue: #0087c7;
 */
 
+/* Design Guidelines - Headings */
+h1.page-title, p.sub-title, h2.sub-heading {
+	color: #33475b !important;
+}
+h1.page-title {
+	font-family: "Open Sans Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	font-size: 3em;
+	line-height: 120% !important;
+}
+p.sub-title {
+	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	font-size: 1.15em !important;
+	line-height: 1.5 !important;
+}
+h2.sub-heading {
+	font-family: "Open Sans Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	font-size: 1.25em !important;
+}
+.centered {
+	text-align: center !important;
+}
+.icon-blue, .icon-blue i {
+	color: #0087c7;
+}
+/* Design Guidelines - Links */
+.text-link {
+	display: inline-block;
+	font-weight: bold !important;
+	margin-top: 1em !important;
+	border-bottom: 2px solid transparent !important;
+}
+.text-link:hover {
+	border-bottom: 2px solid !important;
+}
 /* Global Elements */
 .text-center {
 	text-align: center !important;
@@ -18,10 +52,6 @@ Primary blue: #0087c7;
 }
 #custom-content .et_pb_row {
 	max-width: 1200px !important;
-}
-.page-title {
-	font-size: 3em;
-	line-height: 120% !important;
 }
 .centered-content-section .et_pb_module {
 	text-align: center !important;

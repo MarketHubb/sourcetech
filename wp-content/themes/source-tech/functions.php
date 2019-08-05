@@ -188,6 +188,11 @@ function source_tech_scripts() {
 		wp_enqueue_script( 'comment-reply' );
 	}
 	
+	// All custom pages / Divi-built pages
+	if (is_page(816) || is_page(1372)) {
+		wp_enqueue_style( 'ri_theme_override', get_stylesheet_directory_uri() . '/css/ri-theme-override.css' );
+	}
+	
 	if (is_page(726) || is_page(1234)) {
 		wp_enqueue_style( 'ri_custom_rfq_styles', get_stylesheet_directory_uri() . '/css/ri-rfq-styles.css' );
 		wp_enqueue_script( 'ri_custom_rfq_scripts' );

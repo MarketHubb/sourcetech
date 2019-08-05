@@ -148,7 +148,7 @@
 	</header><!-- #masthead -->
 	
 	<?php
-	if(function_exists('bcn_display') && !is_front_page() && !is_page(777) && !is_page(1234)) {
+	if(function_exists('bcn_display') && !is_front_page() && !is_page(777) && !is_page(1234) && !is_page(816) && !is_page(1372)) {
 		echo '<div class="breadcrumbs" typeof="BreadcrumbList" vocab="https://schema.org/">';
 		bcn_display();
 		echo '</div>';
