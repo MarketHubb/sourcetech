@@ -258,6 +258,20 @@ if ( '' === $product->get_price() || 0 == $product->get_price() ) {
 return $price;
 }
 */
+
+//-----------------------------------------------------
+// RI - WooCommerce Customizations
+//-----------------------------------------------------
+
+/**
+ * Change number of products that are displayed per page to 50
+ */
+add_filter( 'loop_shop_per_page', 'ri_new_loop_shop_per_page', 20 );
+function ri_new_loop_shop_per_page( $cols ) {
+  $cols = 50;
+  return $cols;
+}
+
 //-----------------------------------------------------
 // RI - Global Helpers
 //-----------------------------------------------------
