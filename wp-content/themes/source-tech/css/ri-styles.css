@@ -65,7 +65,7 @@ h2.sub-heading {
 	box-shadow: 0 10px 50px -5px rgba(51,71,91,0.12) !important;
 }
 #homepage-services-container .et_pb_column .et_pb_module .et_pb_text_inner {
-	padding: 3em;
+	padding: 3em !important;
 }
 .testimonials-section .et_pb_testimonial_description {
 	max-width: 1200px;
