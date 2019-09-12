@@ -62,18 +62,18 @@ $zoho.salesiq.ready=function(embedinfo)
    $zoho.salesiq.chatbutton.texts([["Hi! Here to browse, or", "can I get you a quote?"], ["Hi! Here to browse, or", "can I get you a quote?", "Offline"]]);
    $zoho.salesiq.floatwindow.onlinetitle('Live Support');
    $zoho.salesiq.floatwindow.offlinetitle('Live Support');
-   $zoho.salesiq.floatwindow.fields({"offline":"name,email"});
-   // Custom placeholder values for offline form
-   $zoho.salesiq.customfield.add({
-		"name":"_default.name",
-		"hint":"Name",
-		"required":"false"
-   });
-	$zoho.salesiq.customfield.add({
-		"name":"_default.email",
-		"hint":"Email",
-		"required":"false"
-	});
+ //   $zoho.salesiq.floatwindow.fields({"offline":"name,email"});
+ //   // Custom placeholder values for offline form
+ //   $zoho.salesiq.customfield.add({
+	// 	"name":"_default.name",
+	// 	"hint":"Name",
+	// 	"required":"false"
+ //   });
+	// $zoho.salesiq.customfield.add({
+	// 	"name":"_default.email",
+	// 	"hint":"Email",
+	// 	"required":"false"
+	// });
 	// $zoho.salesiq.customfield.add({
 	// 	"name":"_default.question",
 	// 	"hint":"Email",
