@@ -1,6 +1,14 @@
 /* 
 Primary blue: #0087c7;
 */
+#zsiq_maintitle, #zsiq_byline {
+	font-family: "ZSIQ Oxygen";
+    color: #333;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+	-webkit-text-stroke: 0.45px rgba(0, 0, 0, 0.1);
+	padding-bottom: 1px;
+}
 
 /* Design Guidelines - Headings */
 h1.page-title, p.sub-title, h2.sub-heading {
