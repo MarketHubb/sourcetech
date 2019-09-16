@@ -37,12 +37,23 @@ $wrapper_classes   = apply_filters( 'woocommerce_single_product_image_gallery_cl
 	<?php the_title( '<h1 class="product_title entry-title mobile-model-title">', '</h1>' ); ?>
 	<figure class="woocommerce-product-gallery__wrapper">
 		<?php
-		if ( $product->get_image_id() ) {
-			$html = wc_get_gallery_image_html( $post_thumbnail_id, true );
-		} else {
+		if (is_single(1323)) {
+			
 			$html  = '<div class="woocommerce-product-gallery__image--placeholder">';
-			$html .= sprintf( '<img src="%s" alt="%s" class="wp-post-image" />', esc_url( wc_placeholder_img_src( 'woocommerce_single' ) ), esc_html__( 'Awaiting product image', 'woocommerce' ) );
+			$html .= '<img src="' . get_field('post_product_model_page_image') . '" class="wp-post-image" />';
+			// $html .= sprintf( '<img src="%s" alt="%s" class="wp-post-image" />', esc_url( wc_placeholder_img_src( 'woocommerce_single' ) ), esc_html__( 'Awaiting product image', 'woocommerce' ) );
 			$html .= '</div>';
+			
+		} else {
+
+			if ( $product->get_image_id() ) {
+				$html = wc_get_gallery_image_html( $post_thumbnail_id, true );
+			} else {
+				$html  = '<div class="woocommerce-product-gallery__image--placeholder">';
+				$html .= sprintf( '<img src="%s" alt="%s" class="wp-post-image" />', esc_url( wc_placeholder_img_src( 'woocommerce_single' ) ), esc_html__( 'Awaiting product image', 'woocommerce' ) );
+				$html .= '</div>';
+			}
+			
 		}
 
 		echo apply_filters( 'woocommerce_single_product_image_thumbnail_html', $html, $post_thumbnail_id ); // phpcs:disable WordPress.XSS.EscapeOutput.OutputNotEscaped
