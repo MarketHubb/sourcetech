@@ -1,6 +1,17 @@
-/* 
-Primary blue: #0087c7;
-*/
+/* Bootstrap 4 Overrides */
+.container.custom-page-content .row {
+	/*flex-direction: column !important;*/
+}
+.container {
+	max-width: 1280px !important;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-size: inherit;
+	line-height: inherit;
+	margin: inherit;
+}
+
+
 #zsiq_maintitle, #zsiq_byline {
 	font-family: "ZSIQ Oxygen";
     color: #333;
@@ -16,7 +27,7 @@ h1.page-title, p.sub-title, h2.sub-heading {
 }
 h1.page-title {
 	font-family: "Open Sans Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-	font-size: 3em;
+	font-size: 3em !important;
 	line-height: 120% !important;
 }
 p.sub-title {

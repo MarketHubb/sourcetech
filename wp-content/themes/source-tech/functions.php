@@ -180,12 +180,31 @@ function source_tech_scripts() {
 	
 	wp_register_style( 'font-awesome-pro', get_stylesheet_directory_uri() . '/fontawesome/css/all.css' );
 	
+	// wp_register_style( 'bootstrap-styles', get_stylesheet_directory_uri() . '/css/bootstrap.min.css' );
+	
+	wp_register_style( 'model-styles', get_stylesheet_directory_uri() . '/css/model-styles.css' );
+	
+	wp_register_script( 'model-scripts', get_template_directory_uri() . '/js/model-scripts.js', array('shorten'), '', true );
+	
+	wp_register_script( 'bootstrap-scripts', get_template_directory_uri() . '/js/bootstrap.min.js', array(), '', true );
+	
+	wp_register_script( 'shorten', get_template_directory_uri() . '/js/shorten.js', array('jquery'), '', true );
+	
 	if (is_singular( 'product' )) {
 		wp_enqueue_script( 'ri_custom_product_scripts' );
 	}
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
+	}
+	
+	// Demo model page
+	if (is_page(1574)) {
+		// wp_enqueue_style( 'bootstrap-styles' );
+		wp_enqueue_style( 'model-styles' );
+		wp_enqueue_script( 'model-scripts' );
+		wp_enqueue_script( 'bootstrap-scripts' );
+		wp_enqueue_script( 'shorten' );
 	}
 	
 	// All custom pages / Divi-built pages
@@ -296,6 +315,23 @@ function ri_get_single_post_type($post_id) {
 	return $type;
 }
 
+function ri_remove_model_name_adjectives($post_id) {
+	$clean_model_name = '';
+	$model_adjectives = ['Refurbished', '(Demo)', 'Demo', 'Rackmount', 'Server', 'Servers', 'PowerEdge', 'Tower', 'Proliant', 'Blade', '1U', '2U'];
+	$adjectives_lower_case = [];
+	
+	foreach ($model_adjectives as $adjectives) {
+		$adjectives_lower_case[] = strtolower($adjectives);
+	}
+	
+	$model_name =  explode(" ", strtolower(get_the_title($post_id)));
+	$clean_model_name = array_diff($model_name, $adjectives_lower_case);
+	
+	$model = implode(' ', $clean_model_name);
+	
+	return trim(ucwords($model));
+}
+
 //-----------------------------------------------------
 // RI - Page & Post Content
 //-----------------------------------------------------
@@ -320,3 +356,36 @@ function ri_model_phone_cta($post) {
 	
 	return $model_phone_cta;
 }
+
+//-----------------------------------------------------
+// RI - Plugin: ACF
+//-----------------------------------------------------
+if( function_exists('acf_add_options_page') ) {
+	
+	acf_add_options_page(array(
+		'page_title' 	=> 'Server Options',
+		'menu_title'	=> 'Server Options',
+	));
+	
+}
+function ri_load_server_spec_labels( $field ) {
+    $field['choices'] = array();
+
+    if( have_rows('global_server_spec_table_inputs', 'option') ) {
+        
+        while( have_rows('global_server_spec_table_inputs', 'option') ) {
+            
+            the_row();
+            
+            $label = get_sub_field('global_server_spec_table_inputs_input');
+
+            $field['choices'][ $label ] = $label;
+            
+        }
+        
+    }
+
+    return $field;
+}
+
+add_filter('acf/load_field/key=field_5d8ac150d781b', 'ri_load_server_spec_labels');

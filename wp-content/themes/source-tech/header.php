@@ -16,6 +16,12 @@
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="profile" href="https://gmpg.org/xfn/11">
+	
+	
+	<?php if (is_page(1574)) { ?>
+		<!-- Demo Model Page -->
+		<link rel="stylesheet" id="bootstrap-styles-css"  href="<?php echo get_stylesheet_directory_uri() . '/css/bootstrap.min.css?ver=5.2.3'; ?>" type="text/css" media="all" />
+	<?php } ?>
 
 	<?php wp_head(); ?>
 	
