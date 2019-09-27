@@ -389,3 +389,49 @@ function ri_load_server_spec_labels( $field ) {
 }
 
 add_filter('acf/load_field/key=field_5d8ac150d781b', 'ri_load_server_spec_labels');
+
+// Dynamically populate label field in the specs table (field_5d8e354a8650e)
+function ri_load_server_post_spec_labels( $field ) {
+    $field['choices'] = array();
+
+    if( have_rows('global_server_spec_table_inputs', 'option') ) {
+        
+        while( have_rows('global_server_spec_table_inputs', 'option') ) {
+            
+            the_row();
+            
+            $label = get_sub_field('global_server_spec_table_inputs_input');
+
+            $field['choices'][ $label ] = $label;
+            
+        }
+        
+    }
+
+    return $field;
+}
+
+add_filter('acf/load_field/key=field_5d8e354a8650e', 'ri_load_server_post_spec_labels');
+
+// Dynamically populate label field in the pre-configured specs table (field_5d8e3adfe46aa)
+function ri_load_pre_configured_server_post_spec_labels( $field ) {
+    $field['choices'] = array();
+
+    if( have_rows('global_server_spec_table_inputs', 'option') ) {
+        
+        while( have_rows('global_server_spec_table_inputs', 'option') ) {
+            
+            the_row();
+            
+            $label = get_sub_field('global_server_spec_table_inputs_input');
+
+            $field['choices'][ $label ] = $label;
+            
+        }
+        
+    }
+
+    return $field;
+}
+
+add_filter('acf/load_field/key=field_5d8e3adfe46aa', 'ri_load_pre_configured_server_post_spec_labels');
