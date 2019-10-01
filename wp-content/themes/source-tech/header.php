@@ -18,7 +18,7 @@
 	<link rel="profile" href="https://gmpg.org/xfn/11">
 	
 	
-	<?php if (is_page(1574)) { ?>
+	<?php if ( is_page(1574) || is_singular('servers') ) { ?>
 		<!-- Demo Model Page -->
 		<link rel="stylesheet" id="bootstrap-styles-css"  href="<?php echo get_stylesheet_directory_uri() . '/css/bootstrap.min.css?ver=5.2.3'; ?>" type="text/css" media="all" />
 	<?php } ?>
@@ -159,6 +159,23 @@
 		bcn_display();
 		echo '</div>';
 	}?>
+	
+	<?php if (is_singular('servers')) { ?>
+		<div class="container-fluid model-page-header-cta">
+			<div class="row">
+				<div class="col">
+					<div class="alert alert-primary page-cta-alert" role="alert">
+					  <?php 
+					  $header_cta = get_field('global_server_cta_copy', 'option'); 
+					  $model_clean = ri_remove_model_name_adjectives($post->ID);
+					  $header_cta_server = preg_replace('/{Server}/i', $model_clean, $header_cta);
+					  echo $header_cta_server;
+					  ?>
+					</div>
+				</div>
+			</div>
+		</div>
+	<?php } ?>
 	
 	<?php if (is_page(777)) { ?>
 		<div id="custom-content" class="custom-site-content">

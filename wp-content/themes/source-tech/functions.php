@@ -199,7 +199,7 @@ function source_tech_scripts() {
 	}
 	
 	// Demo model page
-	if (is_page(1574)) {
+	if ( is_page(1574) || is_singular('servers') ) {
 		// wp_enqueue_style( 'bootstrap-styles' );
 		wp_enqueue_style( 'model-styles' );
 		wp_enqueue_script( 'model-scripts' );
@@ -330,6 +330,23 @@ function ri_remove_model_name_adjectives($post_id) {
 	$model = implode(' ', $clean_model_name);
 	
 	return trim(ucwords($model));
+}
+
+function ri_replace_placeholder_values($text, $find, $replace) {
+	$pattern = "/$find/";
+	$text = preg_replace($pattern, $replace, $text);
+	
+	return $text;
+}
+
+function ri_get_labels_from_terms($taxonomy) {
+	$label = str_replace('_', ' ', $taxonomy);
+	
+	if(substr($label, -1) == 's') {
+	    $label = substr($label, 0, -1);
+	}
+	
+	return ucwords(str_replace('server ', '', $label));
 }
 
 //-----------------------------------------------------

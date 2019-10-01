@@ -1,34 +1,119 @@
-/* Title & Description */
-#custom-model-page-template .row:not(.model-page-title):not(.image-thumb-container) {
-	margin: 6em auto;
+/* CTA: Header */
+.model-page-header-cta .col {
+	padding-left: 0;
+	padding-right: 0;
 }
-.model-page-tags {
-	background-color: #0087c7;
-	margin-right: .5em;
-	padding-right: 1em;
-    padding-left: 1em;
+.model-page-header-cta .alert {
+	border-radius: 0;
 }
-.model-page-description-label {
-	padding-left: 1em;
-	font-weight: bold;
-	color: #222;
-	margin-bottom: 1em;
+.header-cta-callout {
+	border-bottom: 3px solid #EA672B;
 }
-.model-page-description {
-	border-left: 3px solid #0087c7;
-	padding-left: 1em;
-	font-size: .9em;
-}
-/* Images */
-.image-thumb-container {
-	margin-top: 1em;
-}
-.model-page-featured-image {
+.page-cta-alert {
 	position: relative;
-	bottom: 3em;
-	margin-bottom: -4em;
+	bottom: 4.1rem;
+	text-align: center;
+	font-size: .9rem;
+	font-weight: bolder;
+	margin-bottom: -1rem;
+	font-size: .8rem;
 }
-.model-page-featured-description {
+/* CTA: Page */
+.cta-container p {
+	margin-bottom: 0;
+}
+.model-page-cta-phone-container {
+	border-right: 1px solid;
+	text-align: right;
+}
+.model-page-cta-tag {
+	font-size: .9rem;
+	margin-bottom: 1em;
+	background-color: #ea662b !important;
+}
+.model-page-cta-title {
+	font-family: "Open Sans Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+.model-page-cta-phone-copy {
+	font-family: "Open Sans Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+.model-page-cta-phone {
+	font-size: 1rem;
+	color: #333;
+}
+.model-page-cta {
+	position: relative;
+	bottom: 1rem;
+	margin-bottom: -4rem;
+}
+.page-cta-lead, .page-cta {
+	margin-bottom: 0;
+	color: #33475b;
+	font-weight: bold;
+	text-align: right;
+	font-size: .9rem;
+}
+/* Tabs */
+#model-page-tabs ul {
+	margin-left: 0;
+}
+.model-tab-heading {
+	position: relative;
+	bottom: 1rem;
+	color: #33475b !important;
+}
+/* Tab Content */
+#server-tab-content {
+	margin-bottom: 3rem;
+}
+/* Specs Table */
+#model-specs-table td, #model-specs-table th {
+	padding: .5rem;
+	font-size: .85rem;
+	border: none;
+}
+#model-specs-table tbody tr:not(:first-of-type) td, #model-specs-table tbody tr:not(:first-of-type) th {
+	border-top: 1px solid #f7f7f7;
+}
+#model-specs-table th {
+	font-family: "Open Sans Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	vertical-align: middle;
+}
+.table .thead-dark th {
+	background-color: #0087c7;
+	border-color: #0087c7;
+}
+/* Title & Description */
+/*#custom-model-page-template .row:not(.model-page-title):not(.image-thumb-container):not(#model-page-tabs) {
+	margin: 6em auto;
+	}*/
+	.model-page-tags {
+		background-color: #0087c7;
+		margin-right: .5em;
+		padding-right: 1em;
+		padding-left: 1em;
+	}
+	.model-page-description-label {
+		padding-left: 1em;
+		font-weight: bold;
+		color: #222;
+		margin-bottom: 1em;
+	}
+	.model-page-description {
+		border-left: 3px solid #0087c7;
+		padding-left: 1em;
+		font-size: .9em;
+	}
+	/* Images */
+	.image-thumb-container {
+		margin-top: 1em;
+	}
+	.model-page-featured-image {
+		position: relative;
+		bottom: 3em;
+		margin-bottom: -4em;
+	}
+	.model-page-featured-description {
 /*	font-size: .75em;
 	font-style: italic;
 	color: #666;
@@ -47,10 +132,30 @@
 .image-thumb-container .col.active img {
 	border: 1px solid #0087c7;
 }
+/* How it Works */
+.model-page-how {
+	background-color: #fff !important;
+	border-radius: 4px !important;
+	box-shadow: 0 10px 50px -5px rgba(51,71,91,0.12) !important;
+	padding: 2rem 0;
+}
+.model-page-how .col.col-md-4 {
+	padding: 2rem;
+}
+.model-page-how i {
+	color: #0087c7;
+	font-size: 2rem;
+	margin-bottom: 1em;
+}
 /* Tabs */
+#model-page-tabs {
+	margin: 3rem 0;
+}
 #model-page-tabs .nav .nav-item .nav-link {
 	font-size: .9em;
 	font-weight: bold;
+	font-family: "Open Sans Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	color: #777;
 }
 #model-page-tabs .nav .nav-item .nav-link:visited {
 	color: #777;
@@ -62,6 +167,7 @@
 #model-page-tabs .nav .nav-item .nav-link.active {
 	color: #333;
 	border-color: #0087c7 #0087c7 #fff;
+	outline: 0;
 }
 .nav-tabs {
 	border-bottom: 1px solid #0087c7;
