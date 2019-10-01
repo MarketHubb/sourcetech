@@ -119,7 +119,7 @@ foreach ($server_tag_cats as $tag_cat) {
 							 
 						</div>
 						<div class="col col-md-6 col-lg-6">
-							<h4 class="model-page-description-label">Description:</h4>
+							<h2 class="section-heading model-page-description-label">Description:</h2>
 							<p class="model-page-description"><?php the_field('post_servers_description'); ?></p>
 						</div>
 					</div>
