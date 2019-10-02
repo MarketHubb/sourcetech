@@ -63,9 +63,9 @@
 	color: #33475b !important;
 }
 /* Tab Content */
-.tab-content>.active {
-	display: block;
-	padding: 2rem 0;
+.model-page-tab-content-heading {
+	position: relative;
+	bottom: 1rem;
 }
 #server-tab-content {
 	margin-bottom: 3rem;
@@ -80,7 +80,6 @@
 	border-top: 1px solid #f7f7f7;
 }
 #model-specs-table th {
-	font-family: "Open Sans Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 	vertical-align: middle;
 }
 .table .thead-dark th {
@@ -112,8 +111,7 @@
 }
 .model-page-featured-image {
 	position: relative;
-	bottom: 3em;
-	margin-bottom: -4em;
+	margin-bottom: -1em;
 }
 .model-page-featured-description {
 /*	font-size: .75em;

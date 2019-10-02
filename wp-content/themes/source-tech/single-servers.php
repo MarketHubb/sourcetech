@@ -42,10 +42,10 @@ foreach ($server_tag_cats as $tag_cat) {
 			<?php 
 			if( have_rows('post_product_tags') ):
 				$tags = '';
-			    while ( have_rows('post_product_tags') ) : the_row();
-			        $tags .= '<span class="badge badge-pill badge-primary model-page-tags">' . get_sub_field('post_product_tags_tag') . '</span>';
-			    endwhile;
-			    echo $tags;
+				while ( have_rows('post_product_tags') ) : the_row();
+					$tags .= '<span class="badge badge-pill badge-primary model-page-tags">' . get_sub_field('post_product_tags_tag') . '</span>';
+				endwhile;
+				echo $tags;
 			endif;
 			
 			foreach ($tags as $tag => $value) {
@@ -53,8 +53,8 @@ foreach ($server_tag_cats as $tag_cat) {
 			}
 			
 			echo $tag_items;
-				
-			 ?>
+			
+			?>
 		</div>
 	</div>
 	
@@ -68,9 +68,9 @@ foreach ($server_tag_cats as $tag_cat) {
 				<li class="nav-item">
 					<a class="nav-link" href="#specs" data-toggle="tab" role="tab"><i class="fal fa-file-alt fa-lg"></i>Specs</a>
 				</li>
-				<li class="nav-item">
+				<!-- <li class="nav-item">
 					<a class="nav-link" href="#why" data-toggle="tab" role="tab"><i class="fal fa-hdd fa-lg"></i>Why SourceTech</a>
-				</li>
+				</li> -->
 				<li class="nav-item">
 					<a class="nav-link" href="#faq" data-toggle="tab" role="tab"><i class="fal fa-question-circle fa-lg"></i>FAQs</a>
 				</li>
@@ -97,26 +97,26 @@ foreach ($server_tag_cats as $tag_cat) {
 							if( have_rows('post_servers_images') ):
 								$i = 1;
 								$images = '<div class="row image-thumb-container">';
-							    while ( have_rows('post_servers_images') ) : the_row();
-							    	if ($i === 1) {
-							    		$image_class = ' active';
-							    		$load_image  = '<img src="' . get_sub_field('post_servers_images_image') . '" class="model-page-featured-image" />';
-							    	} else {
-							    		$image_class = ' ';
-							    	}
+								while ( have_rows('post_servers_images') ) : the_row();
+									if ($i === 1) {
+										$image_class = ' active';
+										$load_image  = '<img src="' . get_sub_field('post_servers_images_image') . '" class="model-page-featured-image" />';
+									} else {
+										$image_class = ' ';
+									}
 									$images .= '<div class="col col-md-3 col-lg-3' . $image_class . '">';
-							        $images .= '<img src="' . get_sub_field('post_servers_images_image') . '" class="img-thumbnail rounded float-left" />';
+									$images .= '<img src="' . get_sub_field('post_servers_images_image') . '" class="img-thumbnail rounded float-left" />';
 									$images .= '</div>';
-							        
-							        $i++;
-							    endwhile;
-							    $images .= '</div>';
+									
+									$i++;
+								endwhile;
+								$images .= '</div>';
 							endif;
 							
 							echo $load_image;
 							echo $images;
-							 ?>
-							 
+							?>
+							
 						</div>
 						<div class="col col-md-6 col-lg-6">
 							<h2 class="section-heading model-page-description-label">Description:</h2>
@@ -127,7 +127,7 @@ foreach ($server_tag_cats as $tag_cat) {
 				<!-- End Tab Content: Image & Description -->
 				<!-- Start Tab Content: Specs -->
 				<div class="tab-pane fade show" id="specs" role="tabpanel" aria-labelledby="specs-tab">
-					<h2 class="section-heading model-tab-heading"><?php echo get_field('global_server_specs_heading', 'option'); ?></h2>
+					<h2 class="section-heading model-page-tab-content-heading">Details and Specs</h2>
 					<?php $specs_sub_heading = preg_replace('/{Server}/i', $model_clean, get_field('global_server_specs_sub_heading', 'option'));  ?>
 					<p class="section-sub-heading"><?php echo $specs_sub_heading; ?></p>
 					<table class="table" id="model-specs-table">
@@ -139,47 +139,80 @@ foreach ($server_tag_cats as $tag_cat) {
 							$tax_specs = '';
 							foreach ($tags as $tag => $value) {
 								$tax_specs .= '<tr>';
-							    $tax_specs .= '<th scope="row">' . $tag . ':</th>';
-							    $tax_specs .= '<td>' . $value . '</td>';
+								$tax_specs .= '<th scope="row">' . $tag . ':</th>';
+								$tax_specs .= '<td>' . $value . '</td>';
 								$tax_specs .= '</tr>';
 							}
 							// Output specs from custom field
 							$post_specs = '';
 							if( have_rows('post_servers_specs') ):
-							    while ( have_rows('post_servers_specs') ) : the_row();
-							    	$post_specs .= '<tr>';
-							        $post_specs .= '<th scope="row">' . get_sub_field('post_servers_specs_label') . ':</th>';
-							        $post_specs .= '<td>' . get_sub_field('post_servers_specs_value') . '</td>';
-							    	$post_specs .= '</tr>';
-							    endwhile;
+								while ( have_rows('post_servers_specs') ) : the_row();
+									$post_specs .= '<tr>';
+									$post_specs .= '<th scope="row">' . get_sub_field('post_servers_specs_label') . ':</th>';
+									$post_specs .= '<td>' . get_sub_field('post_servers_specs_value') . '</td>';
+									$post_specs .= '</tr>';
+								endwhile;
 							endif;
 							
 							$specs_table = $tax_specs . $post_specs;
 							
 							echo $specs_table;
-							 ?>
+							?>
 						</tbody>
 					</table>
 				</div>
 				<!-- End Tab Content: Specs -->
+				
 				<!-- Start Tab Content: Why -->
-				<div class="tab-pane fade" id="why" role="tabpanel" aria-labelledby="why-tab">
+				<!-- <div class="tab-pane fade" id="why" role="tabpanel" aria-labelledby="why-tab">
 					<h2>Why SourceTech</h2>
-				</div>
+				</div> -->
 				<!-- End Tab Content: Why -->
+				
 				<!-- Start Tab Content: FAQs -->
 				<div class="tab-pane fade" id="faq" role="tabpanel" aria-labelledby="faq-tab">
-					<h2>FAQs</h2>
+					<h2 class="section-heading model-page-tab-content-heading">FAQs</h2>
+					<div id="accordion">
+						<?php 
+						if( have_rows('global_server_faqs', 'option') ):
+							$faq = '';
+						    while ( have_rows('global_server_faqs', 'option') ) : the_row();
+						    	$faq_active_class = (get_row_index() === 1 ? ' show' : ' ');
+						    	$faq_id = 'faq-' . get_row_index();
+						    	
+						        $faq .= '<div class="card">
+										<div class="card-header" id="headingOne">
+										<h5 class="mb-0">
+										<button class="btn btn-link" data-toggle="collapse" data-target="#' . $faq_id . '" aria-expanded="true" aria-controls="' . $faq_id . '">';
+								$faq .= get_sub_field('global_server_faqs_question', 'option');
+								$faq .= '</button>
+										</h5>
+										</div>';
+								
+								$faq .= '<div id="' . $faq_id . '" class="collapse' . $faq_active_class . '" aria-labelledby="headingOne" data-parent="#accordion">
+										<div class="card-body">';
+								$faq .= get_sub_field('global_server_faqs_answer', 'option');
+								$faq .= '</div>
+										</div>
+										</div>';
+						    endwhile;
+						endif;
+						
+						echo $faq;
+						 ?>
+					</div>
 				</div>
 				<!-- End Tab Content: FAQs -->
 				<!-- Start Tab Content: Warranty -->
 				<div class="tab-pane fade" id="warranty" role="tabpanel" aria-labelledby="warranty-tab">
-					<h2>Warranty</h2>
+					<h2 class="section-heading model-page-tab-content-heading">Warranty</h2>
+					<?php echo get_field('global_server_warranty', 'option'); ?>
 				</div>
 				<!-- End Tab Content: Warranty -->
 				<!-- Start Tab Content: Shipping -->
 				<div class="tab-pane fade" id="shipping" role="tabpanel" aria-labelledby="shipping-tab">
-					<h2>Shipping</h2>
+					<h2 class="section-heading model-page-tab-content-heading">Shipping</h2>
+					<?php echo get_field('global_server_shipping', 'option'); ?>
 				</div>
 				<!-- End Tab Content: Shipping -->
 			</div>
@@ -232,24 +265,24 @@ foreach ($server_tag_cats as $tag_cat) {
 	<div class="row model-page-how">
 		<?php 
 		if( have_rows('global_server_how_it_works', 'option') ):
-	    	$heading_with_server_name = preg_replace('/{Server}/i', $model_clean, get_field('global_server_how_it_works_heading', 'option'));
+			$heading_with_server_name = preg_replace('/{Server}/i', $model_clean, get_field('global_server_how_it_works_heading', 'option'));
 			$how = '<div class="col col-md-12 col-lg-12"><h2 class="section-heading text-center">' . $heading_with_server_name . '</h2></div>';
 			$i = 1;
-		    while ( have_rows('global_server_how_it_works', 'option') ) : the_row();
-		    	$description_with_server_name = preg_replace('/{Server}/i', $model_clean, get_sub_field('global_server_how_it_works_description', 'option'));
+			while ( have_rows('global_server_how_it_works', 'option') ) : the_row();
+				$description_with_server_name = preg_replace('/{Server}/i', $model_clean, get_sub_field('global_server_how_it_works_description', 'option'));
 		    	// $description_with_server_name = str_replace('{Server}', get_sub_field('global_server_how_it_works_description', 'option'), $model_clean);
-		        $how .= '<div class="col col-md-4 col-lg-4 text-center">';
-		        $how .= get_sub_field('global_server_how_it_works_icon', 'option');
-		        $how .= '<h3 class="section-heading">' . get_row_index() . '. ' . get_sub_field('global_server_how_it_works_heading', 'option') . '</h3>';
-		        $how .= '<p>' . $description_with_server_name . '</p>';
-		        $how .= '</div>';
-		    endwhile;
+				$how .= '<div class="col col-md-4 col-lg-4 text-center">';
+				$how .= get_sub_field('global_server_how_it_works_icon', 'option');
+				$how .= '<h3 class="section-heading">' . get_row_index() . '. ' . get_sub_field('global_server_how_it_works_heading', 'option') . '</h3>';
+				$how .= '<p>' . $description_with_server_name . '</p>';
+				$how .= '</div>';
+			endwhile;
 		endif;
 		
 		echo $how;
-			
-			
-		 ?>
+		
+		
+		?>
 	</div>
 	
 	<!-- Testimonial -->
