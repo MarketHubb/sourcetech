@@ -169,7 +169,7 @@
 					  $header_cta = get_field('global_server_cta_copy', 'option'); 
 					  $model_clean = ri_remove_model_name_adjectives($post->ID);
 					  $header_cta_server = preg_replace('/{Server}/i', $model_clean, $header_cta);
-					  echo $header_cta_server;
+					  echo '- ' . $header_cta_server . ' -';
 					  ?>
 					</div>
 				</div>
