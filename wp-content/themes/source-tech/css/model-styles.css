@@ -32,7 +32,6 @@
 	font-size: .9rem;
 	margin-bottom: 1em;
 	background-color: #ea662b !important;
-	text-transform: lowercase;
 	padding: .5em 1em;
 	
 }
@@ -111,7 +110,6 @@
 	margin-bottom: .5em;
 }
 .model-page-description {
-	border-left: 3px solid #0087c7;
 	padding-left: 1em;
 	font-size: .9em;
 }
@@ -143,11 +141,19 @@
 	border: 1px solid #0087c7;
 }
 /* How it Works */
+.model-page-how-title .col {
+	padding: 0;
+}
+.model-page-how-title h2.section-heading {
+	background: #0087c7;
+    color: #fff;
+    padding: 15px;
+}
 .model-page-how {
 	background-color: #fff !important;
 	border-radius: 4px !important;
 	box-shadow: 0 10px 50px -5px rgba(51,71,91,0.12) !important;
-	padding: 2rem 0;
+	padding: .5rem 0;
 }
 .model-page-how .col.col-md-4 {
 	padding: 2rem;

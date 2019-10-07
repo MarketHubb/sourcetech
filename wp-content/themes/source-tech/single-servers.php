@@ -18,13 +18,11 @@ foreach ($server_tag_cats as $tag_cat) {
 	<div class="row justify-content-end model-page-cta">
 		<div class="col-6">
 			<div class="cta-container">
-				<!-- <h3 class="model-page-cta-title text-center">Get a real-time quote now:</h3> -->
 				<div class="text-center">
-					<span class="badge badge-pill badge-primary model-page-tags model-page-cta-tag">2 Easy Ways to get a Real-time Quote</span>
+					<span class="badge badge-pill badge-primary model-page-tags model-page-cta-tag">Get A Real-Time Quote in Seconds</span>
 				</div>
 				<div class="row">
 					<div class="col model-page-cta-phone-container">
-						<!-- <h4><i class="fal fa-phone fa-lg"></i> <a href="tel:800-932-0657" class="model-phone model-page-cta-phone model-page-cta-phone-copy">800-932-0657</a></h4> -->
 						<p class="model-page-cta-phone-copy"><i class="fal fa-phone fa-lg"></i> <a href="tel:800-932-0657" class="model-phone model-page-cta-phone model-page-cta-phone-copy">800-932-0657</a></p>
 					</div>
 					<div class="col">
@@ -220,53 +218,19 @@ foreach ($server_tag_cats as $tag_cat) {
 	</div>
 	<!-- End: Tab Content -->
 	
-	
-	
-	<!-- Start: Tab Content -->
-	<!-- <div class="row" id="model-page-tabs-content">
-		<div class="col">
-			<div class="tab-content" id="myTabContent">
-			<div class="tab-content" id="myTabContent">
-				<div class="tab-pane fade show active" id="specs" role="tabpanel" aria-labelledby="specs-tab">
-					<table class="table">
-						<thead class="thead-dark">
-							<tr>
-								<th scope="col">Label</th>
-								<th scope="col">Values</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php 
-							if( have_rows('post_servers_specs') ):
-								$specs_table = '';
-							    while ( have_rows('post_servers_specs') ) : the_row();
-							    	$specs_table .= '<tr>';
-							        $specs_table .= '<th scope="row">' . get_sub_field('post_servers_specs_label') . '</th>';
-							        $specs_table .= '<td>' . get_sub_field('post_servers_specs_value') . '</td>';
-							    	$specs_table .= '</tr>';
-							    endwhile;
-							endif;
-							
-							echo $specs_table;
-							 ?>
-						</tbody>
-					</table>
-				</div>
-				
-				<div class="tab-pane fade" id="why" role="tabpanel" aria-labelledby="why-tab">...</div>
-				<div class="tab-pane fade" id="faq" role="tabpanel" aria-labelledby="faq-tab">...</div>
-			</div>
-		</div>
-	</div>  -->
-	<!-- End: Tab Content -->
-	
-	
 	<!-- How it Works -->
+	<div class="row model-page-how-title">
+		<div class="col col-md-12 col-lg-12">
+			<?php $heading_with_server_name = preg_replace('/{Server}/i', $model_clean, get_field('global_server_how_it_works_heading', 'option')); ?>
+			<h2 class="section-heading text-center">- <?php echo $heading_with_server_name; ?> -</h2>
+		</div>
+	</div>
 	<div class="row model-page-how">
 		<?php 
 		if( have_rows('global_server_how_it_works', 'option') ):
-			$heading_with_server_name = preg_replace('/{Server}/i', $model_clean, get_field('global_server_how_it_works_heading', 'option'));
-			$how = '<div class="col col-md-12 col-lg-12"><h2 class="section-heading text-center">' . $heading_with_server_name . '</h2></div>';
+			// $heading_with_server_name = preg_replace('/{Server}/i', $model_clean, get_field('global_server_how_it_works_heading', 'option'));
+			// $how = '<div class="col col-md-12 col-lg-12"><h2 class="section-heading text-center">' . $heading_with_server_name . '</h2></div>';
+			$how = '';
 			$i = 1;
 			while ( have_rows('global_server_how_it_works', 'option') ) : the_row();
 				$description_with_server_name = preg_replace('/{Server}/i', $model_clean, get_sub_field('global_server_how_it_works_description', 'option'));
