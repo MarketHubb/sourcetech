@@ -11,7 +11,7 @@
 	border-radius: 0;
 }
 .header-cta-callout {
-	border-bottom: 3px solid #EA672B;
+	border-bottom: 2px solid #EA672B;
 	padding-bottom: 1px;
 }
 .page-cta-alert {
@@ -19,6 +19,12 @@
 	font-size: .9rem;
 	font-weight: bolder;
 	font-size: .8rem;
+}
+.model-page-header-cta i {
+	color: #ea662b;
+    font-size: 1rem;
+    padding: 0 5px;
+    vertical-align: text-bottom;
 }
 /* CTA: Page */
 .cta-container p {
