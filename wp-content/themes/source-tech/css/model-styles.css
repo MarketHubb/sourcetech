@@ -76,8 +76,24 @@
 	position: relative;
 	bottom: 1rem;
 }
+.model-page-tab-content-subheading {
+	font-family: "Open Sans Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	font-size: .9rem;
+	color: #444;
+	background-color: #f7f7f7;
+	padding: 10px;
+	display: inline-block;
+}
 #server-tab-content {
 	margin-bottom: 3rem;
+}
+#accordion button:hover {
+	outline: 0;
+	border: none;
+}
+#accordion button {
+	color: #222;
+	text-decoration: none;
 }
 /* Specs Table */
 #model-specs-table td, #model-specs-table th {

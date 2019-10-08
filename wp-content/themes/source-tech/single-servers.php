@@ -181,7 +181,7 @@ foreach ($server_tag_cats as $tag_cat) {
 						        $faq .= '<div class="card">
 										<div class="card-header" id="headingOne">
 										<h5 class="mb-0">
-										<button class="btn btn-link" data-toggle="collapse" data-target="#' . $faq_id . '" aria-expanded="true" aria-controls="' . $faq_id . '">';
+										<button class="btn btn-link border-0" data-toggle="collapse" data-target="#' . $faq_id . '" aria-expanded="true" aria-controls="' . $faq_id . '">';
 								$faq .= get_sub_field('global_server_faqs_question', 'option');
 								$faq .= '</button>
 										</h5>
@@ -204,12 +204,14 @@ foreach ($server_tag_cats as $tag_cat) {
 				<!-- Start Tab Content: Warranty -->
 				<div class="tab-pane fade" id="warranty" role="tabpanel" aria-labelledby="warranty-tab">
 					<h2 class="section-heading model-page-tab-content-heading">Warranty</h2>
+					<p class="model-page-tab-content-subheading"><?php echo get_field('global_server_warranty_excerpt', 'option'); ?></p>
 					<?php echo get_field('global_server_warranty', 'option'); ?>
 				</div>
 				<!-- End Tab Content: Warranty -->
 				<!-- Start Tab Content: Shipping -->
 				<div class="tab-pane fade" id="shipping" role="tabpanel" aria-labelledby="shipping-tab">
 					<h2 class="section-heading model-page-tab-content-heading">Shipping</h2>
+					<p class="model-page-tab-content-subheading"><?php echo get_field('global_server_shipping_excerpt', 'option'); ?></p>
 					<?php echo get_field('global_server_shipping', 'option'); ?>
 				</div>
 				<!-- End Tab Content: Shipping -->
