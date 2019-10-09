@@ -69,6 +69,17 @@
 	font-size: .9rem;
 }
 /* Tabs */
+#accordion .card-header {
+	background-color: transparent;
+	border: none;
+}
+#accordion .card-header button {
+	font-family: "Open Sans Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	color: #777;
+}
+#accordion .card-header button[aria-expanded="true"] {
+	color: #333;
+}
 #model-page-tabs ul {
 	margin-left: 0;
 }
@@ -124,15 +135,13 @@
 	margin-right: .5em;
 	padding-right: 1em;
 	padding-left: 1em;
+	border-radius: .25rem;
 }
 .model-page-description-label {
-	padding-left: .8em;
 	font-weight: bold;
 	color: #222;
-	margin-bottom: .5em;
 }
 .model-page-description {
-	padding-left: 1em;
 	font-size: .9em;
 }
 /* Images */

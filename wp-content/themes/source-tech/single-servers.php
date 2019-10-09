@@ -66,9 +66,6 @@ foreach ($server_tag_cats as $tag_cat) {
 				<li class="nav-item">
 					<a class="nav-link" href="#specs" data-toggle="tab" role="tab"><i class="fal fa-file-alt fa-lg"></i>Specs</a>
 				</li>
-				<!-- <li class="nav-item">
-					<a class="nav-link" href="#why" data-toggle="tab" role="tab"><i class="fal fa-hdd fa-lg"></i>Why SourceTech</a>
-				</li> -->
 				<li class="nav-item">
 					<a class="nav-link" href="#faq" data-toggle="tab" role="tab"><i class="fal fa-question-circle fa-lg"></i>FAQs</a>
 				</li>
@@ -117,7 +114,9 @@ foreach ($server_tag_cats as $tag_cat) {
 							
 						</div>
 						<div class="col col-md-6 col-lg-6">
-							<h2 class="section-heading model-page-description-label">Description</h2>
+							<h2 class="section-heading model-page-tab-content-heading">Description</h2>
+							<?php $description_sub_heading = preg_replace('/{Server}/i', $model_clean, get_field('global_server_description_excerpt', 'option')); ?>
+							<p class="model-page-tab-content-subheading"><?php echo $description_sub_heading; ?></p>
 							<p class="model-page-description"><?php the_field('post_servers_description'); ?></p>
 						</div>
 					</div>
@@ -126,8 +125,8 @@ foreach ($server_tag_cats as $tag_cat) {
 				<!-- Start Tab Content: Specs -->
 				<div class="tab-pane fade show" id="specs" role="tabpanel" aria-labelledby="specs-tab">
 					<h2 class="section-heading model-page-tab-content-heading">Details and Specs</h2>
-					<?php $specs_sub_heading = preg_replace('/{Server}/i', $model_clean, get_field('global_server_specs_sub_heading', 'option'));  ?>
-					<p class="section-sub-heading"><?php echo $specs_sub_heading; ?></p>
+					<?php $specs_sub_heading = preg_replace('/{Server}/i', $model_clean, get_field('global_server_specs_excerpt', 'option')); ?>
+					<p class="model-page-tab-content-subheading"><?php echo $specs_sub_heading; ?></p>
 					<table class="table" id="model-specs-table">
 						<tbody>
 							<?php 
@@ -170,24 +169,26 @@ foreach ($server_tag_cats as $tag_cat) {
 				<!-- Start Tab Content: FAQs -->
 				<div class="tab-pane fade" id="faq" role="tabpanel" aria-labelledby="faq-tab">
 					<h2 class="section-heading model-page-tab-content-heading">FAQs</h2>
+					<p class="model-page-tab-content-subheading"><?php echo get_field('global_server_faq_excerpt', 'option'); ?></p>
 					<div id="accordion">
 						<?php 
 						if( have_rows('global_server_faqs', 'option') ):
 							$faq = '';
 						    while ( have_rows('global_server_faqs', 'option') ) : the_row();
 						    	$faq_active_class = (get_row_index() === 1 ? ' show' : ' ');
+						    	$faq_open_class = (get_row_index() === 1 ? 'true' : 'false');
 						    	$faq_id = 'faq-' . get_row_index();
 						    	
 						        $faq .= '<div class="card">
-										<div class="card-header" id="headingOne">
+										<div class="card-header" id="heading-' . get_row_index() . '">
 										<h5 class="mb-0">
-										<button class="btn btn-link border-0" data-toggle="collapse" data-target="#' . $faq_id . '" aria-expanded="true" aria-controls="' . $faq_id . '">';
+										<button class="btn btn-link border-0" data-toggle="collapse" data-target="#' . $faq_id . '" aria-expanded="' . $faq_open_class . '" aria-controls="' . $faq_id . '">';
 								$faq .= get_sub_field('global_server_faqs_question', 'option');
 								$faq .= '</button>
 										</h5>
 										</div>';
 								
-								$faq .= '<div id="' . $faq_id . '" class="collapse' . $faq_active_class . '" aria-labelledby="headingOne" data-parent="#accordion">
+								$faq .= '<div id="' . $faq_id . '" class="collapse' . $faq_active_class . '" aria-labelledby="heading-' . get_row_index() . '" data-parent="#accordion">
 										<div class="card-body">';
 								$faq .= get_sub_field('global_server_faqs_answer', 'option');
 								$faq .= '</div>
