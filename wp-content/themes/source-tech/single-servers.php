@@ -59,7 +59,7 @@ foreach ($server_tag_cats as $tag_cat) {
 	<!-- Start: Tabs -->
 	<div class="row" id="model-page-tabs">
 		<div class="col">
-			<ul class="nav nav-tabs nav-fill">
+			<ul class="nav nav-tabs nav-fill" id="model-tabs">
 				<li class="nav-item">
 					<a class="nav-link active" href="#server" data-toggle="tab" role="tab"><i class="fal fa-server fa-lg"></i><?php echo $model_clean; ?></a>
 				</li>
