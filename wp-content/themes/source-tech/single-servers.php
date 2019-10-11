@@ -2,7 +2,8 @@
 
 <?php 
 $post_id = $post->ID; 
-$model_clean = ri_remove_model_name_adjectives($post_id);
+// $model_clean = ri_remove_model_name_adjectives($post_id);
+$model_clean = get_the_title();
 $tags = array();
 $server_tag_cats = array('server_manufacturers', 'product_line', 'server_types', 'form_factor');
 foreach ($server_tag_cats as $tag_cat) {
