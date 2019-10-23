@@ -59,48 +59,12 @@ var $zoho=$zoho || {};$zoho.salesiq = $zoho.salesiq || {widgetcode:"00c1181641a8
 $zoho.salesiq.ready=function(embedinfo)
 
 {
-   $zoho.salesiq.chatbutton.texts([["Hi! Here to browse, or", "can I get you a quote?", "Online"], ["Hi! Here to browse, or", "can I get you a quote?", "Offline"]]);
+   $zoho.salesiq.chatbutton.texts([["Get a quote in minutes.", "Talk to me to get started.", "Online"], ["Get a quote in minutes.", "Talk to me to get started.", "Online"]]);
    $zoho.salesiq.floatwindow.onlinetitle('Live Support');
    $zoho.salesiq.floatwindow.offlinetitle('Live Support');
 }
 
 </script>
-
-<?php 
-	date_default_timezone_set('America/Chicago');
-	$timezone = date_default_timezone_get();
-	$hour = date('H', time());
-	$offline_hours = [23,24,1,2,3,4,5,6];
-	
-	if (in_array($hour, $offline_hours)) { ?>
-		
-		<script>
-
-		$zoho.salesiq.ready=function(embedinfo)
-
-		{
-			   // Offline form
-			   $zoho.salesiq.floatwindow.fields({"offline":"name,email"});
-			   $zoho.salesiq.customfield.add({
-					"name":"_default.name",
-					"hint":"Name",
-					"required":"false"
-			   });
-				$zoho.salesiq.customfield.add({
-					"name":"_default.email",
-					"hint":"Email",
-					"required":"false"
-				});
-				$zoho.salesiq.customfield.add({
-					"name":"_default.question",
-					"hint":"Tell us what products you're interested in",
-					"required":"false"
-				});
-		}
-			
-		</script>
-		
-	<?php } ?>
 
 </body>
 </html>
