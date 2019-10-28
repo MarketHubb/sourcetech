@@ -129,7 +129,11 @@
 	border-color: #0087c7;
 }
 /* Title & Description */
-
+.server-title-abstract {
+	color: #555;
+	font-style: italic;
+	font-size: 1rem;
+}
 .model-page-tags {
 	background-color: #0087c7;
 	margin-right: .5em;

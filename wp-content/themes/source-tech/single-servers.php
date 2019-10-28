@@ -37,7 +37,8 @@ foreach ($server_tag_cats as $tag_cat) {
 	<!-- Title -->
 	<div class="row model-page-title">
 		<div class="col">
-			<h1 class="page-title"><?php echo get_the_title($post_id); ?></h1>
+			<h1 class="page-title"><?php echo get_the_title($post_id); ?> Servers</h1>
+			<h6 class="server-title-abstract">(Refurbished, Built to order)</h6>
 			<?php 
 			if( have_rows('post_product_tags') ):
 				$tags = '';
@@ -88,7 +89,7 @@ foreach ($server_tag_cats as $tag_cat) {
 				<!-- Start Tab Content: Image & Description -->
 				<div class="tab-pane fade show active" id="server" role="tabpanel" aria-labelledby="specs-tab">
 					<div class="row">
-						<div class="col col-md-6 col-lg-6" id="model-page-image-container">
+						<div class="col-12 col-sm-12 col-md-6 col-lg-6" id="model-page-image-container">
 							<?php 
 							if( have_rows('post_servers_images') ):
 								$i = 1;
@@ -100,7 +101,7 @@ foreach ($server_tag_cats as $tag_cat) {
 									} else {
 										$image_class = ' ';
 									}
-									$images .= '<div class="col col-md-3 col-lg-3' . $image_class . '">';
+									$images .= '<div class="col-3 col-md-3 col-lg-3' . $image_class . '">';
 									$images .= '<img src="' . get_sub_field('post_servers_images_image') . '" class="img-thumbnail rounded float-left" />';
 									$images .= '</div>';
 									
@@ -114,7 +115,7 @@ foreach ($server_tag_cats as $tag_cat) {
 							?>
 							
 						</div>
-						<div class="col col-md-6 col-lg-6">
+						<div class="col-12 col-sm-12 col-md-6 col-lg-6">
 							<h2 class="section-heading model-page-tab-content-heading">Description</h2>
 							<?php $description_sub_heading = preg_replace('/{Server}/i', $model_clean, get_field('global_server_description_excerpt', 'option')); ?>
 							<p class="model-page-tab-content-subheading"><?php echo $description_sub_heading; ?></p>
