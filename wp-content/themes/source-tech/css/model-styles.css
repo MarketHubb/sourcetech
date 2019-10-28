@@ -156,23 +156,14 @@
 	position: relative;
 	margin-bottom: -1em;
 }
-.model-page-featured-description {
-/*	font-size: .75em;
-	font-style: italic;
-	color: #666;
-	text-align: center;
-	position: relative;
-	bottom: 5.5em;
-	margin-bottom: -4em;*/
-}
-.image-thumb-container .col img {
+.image-thumb-container .thumb-images img {
 	padding: 10px;
 }
-.image-thumb-container .col img:hover {
+.image-thumb-container .thumb-images img:hover {
 	cursor: pointer;
 	border: 1px solid #0087c7;
 }
-.image-thumb-container .col.active img {
+.image-thumb-container .thumb-images.active img {
 	border: 1px solid #0087c7;
 }
 /* How it Works */

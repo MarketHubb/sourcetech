@@ -101,8 +101,8 @@ foreach ($server_tag_cats as $tag_cat) {
 									} else {
 										$image_class = ' ';
 									}
-									$images .= '<div class="col-3 col-md-3 col-lg-3' . $image_class . '">';
-									$images .= '<img src="' . get_sub_field('post_servers_images_image') . '" class="img-thumbnail rounded float-left" />';
+									$images .= '<div class="col-4 col-sm-4 col-md-3 col-lg-3 thumb-images' . $image_class . '">';
+									$images .= '<img src="' . get_sub_field('post_servers_images_image') . '" class="img-thumbnail rounded" />';
 									$images .= '</div>';
 									
 									$i++;

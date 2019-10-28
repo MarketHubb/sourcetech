@@ -29,11 +29,11 @@
     
     
 	// Image thumbnail gallery
-	$('#model-page-image-container .image-thumb-container .col img').on('click', function(){
-		$('#model-page-image-container .image-thumb-container .col').each(function(){
+	$('#model-page-image-container .image-thumb-container .thumb-images img').on('click', function(){
+		$('#model-page-image-container .image-thumb-container .thumb-images').each(function(){
 			$(this).removeClass('active');
 		})
-		$(this).closest('.col').addClass('active');
+		$(this).closest('.thumb-images').addClass('active');
 		let selectedFeatureSrc = $(this).attr('src');
 		$('.model-page-featured-image').attr('src', selectedFeatureSrc);
 	});
