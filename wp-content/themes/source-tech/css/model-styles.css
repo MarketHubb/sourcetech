@@ -94,12 +94,12 @@
 	bottom: 1rem;
 }
 .model-page-tab-content-subheading {
-	font-family: "Open Sans Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-	font-size: .9rem;
-	color: #444;
-	background-color: #f7f7f7;
-	padding: 10px;
-	display: inline-block;
+	font-size: .85rem;
+	color: #555;
+	font-weight: 600;
+	line-height: 135%;
+	position: relative;
+	bottom: 1rem;
 }
 #server-tab-content {
 	margin-bottom: 3rem;
