@@ -11,13 +11,13 @@
 	border-radius: 0;
 }
 .header-cta-callout {
-	border-bottom: 2px solid #EA672B;
-	padding-bottom: 1px;
+	color: #EA672B;
+	font-weight: bold;
 }
 .page-cta-alert {
 	text-align: center;
 	font-size: .9rem;
-	font-weight: bolder;
+	font-weight: 600;
 	font-size: .8rem;
 }
 .model-page-header-cta i {
@@ -103,6 +103,9 @@
 }
 #server-tab-content {
 	margin-bottom: 3rem;
+}
+#server-tab-content .tab-pane {
+	padding-left: 1.1rem;
 }
 #accordion button:hover {
 	outline: 0;

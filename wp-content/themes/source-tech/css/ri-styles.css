@@ -1,3 +1,34 @@
+/* Component: Call to Action */
+.cta-header {
+	padding: .5rem 1.25rem;
+}
+.cta-card .card-title {
+	font-family: "Open Sans Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	font-size: 1em;
+}
+.cta-card li {
+	font-size: .82rem;
+	padding: .5rem 1.25rem;
+	font-weight: 600;
+	color: #333;
+	border-color: #eee;
+}
+.cta-card li i {
+	color: #0087c7;
+	margin-left: .75em;
+}
+/* Layout: Colors */
+.text-white {
+	color: #fff;
+}
+.bg-orange {
+	background: #EA672B;
+}
+
+/* Layout: Borders & Shadows */
+.shadow {
+	box-shadow: 0 10px 35px -5px rgba(51,71,91,0.1) !important;
+}
 /* Bootstrap 4 Overrides */
 .container {
 	max-width: 1280px !important;
