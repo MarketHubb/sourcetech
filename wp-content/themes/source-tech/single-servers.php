@@ -14,31 +14,12 @@ foreach ($server_tag_cats as $tag_cat) {
 ?>
 
 <div class="custom-page-content" id="custom-model-page-template">
-	
-	<!-- CTA -->
-	<div class="row justify-content-end model-page-cta">
-		<div class="col-6">
-			<div class="cta-container">
-				<div class="text-center">
-					<span class="badge badge-pill badge-primary model-page-tags model-page-cta-tag">Get A Real-Time Quote in Seconds</span>
-				</div>
-				<div class="row">
-					<div class="col model-page-cta-phone-container">
-						<p class="model-page-cta-phone-copy"><i class="fal fa-phone fa-lg"></i> <a href="tel:800-932-0657" class="model-phone model-page-cta-phone model-page-cta-phone-copy">800-932-0657</a></p>
-					</div>
-					<div class="col">
-						<p class="model-page-cta-phone-copy"><i class="fal fa-comments-alt fa-lg"></i> Chat with us</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	
 	<!-- Title -->
-	<div class="row model-page-title">
-		<div class="col">
+	<div class="row model-page-title mt-4">
+		<div class="col col-sm-12 col-md-6 col-lg-8">
 			<h1 class="page-title"><?php echo get_the_title($post_id); ?> Servers</h1>
-			<h6 class="server-title-abstract">(Refurbished, Built to order)</h6>
+			<h6 class="server-title-abstract mb-3">Refurbished, built-to-order <?php echo $tags['Manufacturer']; ?>
+                <?php echo $tags['Type']; ?> Servers</h6>
 			<?php 
 			if( have_rows('post_product_tags') ):
 				$tags = '';
@@ -56,6 +37,9 @@ foreach ($server_tag_cats as $tag_cat) {
 			
 			?>
 		</div>
+        <div class="col col-sm-12 col-md-6 col-lg-4">
+            <?php get_template_part('template-parts/content', 'cta' ); ?>
+        </div>
 	</div>
 	
 	<!-- Start: Tabs -->
@@ -63,7 +47,7 @@ foreach ($server_tag_cats as $tag_cat) {
 		<div class="col">
 			<ul class="nav nav-tabs nav-fill" id="model-tabs">
 				<li class="nav-item">
-					<a class="nav-link active" href="#server" data-toggle="tab" role="tab"><i class="fal fa-server fa-lg"></i><?php echo $model_clean; ?></a>
+					<a class="nav-link active" href="#server" data-toggle="tab" role="tab"><i class="fal fa-server fa-lg"></i>Overview</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="#specs" data-toggle="tab" role="tab"><i class="fal fa-file-alt fa-lg"></i>Specs</a>
@@ -88,6 +72,13 @@ foreach ($server_tag_cats as $tag_cat) {
 			<div class="tab-content" id="server-tab-content">
 				<!-- Start Tab Content: Image & Description -->
 				<div class="tab-pane fade show active" id="server" role="tabpanel" aria-labelledby="specs-tab">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="section-heading model-page-tab-content-heading">Overview</h2>
+                            <?php $description_sub_heading = preg_replace('/{Server}/i', $model_clean, get_field('global_server_description_excerpt', 'option')); ?>
+                            <p class="model-page-tab-content-subheading"><?php echo $description_sub_heading; ?></p>
+                        </div>
+                    </div>
 					<div class="row">
 						<div class="col-12 col-sm-12 col-md-6 col-lg-6" id="model-page-image-container">
 							<?php 
@@ -116,10 +107,7 @@ foreach ($server_tag_cats as $tag_cat) {
 							
 						</div>
 						<div class="col-12 col-sm-12 col-md-6 col-lg-6">
-							<h2 class="section-heading model-page-tab-content-heading">Description</h2>
-							<?php $description_sub_heading = preg_replace('/{Server}/i', $model_clean, get_field('global_server_description_excerpt', 'option')); ?>
-							<p class="model-page-tab-content-subheading"><?php echo $description_sub_heading; ?></p>
-							<p class="model-page-description"><?php the_field('post_servers_description'); ?></p>
+							<p class="model-page-description mt-3"><?php the_field('post_servers_description'); ?></p>
 						</div>
 					</div>
 				</div>

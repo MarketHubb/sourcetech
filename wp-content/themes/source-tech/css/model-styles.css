@@ -131,7 +131,6 @@
 /* Title & Description */
 .server-title-abstract {
 	color: #555;
-	font-style: italic;
 	font-size: 1rem;
 }
 .model-page-tags {
@@ -224,4 +223,12 @@
 /* Testimonial */
 .model-page-testimonial {
 	padding: 6rem 0;
+}
+
+/* MEDIA QUERIES */
+/* Responsive Styles Desktop Only */
+@media all and (min-width: 981px) {
+	.cta-title-container {
+		text-align: right;
+	}
 }

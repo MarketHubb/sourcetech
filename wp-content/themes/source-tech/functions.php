@@ -160,44 +160,53 @@ add_action( 'widgets_init', 'source_tech_widgets_init' );
  * Enqueue scripts and styles.
  */
 function source_tech_scripts() {
+
 	wp_enqueue_style( 'source-tech-style', get_stylesheet_uri() );
-	
+
 	wp_enqueue_style( 'ri_custom_styles', get_stylesheet_directory_uri() . '/css/ri-styles.css' );
+
+	wp_enqueue_style( 'ri_blog_styles', get_stylesheet_directory_uri() . '/css/ri-blog-styles.css' );
+
+	wp_enqueue_style( 'ri_web_fonts', 'https://fonts.googleapis.com/css?family=Open+Sans:600,700&display=swap' );
 
 	wp_enqueue_style( 'fontello', get_template_directory_uri() . '/css/fontello.css');
 
 	wp_enqueue_script( 'source-tech-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
 
 	wp_enqueue_script( 'source-tech-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
-	
+
 	wp_register_script( 'ri_custom_global_scripts', get_template_directory_uri() . '/js/ri-custom-global-scripts.js', array(), '', true );
-	
+
 	wp_register_script( 'ri_custom_product_scripts', get_template_directory_uri() . '/js/ri-custom-product-scripts.js', array(), '', true );
-	
+
 	wp_register_script( 'ri_custom_rfq_scripts', get_template_directory_uri() . '/js/ri-custom-rfq-scripts.js', array(), '', true );
-	
+
 	wp_enqueue_script( 'ri_custom_global_scripts' );
-	
+
 	wp_register_style( 'font-awesome-pro', get_stylesheet_directory_uri() . '/fontawesome/css/all.css' );
-	
+
 	// wp_register_style( 'bootstrap-styles', get_stylesheet_directory_uri() . '/css/bootstrap.min.css' );
-	
+
 	wp_register_style( 'model-styles', get_stylesheet_directory_uri() . '/css/model-styles.css' );
-	
+
 	wp_register_script( 'bootstrap-scripts', get_template_directory_uri() . '/js/bootstrap.min.js', array(), '', true );
-	
+
 	wp_register_script( 'model-scripts', get_template_directory_uri() . '/js/model-scripts.js', array('shorten', 'bootstrap-scripts'), '', true );
-	
+
 	wp_register_script( 'shorten', get_template_directory_uri() . '/js/shorten.js', array('jquery'), '', true );
-	
+
 	if (is_singular( 'product' )) {
 		wp_enqueue_script( 'ri_custom_product_scripts' );
+	}
+
+	if (is_singular( 'post' )) {
+		wp_enqueue_style( 'ri-blog-styles' );
 	}
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
-	
+
 	// Demo model page
 	if ( is_page(1574) || is_singular('servers') ) {
 		// wp_enqueue_style( 'bootstrap-styles' );
@@ -206,12 +215,12 @@ function source_tech_scripts() {
 		wp_enqueue_script( 'bootstrap-scripts' );
 		wp_enqueue_script( 'shorten' );
 	}
-	
+
 	// All custom pages / Divi-built pages
 	if (is_page(816) || is_page(1372)) {
 		wp_enqueue_style( 'ri_theme_override', get_stylesheet_directory_uri() . '/css/ri-theme-override.css' );
 	}
-	
+
 	if (is_page(726) || is_page(1234)) {
 		wp_enqueue_style( 'ri_custom_rfq_styles', get_stylesheet_directory_uri() . '/css/ri-rfq-styles.css' );
 		wp_enqueue_script( 'ri_custom_rfq_scripts' );
@@ -261,7 +270,7 @@ if ( class_exists( 'WooCommerce' ) ) {
  */
 function widget_count( $widget_area_id ) {
     $widget_areas = wp_get_sidebars_widgets();
- 
+
     if( empty( $widget_areas[$widget_area_id] ) ) {
         return false;
     } else {
@@ -273,7 +282,7 @@ add_filter( 'woocommerce_get_price_html', 'actwd_call_for_quote_if_zero', 100, 2
 function actwd_call_for_quote_if_zero( $price, $product ){
 if ( '' === $product->get_price() || 0 == $product->get_price() ) {
     $price = '<a href="/request-a-quote.html" class="button request-quote"><span>Request a Quote</span></a>';
-} 
+}
 return $price;
 }
 */
@@ -297,21 +306,21 @@ function ri_new_loop_shop_per_page( $cols ) {
 function ri_get_single_post_type($post_id) {
 	$terms = get_the_terms( $post_id, 'product_cat' );
 	$term_names = array();
-	
+
 	foreach ($terms as $term) {
 		$terms_array[] = $term->name;
 	}
-	
+
 	if (in_array('Networking', $terms_array)) {
 		$type = 'Networking';
-	} 
+	}
 	if (in_array('Used Servers', $terms_array)) {
 		$type = 'Servers';
-	} 
+	}
 	if (in_array('Storwize', $terms_array)) {
 		$type = 'Storage';
-	} 
-	
+	}
+
 	return $type;
 }
 
@@ -319,33 +328,33 @@ function ri_remove_model_name_adjectives($post_id) {
 	$clean_model_name = '';
 	$model_adjectives = ['Refurbished', '(Demo)', 'Demo', 'Rackmount', 'Server', 'Servers', 'PowerEdge', 'Tower', 'Proliant', 'Blade', '1U', '2U'];
 	$adjectives_lower_case = [];
-	
+
 	foreach ($model_adjectives as $adjectives) {
 		$adjectives_lower_case[] = strtolower($adjectives);
 	}
-	
+
 	$model_name =  explode(" ", strtolower(get_the_title($post_id)));
 	$clean_model_name = array_diff($model_name, $adjectives_lower_case);
-	
+
 	$model = implode(' ', $clean_model_name);
-	
-	return trim(ucwords($model));
+
+	return trim(strtoupper($model));
 }
 
 function ri_replace_placeholder_values($text, $find, $replace) {
 	$pattern = "/$find/";
 	$text = preg_replace($pattern, $replace, $text);
-	
+
 	return $text;
 }
 
 function ri_get_labels_from_terms($taxonomy) {
 	$label = str_replace('_', ' ', $taxonomy);
-	
+
 	if(substr($label, -1) == 's') {
 	    $label = substr($label, 0, -1);
 	}
-	
+
 	return ucwords(str_replace('server ', '', $label));
 }
 
@@ -355,22 +364,22 @@ function ri_get_labels_from_terms($taxonomy) {
 function ri_model_phone_cta($post) {
 	$terms = get_the_terms( $post->ID, 'product_cat' );
 	$term_names = array();
-	
+
 	foreach ($terms as $term) {
 		$terms_array[] = $term->name;
 	}
-	
+
 	if (in_array('Networking', $terms_array)) {
-		$lead = 'Call to order this networking equipment'; 
+		$lead = 'Call to order this networking equipment';
 	} else {
 		$lead = 'Need help configuring this server?';
 	}
-	
+
 	$model_phone_cta  = '<div class="model-phone-cta-container">';
 	$model_phone_cta .= '<p class="model-phone-lead">' . $lead . '</p>';
 	$model_phone_cta .= '<a href="tel:800-932-0657" class="model-phone">800-932-0657</a>';
 	$model_phone_cta .= '</div>';
-	
+
 	return $model_phone_cta;
 }
 
@@ -378,28 +387,33 @@ function ri_model_phone_cta($post) {
 // RI - Plugin: ACF
 //-----------------------------------------------------
 if( function_exists('acf_add_options_page') ) {
-	
+
 	acf_add_options_page(array(
 		'page_title' 	=> 'Server Options',
 		'menu_title'	=> 'Server Options',
 	));
-	
+
+	acf_add_options_page(array(
+		'page_title' 	=> 'Blog Options',
+		'menu_title'	=> 'Blog Options',
+	));
+
 }
 function ri_load_server_spec_labels( $field ) {
     $field['choices'] = array();
 
     if( have_rows('global_server_spec_table_inputs', 'option') ) {
-        
+
         while( have_rows('global_server_spec_table_inputs', 'option') ) {
-            
+
             the_row();
-            
+
             $label = get_sub_field('global_server_spec_table_inputs_input');
 
             $field['choices'][ $label ] = $label;
-            
+
         }
-        
+
     }
 
     return $field;
@@ -412,17 +426,17 @@ function ri_load_server_post_spec_labels( $field ) {
     $field['choices'] = array();
 
     if( have_rows('global_server_spec_table_inputs', 'option') ) {
-        
+
         while( have_rows('global_server_spec_table_inputs', 'option') ) {
-            
+
             the_row();
-            
+
             $label = get_sub_field('global_server_spec_table_inputs_input');
 
             $field['choices'][ $label ] = $label;
-            
+
         }
-        
+
     }
 
     return $field;
@@ -435,17 +449,17 @@ function ri_load_pre_configured_server_post_spec_labels( $field ) {
     $field['choices'] = array();
 
     if( have_rows('global_server_spec_table_inputs', 'option') ) {
-        
+
         while( have_rows('global_server_spec_table_inputs', 'option') ) {
-            
+
             the_row();
-            
+
             $label = get_sub_field('global_server_spec_table_inputs_input');
 
             $field['choices'][ $label ] = $label;
-            
+
         }
-        
+
     }
 
     return $field;
