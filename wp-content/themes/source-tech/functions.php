@@ -191,9 +191,7 @@ function source_tech_scripts() {
 
 	wp_register_script( 'bootstrap-scripts', get_template_directory_uri() . '/js/bootstrap.min.js', array(), '', true );
 
-	wp_register_script( 'model-scripts', get_template_directory_uri() . '/js/model-scripts.js', array('shorten', 'bootstrap-scripts'), '', true );
-
-	wp_register_script( 'shorten', get_template_directory_uri() . '/js/shorten.js', array('jquery'), '', true );
+	wp_register_script( 'model-scripts', get_template_directory_uri() . '/js/model-scripts.js', array('bootstrap-scripts'), '', true );
 
 	if (is_singular( 'product' )) {
 		wp_enqueue_script( 'ri_custom_product_scripts' );
@@ -209,11 +207,9 @@ function source_tech_scripts() {
 
 	// Demo model page
 	if ( is_page(1574) || is_singular('servers') ) {
-		// wp_enqueue_style( 'bootstrap-styles' );
 		wp_enqueue_style( 'model-styles' );
 		wp_enqueue_script( 'model-scripts' );
 		wp_enqueue_script( 'bootstrap-scripts' );
-		wp_enqueue_script( 'shorten' );
 	}
 
 	// All custom pages / Divi-built pages
