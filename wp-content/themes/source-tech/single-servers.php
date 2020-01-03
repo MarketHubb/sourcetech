@@ -19,7 +19,7 @@ foreach ($server_tag_cats as $tag_cat) {
 		<div class="col col-sm-12 col-md-6 col-lg-8">
 			<h1 class="page-title"><?php echo get_the_title($post_id); ?> Servers</h1>
 			<h6 class="server-title-abstract mb-3">Refurbished, built-to-order <?php echo $tags['Manufacturer']; ?>
-                <?php echo $tags['Type']; ?> Servers</h6>
+                <?php echo $tags['Type']; ?> servers</h6>
 			<?php 
 			if( have_rows('post_product_tags') ):
 				$tags = '';
@@ -38,7 +38,10 @@ foreach ($server_tag_cats as $tag_cat) {
 			?>
 		</div>
         <div class="col col-sm-12 col-md-6 col-lg-4">
-            <?php get_template_part('template-parts/content', 'cta' ); ?>
+            <?php
+            set_query_var('product_name', get_the_title($post_id));
+            get_template_part('template-parts/content', 'cta' );
+            ?>
         </div>
 	</div>
 	
@@ -80,7 +83,7 @@ foreach ($server_tag_cats as $tag_cat) {
                         </div>
                     </div>
 					<div class="row">
-						<div class="col-12 col-sm-12 col-md-6 col-lg-6" id="model-page-image-container">
+						<div class="col-12 col-sm-12 col-md-7 col-lg-6" id="model-page-image-container">
 							<?php 
 							if( have_rows('post_servers_images') ):
 								$i = 1;
@@ -106,7 +109,7 @@ foreach ($server_tag_cats as $tag_cat) {
 							?>
 							
 						</div>
-						<div class="col-12 col-sm-12 col-md-6 col-lg-6">
+						<div class="col-12 col-sm-12 col-md-5 col-lg-6">
 							<p class="model-page-description mt-3"><?php the_field('post_servers_description'); ?></p>
 						</div>
 					</div>

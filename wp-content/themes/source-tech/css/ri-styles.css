@@ -1,14 +1,16 @@
 /* Component: Call to Action */
-.cta-header {
-	padding: .5rem 1.25rem;
+.cta-card ul {
+	margin-left: 0;
+	text-align: right;
 }
-.cta-card .card-title {
+.cta-card li:first-of-type {
+	padding: .5rem 1.25rem;
 	font-family: "Open Sans Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 	font-size: 1em;
 }
 .cta-card li {
-	font-size: .82rem;
-	padding: .5rem 1.25rem;
+	font-size: .85rem;
+	padding: .5rem 1.25rem .5rem 1.25rem;
 	font-weight: 600;
 	color: #333;
 	border-color: #eee;
@@ -17,7 +19,11 @@
 	color: #0087c7;
 	margin-left: .75em;
 }
-/* Layout: Colors */
+.cta-chat:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+	/* Layout: Colors */
 .text-white {
 	color: #fff;
 }
@@ -48,6 +54,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Helper Classes */
+.inline-block {
+	display: inline-block;
+}
 .blue {
 	color: #0087c7;
 }
