@@ -24,7 +24,7 @@ if ($product_name) {
 <div class="inline-block cta-card shadow">
     <ul class="list-group list-group-flush">
         <li class="list-group-item bg-orange text-white">Get a Custom Quote Today</li>
-        <li class="list-group-item"><span class="cta-chat" onclick="$zoho.salesiq.chat.start()">Live Chat</span> <i class="fas fa-comments-alt"></i></li>
+        <li class="list-group-item"><span class="cta-chat" onclick='$zoho.salesiq.floatwindow.visible("show");'>Live Chat</span> <i class="fas fa-comments-alt"></i></li>
         <li class="list-group-item"><a href="tel:800-932-0657">800-932-0657</a> <i class="fas fa-phone"></i></li>
         <li class="list-group-item"><a href="mailto:info@source-tech.net?subject=<?php echo rawurlencode($mail_subject); ?>">info@source-tech.net</a> <i
                 class="fas fa-envelope-open-text"></i></li>
