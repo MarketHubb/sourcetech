@@ -24,7 +24,7 @@ if ($product_name) {
 
 <div class="inline-block cta-card shadow">
     <ul class="list-group list-group-flush">
-        <li class="list-group-item bg-orange text-white">3 Easy Ways to get a Quote</li>
+        <li class="list-group-item bg-orange text-white">3 Easy Ways to Get a Quote</li>
         <li class="list-group-item">
             <p class="cta-lead-copy text-right mb-0 pb-0">Real humans available 24x7 <i class="fas fa-comments-alt"></i></p>
             <span class="cta-chat" onclick='$zoho.salesiq.floatwindow.visible("show");'>Chat Now <i class="far fa-long-arrow-right"></i></span>
