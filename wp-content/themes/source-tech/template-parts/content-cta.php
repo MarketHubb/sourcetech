@@ -34,7 +34,7 @@ if ($product_name) {
             <a href="tel:800-932-0657" class="cta-phone">800-932-0657 <i class="far fa-long-arrow-right"></i></a>
         </li>
         <li class="list-group-item">
-            <p class="cta-lead-copy text-right mb-0 pb-0">Email us their quote and we'll beat it <i
+            <p class="cta-lead-copy text-right mb-0 pb-0">Email us their quote & we'll beat it <i
                         class="fas fa-envelope-open-text"></i></p>
             <a href="mailto:info@source-tech.net?subject=<?php echo rawurlencode($mail_subject); ?>" class="cta-email">info@source-tech.net <i class="far fa-long-arrow-right"></i></a>
         </li>
