@@ -40,6 +40,7 @@ foreach ($server_tag_cats as $tag_cat) {
         <div class="col col-sm-12 col-md-6 col-lg-4 text-right">
             <?php
             set_query_var('product_name', get_the_title($post_id));
+            set_query_var('manufacturer',$tags['Manufacturer']);
             get_template_part('template-parts/content', 'cta' );
             ?>
         </div>

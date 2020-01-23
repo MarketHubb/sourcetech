@@ -15,8 +15,22 @@
 	color: #333;
 	border-color: #eee;
 }
-.cta-card li i {
+.cta-card span, .cta-card a {
+	font-weight: bold;
+	margin-right: 1.5rem;
 	color: #0087c7;
+	font-size: .9rem;
+}
+.cta-card span i {
+	border-bottom: none;
+}
+.cta-lead-copy {
+	font-size: .7rem;
+	font-style: italic;
+	color: #555;
+}
+.cta-card li p i {
+	color: #EA672B;
 	margin-left: .75em;
 }
 .cta-chat:hover {
