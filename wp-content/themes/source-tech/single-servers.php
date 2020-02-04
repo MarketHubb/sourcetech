@@ -111,6 +111,14 @@ foreach ($server_tag_cats as $tag_cat) {
 							
 						</div>
 						<div class="col-12 col-sm-12 col-md-5 col-lg-6">
+<!--                            <p class="model-page-discount">Our --><?php //echo get_the_title(); ?><!-- customers save 15% compared to other re-sellers.</p>-->
+<!--                            <p class="model-page-discount">Our customers save 20% on average on --><?php //echo get_the_title(); ?><!-- servers.</p>-->
+<!--                            <p class="model-page-discount">Custom-configured --><?php //echo get_the_title(); ?><!-- servers for 20% less than the other guys.</p>-->
+<!--                            <p class="model-page-discount">Our custom-configured --><?php //echo get_the_title(); ?><!-- servers are up to 20% less than the other guys.</p>-->
+                            <div class="discount-container mb-4">
+                                <p class="model-page-discount mb-2">Save up to 20% on custom-configured <?php echo get_the_title(); ?> servers.</p>
+                                <p class="model-page-discount-sub">Don't believe us? Start a chat and get a real-time quote in minutes.</p>
+                            </div>
 							<p class="model-page-description mt-3"><?php the_field('post_servers_description'); ?></p>
 						</div>
 					</div>

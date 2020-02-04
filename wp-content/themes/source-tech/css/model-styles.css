@@ -147,6 +147,24 @@
 	font-weight: bold;
 	color: #222;
 }
+.discount-container {
+	padding: 0 0 0 1rem;
+	border-left: 4px solid #0087c7;
+}
+.model-page-discount {
+	font-family: "Open Sans Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	color: #33475b !important;
+	font-size: 1.75em !important;
+	line-height: 118% !important;
+}
+.model-page-discount-sub {
+	color: #444;
+	font-size: .8rem;
+	display: inline-block;
+	margin-bottom: 0;
+	font-weight: bolder;
+	letter-spacing: -.025em;
+}
 .model-page-description {
 	font-size: .9em;
 }
