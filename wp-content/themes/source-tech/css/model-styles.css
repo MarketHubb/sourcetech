@@ -1,3 +1,8 @@
+/* CTA Module */
+.cta-card {
+	position: relative;
+	bottom: 1rem;
+}
 /* Breadcrumbs */
 .breadcrumbs {
 	display: none;
@@ -27,6 +32,7 @@
     vertical-align: text-bottom;
 }
 /* CTA: Page */
+
 .cta-container p {
 	margin-bottom: 0;
 }
@@ -211,7 +217,7 @@
 }
 /* Tabs */
 #model-page-tabs {
-	margin: 3rem 0;
+	margin: 1rem 0 3rem;
 }
 #model-page-tabs .nav .nav-item .nav-link {
 	font-size: .9em;
