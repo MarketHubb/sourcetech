@@ -106,6 +106,9 @@
 .post-overview p {
     margin-bottom: .5rem;
 }
+.post-overview strong {
+    display: block;
+}
 .post-overview a.product-links {
     color: #2ea3f2;
     font-weight: bold;
