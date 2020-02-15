@@ -13,7 +13,7 @@
 	<header class="entry-header">
 		<?php
 		if ( is_singular() ) :
-			the_title( '<h1 class="entry-title">', '</h1>' );
+			the_title( '<h1 class="entry-title single-blog-title">', '</h1>' );
 		else :
 			the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' );
 		endif;
@@ -22,9 +22,11 @@
 			?>
 			<div class="entry-meta">
 				<?php
-				source_tech_posted_on();
-				source_tech_posted_by();
+				// source_tech_posted_on();
+				// the_modified_date();
 				?>
+				<p class="post-created"><strong>Created on: </strong> <?php echo get_the_date(); ?></p>
+				<p class="post-updated"><strong>Updated on: </strong> <?php the_modified_date(); ?></p>
 			</div><!-- .entry-meta -->
 		<?php endif; ?>
 	</header><!-- .entry-header -->

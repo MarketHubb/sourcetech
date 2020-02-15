@@ -18,8 +18,7 @@
 	<link rel="profile" href="https://gmpg.org/xfn/11">
 	
 	
-	<?php if ( is_page(1574) || is_singular('servers') ) { ?>
-		<!-- Demo Model Page -->
+	<?php if ( is_page(1574) || is_singular('servers') || is_singular('post') ) { ?>
 		<link rel="stylesheet" id="bootstrap-styles-css"  href="<?php echo get_stylesheet_directory_uri() . '/css/bootstrap.min.css?ver=5.2.3'; ?>" type="text/css" media="all" />
 	<?php } ?>
 
@@ -180,6 +179,6 @@
 	
 	<?php if (is_page(777)) { ?>
 		<div id="custom-content" class="custom-site-content">
-		<?php } else { ?>
+		<?php } else if (!is_singular('post')) { ?>
 			<div id="content" class="site-content">
 			<?php } ?>
