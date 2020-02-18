@@ -25,6 +25,7 @@
 	<?php wp_head(); ?>
 
 
+    <?php if (is_singular('servers')) { ?>
     <!-- Hotjar Tracking Code for Source-tech.net -->
     <script>
         (function(h,o,t,j,a,r){
@@ -36,6 +37,7 @@
             a.appendChild(r);
         })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
     </script>
+    <?php } ?>
 
     <!-- ahrefs domain verification -->
     <meta name="ahrefs-site-verification" content="b1123fd872bc8c7860c22eadc8959120a93e9d7d4a3999dd64a3141842640706">
