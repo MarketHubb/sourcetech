@@ -27,7 +27,8 @@
 }
 .cta-lead-copy {
 	font-size: .65rem;
-	color: #555;
+	color: #333;
+	letter-spacing: -.025rem;
 }
 .cta-card li p i {
 	color: #EA672B;
@@ -49,6 +50,10 @@
 /* Layout: Borders & Shadows */
 .shadow {
 	box-shadow: 0 10px 35px -5px rgba(51,71,91,0.1) !important;
+}
+.panel {
+	padding: 2rem;
+	border-radius: 4px;
 }
 /* Bootstrap 4 Overrides */
 .container {

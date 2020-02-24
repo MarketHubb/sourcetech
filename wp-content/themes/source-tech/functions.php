@@ -204,7 +204,7 @@ function source_tech_scripts() {
 	}
 
 	// Demo model page
-	if ( is_page(1574) || is_singular('servers') ) {
+	if ( is_page(1574) || is_singular('servers') || is_singular('networking')) {
 		wp_enqueue_style( 'model-styles' );
 		wp_enqueue_script( 'model-scripts' );
 		wp_enqueue_script( 'bootstrap-scripts' );
@@ -297,6 +297,43 @@ function ri_new_loop_shop_per_page( $cols ) {
 //-----------------------------------------------------
 // RI - Global Helpers
 //-----------------------------------------------------
+function get_formatted_product_terms($post_id) {
+    $tag_terms = array('server_manufacturers', 'product_line', 'server_types', 'form_factor', 'networking_type');
+    $tags = array();
+
+    foreach ($tag_terms as $tag_cat) {
+        $terms = get_the_terms($post_id, $tag_cat);
+        if ($terms) {
+            $label = ri_get_labels_from_terms($terms[0]->taxonomy);
+            $tags[$label] = $terms[0]->name;
+        }
+    }
+    $tags['title'] = get_formatted_product_title($post_id);
+    $tags['product'] = get_post_type($post_id) == 'servers' ? 'Servers' : $tags['Networking Type'];
+
+    return $tags;
+}
+function get_formatted_product_title($post_id) {
+
+    return (get_post_type($post_id) == 'servers') ? get_the_title($post_id) . ' Servers' : get_the_title($post_id);
+
+}
+
+function replace_product_variable_in_string($string, $post_id) {
+    $string = trim($string);
+//    $string = trim(strtolower($string));
+    $tags = get_formatted_product_terms($post_id);
+    $replacement_array = [];
+
+    foreach ($tags as $key => $val) {
+        if ($val) {
+            $replacement_array['{' . strtolower($key) . '}'] = $val;
+        }
+    }
+
+    return strtr($string, $replacement_array);
+}
+
 function ri_get_single_post_type($post_id) {
 	$terms = get_the_terms( $post_id, 'product_cat' );
 	$term_names = array();
@@ -390,6 +427,16 @@ if( function_exists('acf_add_options_page') ) {
 	acf_add_options_page(array(
 		'page_title' 	=> 'Blog Options',
 		'menu_title'	=> 'Blog Options',
+	));
+
+	acf_add_options_page(array(
+		'page_title' 	=> 'Networking Options',
+		'menu_title'	=> 'Networking Options',
+	));
+
+	acf_add_options_page(array(
+		'page_title' 	=> 'Global - Products',
+		'menu_title'	=> 'Global - Products',
 	));
 
 }

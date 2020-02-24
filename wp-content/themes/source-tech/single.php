@@ -6,33 +6,15 @@
  *
  * @package Source_Tech
  */
-
 get_header();
 ?>
 
-	<div id="primary" class="content-area">
-		<main id="main" class="site-main">
-            <h3>Heck no</h3>
-
-		<?php
-		while ( have_posts() ) :
-			the_post();
-
-			get_template_part( 'template-parts/content', get_post_type() );
-
-			the_post_navigation();
-
-			// If comments are open or we have at least one comment, load up the comment template.
-			if ( comments_open() || get_comments_number() ) :
-				comments_template();
-			endif;
-
-		endwhile; // End of the loop.
-		?>
-
-		</main><!-- #main -->
-	</div><!-- #primary -->
-
 <?php
-get_sidebar('blog');
-get_footer();
+if ($post->post_type == 'servers' || $post->post_type == 'networking') {
+    get_template_part('content-product');
+} elseif ($post->post_type == 'post') {
+    get_template_part('content-post');
+}
+?>
+
+<?php get_footer(); ?>

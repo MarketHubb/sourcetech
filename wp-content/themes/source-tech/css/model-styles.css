@@ -101,11 +101,19 @@
 }
 .model-page-tab-content-subheading {
 	font-size: .85rem;
-	color: #555;
-	font-weight: 600;
 	line-height: 135%;
 	position: relative;
 	bottom: 1rem;
+	background: #cce5ff;
+	padding: .3rem .5rem;
+	color: #222;
+	display: inline-block;
+	margin-bottom: 0;
+	font-weight: 600;
+	letter-spacing: -.025em;
+}
+.model-page-tab-content-subheading:first-letter {
+	text-transform: uppercase;
 }
 #server-tab-content {
 	margin-bottom: 3rem;
@@ -126,6 +134,8 @@
 	padding: .5rem;
 	font-size: .85rem;
 	border: none;
+	line-height: 155%;
+	letter-spacing: -.025em;
 }
 #model-specs-table tbody tr:not(:first-of-type) td, #model-specs-table tbody tr:not(:first-of-type) th {
 	border-top: 1px solid #f7f7f7;
@@ -154,25 +164,34 @@
 	color: #222;
 }
 .discount-container {
+	position: relative;
+	top: 1rem;
 	padding: 0 0 0 1rem;
 	border-left: 4px solid #0087c7;
 }
 .model-page-discount {
 	font-family: "Open Sans Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 	color: #33475b !important;
-	font-size: 1.75em !important;
-	line-height: 118% !important;
+	font-size: 1.6em !important;
+	line-height: 115% !important;
+	text-transform: uppercase;
+	letter-spacing: -.05rem;
+	font-weight: bold;
 }
 .model-page-discount-sub {
-	color: #444;
-	font-size: .8rem;
+	color: #333;
+	font-size: .85rem;
 	display: inline-block;
 	margin-bottom: 0;
-	font-weight: bolder;
+	font-style: italic;
 	letter-spacing: -.025em;
 }
 .model-page-description {
-	font-size: .9em;
+	font-size: .85rem;
+	line-height: 155%;
+	letter-spacing: -.025em;
+	position: relative;
+	top: 1rem;
 }
 /* Images */
 .image-thumb-container {
@@ -193,27 +212,23 @@
 	border: 1px solid #0087c7;
 }
 /* How it Works */
-.model-page-how-title .col {
-	padding: 0;
-}
 .model-page-how-title h2.section-heading {
 	background: #0087c7;
     color: #fff;
     padding: 15px;
 }
-.model-page-how {
-	background-color: #fff !important;
-	border-radius: 4px !important;
-	box-shadow: 0 10px 50px -5px rgba(51,71,91,0.12) !important;
-	padding: .5rem 0;
-}
-.model-page-how .col.col-md-4 {
-	padding: 2rem;
+.model-page-how .shadow {
+	box-shadow: 0 10px 35px -5px rgba(51,71,91,0.2) !important;
 }
 .model-page-how i {
 	color: #0087c7;
 	font-size: 2rem;
 	margin-bottom: 1em;
+}
+.how-copy {
+	font-size: .85rem;
+	line-height: 155%;
+	letter-spacing: -.025em;
 }
 /* Tabs */
 #model-page-tabs {
