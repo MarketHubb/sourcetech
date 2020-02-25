@@ -309,7 +309,7 @@ function get_formatted_product_terms($post_id) {
         }
     }
     $tags['title'] = get_formatted_product_title($post_id);
-    $tags['product'] = get_post_type($post_id) == 'servers' ? 'Servers' : $tags['Networking Type'];
+    $tags['product'] = get_post_type($post_id) == 'servers' ? 'Servers' : get_field('post_networking_equipment_type', $post_id);
 
     return $tags;
 }
