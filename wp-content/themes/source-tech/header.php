@@ -184,10 +184,9 @@
 					<div class="alert alert-primary page-cta-alert" role="alert">
 					  <?php 
 					  $header_cta = get_field('global_server_cta_copy', 'option'); 
-					  // $model_clean = ri_remove_model_name_adjectives($post->ID);
-					  $model_clean = get_the_title();
-					  $header_cta_server = preg_replace('/{Server}/i', $model_clean, $header_cta);
-					  echo '<i class="fas fa-angle-double-right"></i> ' . $header_cta_server . ' <i class="fas fa-angle-double-left"></i>';
+					  $alert_field = 'global_' . $post->post_type . '_alert';
+					  $alert = replace_product_variable_in_string(get_field($alert_field, 'option'), $post->ID);
+					  echo '<i class="fas fa-angle-double-right"></i> ' . $alert . ' <i class="fas fa-angle-double-left"></i>';
 					  ?>
 					</div>
 				</div>
