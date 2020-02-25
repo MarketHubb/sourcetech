@@ -1,6 +1,6 @@
 <div class="row model-page-how-title">
     <div class="col col-md-12 col-lg-12">
-        <h2 class="section-heading text-center mb-4">Ordering a <?php the_title(); ?> has never been easier</h2>
+        <h2 class="section-heading text-center mb-4">Getting the lowest price on a <?php the_title(); ?> has never been easier</h2>
     </div>
 </div>
 <div class="row model-page-how">
