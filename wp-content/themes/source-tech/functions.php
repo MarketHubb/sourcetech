@@ -321,7 +321,6 @@ function get_formatted_product_title($post_id) {
 
 function replace_product_variable_in_string($string, $post_id) {
     $string = trim($string);
-//    $string = trim(strtolower($string));
     $tags = get_formatted_product_terms($post_id);
     $replacement_array = [];
 
