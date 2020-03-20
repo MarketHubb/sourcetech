@@ -1,14 +1,23 @@
+<?php
+$categories = get_the_category();
+$dates = compare_published_updated_dates($post->ID);
+$published_read = '';
+foreach ($dates as $key => $val) {
+    $published_read .= '<p><i class="fas fa-calendar-week"></i> ' . ucwords($key) . ': <strong>' . $val . '</strong></p>';
+}
+if (get_field('post_read_time')) {
+    $published_read .= '<p><i class="fas fa-clock"></i> Read Time: ' . '<strong>' . get_field('post_read_time') . ' minutes</strong></p>';
+}
+?>
+
 <?php if (!get_field('post_featured_image')) { ?>
 <div class="bg-blue">
     <div class="container">
         <div class="row">
             <div class="col text-center">
-                <h1 class="blog-title"><?php echo get_the_title(); ?></h1>
+                <h1 class="blog-title pt-3 pb-3 mt-2 mb-2"><?php echo get_the_title(); ?></h1>
                 <div class="publish-container">
-                    <?php if (get_the_modified_date()) { ?>
-                        <p class="post-updated"><strong>Updated: </strong> <?php the_modified_date(); ?></p>
-                    <?php } ?>
-                    <p class="post-created"><strong>Published: </strong> <?php echo get_the_date(); ?></p>
+                    <?php echo $published_read; ?>
                 </div>
             </div>
         </div>
@@ -23,14 +32,19 @@
     <div class="banner-container" style="background-image: url('<?php echo $banner_url; ?>');">
         <div class="banner-overlay dark">
             <div class="container h-100 content-section">
-                <div class="row h-100 align-items-center">
+                <div class="row h-100 pt-4 pb-4 align-items-center">
                     <div class="col-12 text-center">
-                        <h1 class="banner-headline"><?php the_title(); ?></h1>
+                        <?php
+                        $cats = '<ul class="post-categories">';
+                        foreach ($categories as $category) {
+                            $cats .= '<li>' . $category->name . '</li>';
+                        }
+                        $cats .= '</ul>';
+                        echo $cats;
+                        ?>
+                        <h1 class="banner-headline mt-2 mb-2"><?php the_title(); ?></h1>
                         <div class="publish-container">
-                            <?php if (get_the_modified_date()) { ?>
-                                <p class="post-updated"><strong>Updated: </strong> <?php the_modified_date(); ?></p>
-                            <?php } ?>
-                            <p class="post-created"><strong>Published: </strong> <?php echo get_the_date(); ?></p>
+                            <?php echo $published_read; ?>
                         </div>
                     </div>
                 </div>

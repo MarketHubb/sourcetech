@@ -11,9 +11,13 @@ get_header();
 
 <?php
 if ($post->post_type == 'servers' || $post->post_type == 'networking') {
+
     get_template_part('content-products');
+
 } elseif ($post->post_type == 'post') {
+
     get_template_part('content-post');
+
 }
 ?>
 

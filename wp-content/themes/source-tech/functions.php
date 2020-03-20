@@ -297,6 +297,21 @@ function ri_new_loop_shop_per_page( $cols ) {
 //-----------------------------------------------------
 // RI - Global Helpers
 //-----------------------------------------------------
+function compare_published_updated_dates($post_id) {
+    $dates = [];
+    $published_time = strtotime(get_the_date('', $post_id));
+    $updated_time = strtotime(get_the_modified_date('', $post_id));
+    $date_diff = $updated_time - $published_time;
+    $days_diff = round($date_diff / (60 * 60 * 24));
+
+    if ($days_diff > 30) {
+        $dates['updated'] = get_the_modified_date('', $post_id);
+    } else {
+        $dates['published'] = get_the_date('', $post_id);
+    }
+
+    return $dates;
+}
 function get_formatted_product_terms($post_id) {
     $tag_terms = array('server_manufacturers', 'product_line', 'server_types', 'form_factor', 'networking_type');
     $tags = array();

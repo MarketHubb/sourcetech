@@ -61,11 +61,30 @@
 /****************************************
 *** Title ***
 *****************************************/
+ul.post-categories {
+    margin-left: 0;
+    margin-bottom: 0;
+    padding-inline-start: 0;
+}
+ul.post-categories li {
+    display: inline-block;
+    border-radius: 1000px;
+    padding: .2rem 1.25rem;
+    font-weight: bold;
+    background: rgba(255,255,255, .9);
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .05rem;
+    color: #0087c7;
+}
 .blog-title {
     font-size: 3rem;
     letter-spacing: -.04rem;
     line-height: 130%;
     font-weight: bold;
+}
+.publish-container {
+    display: inline-block;
 }
 .publish-container p {
     color: #fff;
@@ -73,6 +92,18 @@
     margin-left: .5rem;
     margin-right: .5rem;
     margin-bottom: 0;
+    letter-spacing: .01rem;
+    font-size: .85rem;
+    font-style: italic;
+}
+.publish-container i {
+    color: #f5f8fa;
+    margin-right: .25rem;
+}
+.publish-container p:nth-of-type(2) {
+    border-left: 1px solid;
+    padding-left: 1rem;
+    border-color: #ddd;
 }
 .post-read-time {
     color: #fff;
@@ -83,6 +114,16 @@
 /****************************************
 *** Content ***
 *****************************************/
+.post-callout {
+    margin-top: 1rem;
+    margin-bottom: 3rem;
+}
+.post-callout p {
+    font-size: 1.5rem;
+    letter-spacing: -.025rem;
+    border-left: 4px solid #0087c7;
+    padding: 1.25rem 1rem 1.25rem 3rem;
+}
 .post-content-container {
     border-radius: 4px;
     box-shadow: 0 10px 50px -5px rgba(51,71,91,0.12);
