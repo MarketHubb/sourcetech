@@ -203,6 +203,11 @@ ul.post-categories li {
     line-height: 130%;
     margin: 1rem 0;
 }
+.post-images p, .post-images li {
+    font-size: .85rem;
+    font-style: italic;
+    letter-spacing: -.02rem;
+}
 
 /****************************************
 *** Media Queries ***
