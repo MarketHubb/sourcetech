@@ -1,5 +1,7 @@
 <?php
 $categories = get_the_category();
+$heading = (get_field('post_banner_title')) ? get_field('post_banner_title') : get_the_title();
+$sub_heading = (get_field('post_banner_subtitle')) ? get_field('post_banner_subtitle') : '';
 $dates = compare_published_updated_dates($post->ID);
 $published_read = '';
 foreach ($dates as $key => $val) {
@@ -15,7 +17,8 @@ if (get_field('post_read_time')) {
     <div class="container">
         <div class="row">
             <div class="col text-center">
-                <h1 class="blog-title pt-3 pb-3 mt-2 mb-2"><?php echo get_the_title(); ?></h1>
+                <h1 class="blog-title pt-3 pb-3 mt-2 mb-2"><?php echo $heading; ?></h1>
+                <p class="blog-subtitle"><?php echo $sub_heading; ?></p>
                 <div class="publish-container">
                     <?php echo $published_read; ?>
                 </div>
@@ -42,7 +45,8 @@ if (get_field('post_read_time')) {
                         $cats .= '</ul>';
                         echo $cats;
                         ?>
-                        <h1 class="banner-headline mt-2 mb-2"><?php the_title(); ?></h1>
+                        <h1 class="banner-headline mt-2"><?php echo $heading; ?></h1>
+                        <p class="banner-subheadline mb-5"><?php echo $sub_heading; ?></p>
                         <div class="publish-container">
                             <?php echo $published_read; ?>
                         </div>

@@ -2,12 +2,7 @@
 $categories = get_the_category();
 ?>
 <div class="container post-content-container">
-    <?php
-    if (get_field('post_content_migrated')) {
-//        get_template_part('template-parts/blog/content', 'overview');
-    }
-    ?>
-    <div class="row bg-white">
+    <div class="row bg-white pt-4">
         <div class="col">
             <?php
             if (!get_field('post_content_migrated')) {
@@ -15,6 +10,18 @@ $categories = get_the_category();
             } else {
                 if( have_rows('post_section') ):
                     $content = '';
+                    if( have_rows('') ):
+                        $content .= '<div class="row">';
+                        $content .= '<div class="col">';
+                        $content .= '<ul class="">';
+                        while ( have_rows('') ) : the_row();
+                            $content .=
+                        endwhile;
+                        echo $;
+                    endif;
+
+
+                    $content .= '<div class="row">';
                     while ( have_rows('post_section') ) : the_row();
                         $content .= '<div class="post-content-section">';
                         $section_heading = get_sub_field('post_section_content_heading');
@@ -33,12 +40,27 @@ $categories = get_the_category();
                             $content .= '</div>';
                         }
                         if (get_sub_field('post_section_content_type') == 'Images') {
+                            $row_count = 12 / count(get_sub_field('post_section_images'));
+
+                            if( have_rows('post_section_images') ):
+                                $content .= '<div class="row post-images">';
+                                while ( have_rows('post_section_images') ) : the_row();
+                                    $content .= '<div class="col-md-' . $row_count . '">';
+                                    $content .= '<div class="text-center">';
+                                    $content .= '<img src="' . get_sub_field('post_section_images_image') . '" />';
+                                    $content .= '</div>';
+                                    $content .= '<p>' . get_sub_field('post_section_images_description') . '</p>';
+                                    $content .= '</div>';
+                                endwhile;
+                                    $content .= '</div>';
+
+                            endif;
 
                         }
                         $content .= '</div>';
                     endwhile;
+                    $content .= '</div>';
                 endif;
-
                 echo $content;
             }
             ?>
