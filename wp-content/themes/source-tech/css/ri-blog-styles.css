@@ -144,6 +144,8 @@ ul.post-categories li {
 .post-callout {
     margin-top: 1rem;
     margin-bottom: 3rem;
+    box-shadow: 0 10px 20px -5px rgba(51,71,91,0.1);
+    line-height: 1.4;
 }
 .post-callout p {
     font-size: 1.5rem;
