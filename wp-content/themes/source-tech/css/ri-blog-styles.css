@@ -57,6 +57,7 @@
     color: #fff;
     font-weight: 600;
     line-height: 130%;
+    letter-spacing: -.03rem;
 }
 /****************************************
 *** Title ***
@@ -110,6 +111,32 @@ ul.post-categories li {
 }
 .post-read-time i {
     margin-right: 1rem;
+}
+/****************************************
+*** Post Overview ***
+*****************************************/
+.post-overview {
+    background-color: #f5f8fa;
+    margin-bottom: -1rem;
+    margin-top: 1rem;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+    box-shadow: 0 10px 20px -5px rgba(51,71,91,0.1);
+    border-radius: 3px;
+    border-left: 4px solid #0087c7;
+}
+.post-overview ul {
+    padding-inline-start: 0;
+    margin-left: 0;
+    margin-bottom: 0;
+}
+.post-overview ul li {
+    padding-top: .35rem;
+    padding-bottom: .35rem;
+    letter-spacing: -.02rem;
+    font-size: .8rem;
+    color: #111;
+    font-weight: bold;
 }
 /****************************************
 *** Content ***
@@ -194,6 +221,6 @@ ul.post-categories li {
         font-size: 3.25rem;
     }
     .banner-subheadline {
-        font-size: 1.4rem;
+        font-size: 1.1rem;
     }
 }

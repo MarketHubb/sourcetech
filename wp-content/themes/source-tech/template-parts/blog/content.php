@@ -10,14 +10,14 @@ $categories = get_the_category();
             } else {
                 if( have_rows('post_section') ):
                     $content = '';
-                    if( have_rows('') ):
-                        $content .= '<div class="row">';
+                    if( have_rows('post_overview') ):
+                        $content .= '<div class="row post-overview">';
                         $content .= '<div class="col">';
-                        $content .= '<ul class="">';
-                        while ( have_rows('') ) : the_row();
-                            $content .=
+                        $content .= '<ul>';
+                        while ( have_rows('post_overview') ) : the_row();
+                            $content .= '<li>' .get_sub_field('post_overview_bullet') . '</li>';
                         endwhile;
-                        echo $;
+                        $content .= '</ul></div></div>';
                     endif;
 
 
