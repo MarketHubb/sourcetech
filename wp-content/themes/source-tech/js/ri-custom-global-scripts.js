@@ -18,5 +18,5 @@
             'event_label' : 'Open email application'
         });
     });
-
+    
 })( jQuery );
