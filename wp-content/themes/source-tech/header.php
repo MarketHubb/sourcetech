@@ -121,8 +121,11 @@
 			</div>
 			<div class="row bottom-row">
 				<div class="item site-branding">
+                    <a href="<?php echo get_home_url(); ?>" class="custom-logo-link" rel="home" itemprop="url">
+                        <img width="299" height="65" src="<?php echo get_home_url() . '/wp-content/uploads/2020/05/SourceTech-Systems.svg' ?>" class="custom-logo" alt="Source Tech" itemprop="logo">
+                    </a>
 					<?php
-					the_custom_logo();
+//					the_custom_logo();
 					if ( is_front_page() && is_home() ) :
 						?>
 					<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
