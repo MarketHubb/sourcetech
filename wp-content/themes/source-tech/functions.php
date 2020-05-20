@@ -297,6 +297,21 @@ function ri_new_loop_shop_per_page( $cols ) {
 //-----------------------------------------------------
 // RI - Global Helpers
 //-----------------------------------------------------
+function get_product_post_count($taxonomy_id) {
+    $products = get_posts(array(
+        'post_type' => 'product',
+        'numberposts' => -1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'product_cat',
+                'field' => 'term_id',
+                'terms' => $taxonomy_id
+            )
+        )
+    ));
+
+    return count($products);
+}
 function compare_published_updated_dates($post_id) {
     $dates = [];
     $published_time = strtotime(get_the_date('', $post_id));
@@ -451,6 +466,11 @@ if( function_exists('acf_add_options_page') ) {
 	acf_add_options_page(array(
 		'page_title' 	=> 'Global - Products',
 		'menu_title'	=> 'Global - Products',
+	));
+
+	acf_add_options_page(array(
+		'page_title' 	=> 'Alerts',
+		'menu_title'	=> 'Alerts',
 	));
 
 }

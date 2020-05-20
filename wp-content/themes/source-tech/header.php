@@ -18,7 +18,7 @@
 	<link rel="profile" href="https://gmpg.org/xfn/11">
 	
 	
-	<?php if ( is_page(1574) || is_singular('servers') || is_singular('networking') || is_singular('post') ) { ?>
+	<?php if ( is_page(1574) || is_singular('servers') || is_singular('networking') || is_singular('post') || is_page(2055) || is_page(661) ) { ?>
 		<link rel="stylesheet" id="bootstrap-styles-css"  href="<?php echo get_stylesheet_directory_uri() . '/css/bootstrap.min.css?ver=5.2.3'; ?>" type="text/css" media="all" />
 	<?php } ?>
 
@@ -78,6 +78,12 @@
 </head>
 
 <body <?php body_class(); ?>>
+
+    <!-- Global Alert Bar -->
+    <div class="bg-light-blue global-alert fixed shadow">
+        <p class="text-center">We're here to help during COVID-19. Call us today <span class="alert-cta"><span class="icon icon-phone"></span><a href="tel:800-932-0657">800-932-0657</a></span> or email <span class="alert-cta"><a href="mailto:info@source-tech.net">team@source-tech.net</a></span></p>
+    </div>
+
 	<div id="page" class="site">
 		<?php 
 		// Variant copy testing for primary CTA button on Server model pages
@@ -103,22 +109,22 @@
 		<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'source-tech' ); ?></a>
 
 		<header id="masthead" class="site-header" data-buttonvariant="<?php echo $cta_copy; ?>">
-			<div class="row top-row">
-				<div class="item">
-					<?php
-					if (is_active_sidebar( 'widget-header-left' )) {
-						dynamic_sidebar( 'widget-header-left' );
-					}
-					?>
-				</div>
-				<div class="item">
-					<?php
-					if (is_active_sidebar( 'widget-header-right' )) {
-						dynamic_sidebar( 'widget-header-right' );
-					}
-					?>
-				</div>
-			</div>
+<!--			<div class="row top-row">-->
+<!--				<div class="item">-->
+<!--					--><?php
+//					if (is_active_sidebar( 'widget-header-left' )) {
+//						dynamic_sidebar( 'widget-header-left' );
+//					}
+//					?>
+<!--				</div>-->
+<!--				<div class="item">-->
+<!--					--><?php
+//					if (is_active_sidebar( 'widget-header-right' )) {
+//						dynamic_sidebar( 'widget-header-right' );
+//					}
+//					?>
+<!--				</div>-->
+<!--			</div>-->
 			<div class="row bottom-row">
 				<div class="item site-branding">
                     <a href="<?php echo get_home_url(); ?>" class="custom-logo-link" rel="home" itemprop="url">
@@ -197,7 +203,7 @@
 		</div>
 	<?php } ?>
 	
-	<?php if (is_page(777) || is_singular('networking') || is_singular('servers')) { ?>
+	<?php if (is_page(777) || is_singular('networking') || is_singular('servers') || is_page(2055) || is_page(661) ){ ?>
 		<div id="custom-content" class="custom-site-content">
 		<?php } else if (!is_singular('post')) { ?>
 			<div id="content" class="site-content">
