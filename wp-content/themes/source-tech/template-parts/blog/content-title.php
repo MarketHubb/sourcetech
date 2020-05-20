@@ -40,7 +40,7 @@ if (get_field('post_read_time')) {
                         <?php
                         $cats = '<ul class="post-categories">';
                         foreach ($categories as $category) {
-                            $cats .= '<li>' . $category->name . '</li>';
+                            $cats .= '<li><i class="fas fa-tag text-blue mr-2"></i>' . $category->name . '</li>';
                         }
                         $cats .= '</ul>';
                         echo $cats;
