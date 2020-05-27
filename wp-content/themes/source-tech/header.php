@@ -81,7 +81,7 @@
 
     <!-- Global Alert Bar -->
     <div class="bg-light-blue global-alert fixed shadow">
-        <p class="text-center">We're here to help during COVID-19. Call us today <span class="alert-cta"><span class="icon icon-phone"></span><a href="tel:800-932-0657">800-932-0657</a></span> or email <span class="alert-cta"><a href="mailto:info@source-tech.net">team@source-tech.net</a></span></p>
+        <p class="text-center">We're fully operational during COVID-19. Call us today <span class="alert-cta"><span class="icon icon-phone"></span><a href="tel:800-932-0657">800-932-0657</a></span> or email <span class="alert-cta"><a href="mailto:info@source-tech.net">team@source-tech.net</a></span></p>
     </div>
 
 	<div id="page" class="site">
