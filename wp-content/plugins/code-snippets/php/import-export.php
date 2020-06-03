@@ -4,11 +4,10 @@
  * This file includes functions for importing and exporting snippets
  */
 
-
 /**
  * @access private
  *
- * @param        $snippets
+ * @param array  $snippets
  * @param null   $multisite
  * @param string $dup_action
  *
@@ -18,7 +17,7 @@ function _code_snippets_save_imported_snippets( $snippets, $multisite = null, $d
 
 	/* Get a list of existing snippet names keyed to their IDs */
 	$existing_snippets = array();
-	if ( 'replace' == $dup_action || 'skip' === $dup_action ) {
+	if ( 'replace' === $dup_action || 'skip' === $dup_action ) {
 		$all_snippets = get_snippets( array(), $multisite );
 
 		foreach ( $all_snippets as $snippet ) {
@@ -32,6 +31,7 @@ function _code_snippets_save_imported_snippets( $snippets, $multisite = null, $d
 	$imported = array();
 
 	/* Loop through the provided snippets */
+	/** @var Code_Snippet $snippet */
 	foreach ( $snippets as $snippet ) {
 
 		/* Check if the snippet already exists */
@@ -45,8 +45,12 @@ function _code_snippets_save_imported_snippets( $snippets, $multisite = null, $d
 			}
 		}
 
+		/* Ensure that imported snippets are inactive */
+		$snippet->active = 0;
+
 		/* Save the snippet and increase the counter if successful */
-		if ( $snippet_id = save_snippet( $snippet ) ) {
+		$snippet_id = save_snippet( $snippet );
+		if ( $snippet_id ) {
 			$imported[] = $snippet_id;
 		}
 	}
@@ -54,15 +58,15 @@ function _code_snippets_save_imported_snippets( $snippets, $multisite = null, $d
 	return $imported;
 }
 
-/**
+/**f
  * Imports snippets from a JSON file
  *
  * @since 2.9.7
  *
- * @uses save_snippet() to add the snippets to the database
+ * @uses  save_snippet() to add the snippets to the database
  *
- * @param string    $file The path to the file to import
- * @param bool|null $multisite Import into network-wide table or site-wide table?
+ * @param string    $file       The path to the file to import
+ * @param bool|null $multisite  Import into network-wide table or site-wide table?
  * @param string    $dup_action Action to take if duplicate snippets are detected. Can be 'skip', 'ignore', or 'replace'
  *
  * @return array|bool An array of imported snippet IDs on success, false on failure
@@ -95,10 +99,10 @@ function import_snippets_json( $file, $multisite = null, $dup_action = 'ignore' 
  *
  * @since 2.0
  *
- * @uses save_snippet() to add the snippets to the database
+ * @uses  save_snippet() to add the snippets to the database
  *
- * @param string    $file The path to the file to import
- * @param bool|null $multisite Import into network-wide table or site-wide table?
+ * @param string    $file       The path to the file to import
+ * @param bool|null $multisite  Import into network-wide table or site-wide table?
  * @param string    $dup_action Action to take if duplicate snippets are detected. Can be 'skip', 'ignore', or 'replace'
  *
  * @return array|bool An array of imported snippet IDs on success, false on failure
@@ -109,6 +113,7 @@ function import_snippets_xml( $file, $multisite = null, $dup_action = 'ignore' )
 		return false;
 	}
 
+	/** @phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase */
 	$dom = new DOMDocument( '1.0', get_bloginfo( 'charset' ) );
 	$dom->load( $file );
 
@@ -148,6 +153,8 @@ function import_snippets_xml( $file, $multisite = null, $dup_action = 'ignore' )
 	$imported = _code_snippets_save_imported_snippets( $snippets, $dup_action, $multisite );
 	do_action( 'code_snippets/import/xml', $file, $multisite );
 
+	/** @phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase */
+
 	return $imported;
 }
 
@@ -183,7 +190,7 @@ function code_snippets_prepare_export( $format, $ids, $table_name = '', $mime_ty
 	}
 
 	/* Build the export filename */
-	if ( 1 == count( $ids ) ) {
+	if ( 1 === count( $ids ) ) {
 		/* If there is only snippet to export, use its name instead of the site name */
 		$first_snippet = new Code_Snippet( $snippets[0] );
 		$title = strtolower( $first_snippet->name );
@@ -241,7 +248,7 @@ function download_snippets( $ids, $table_name = '' ) {
 /**
  * Export snippets in JSON format
  *
- * @param array  $ids list of snippet IDs to export
+ * @param array  $ids        list of snippet IDs to export
  * @param string $table_name name of the database table to fetch snippets from
  */
 function export_snippets( $ids, $table_name = '' ) {
@@ -251,12 +258,12 @@ function export_snippets( $ids, $table_name = '' ) {
 	foreach ( $raw_snippets as $snippet ) {
 		$snippet = new Code_Snippet( $snippet );
 
-		$fields = array( 'name', 'desc', 'tags', 'scope', 'code' );
+		$fields = array( 'name', 'desc', 'tags', 'scope', 'code', 'priority' );
 		$final_snippet = array();
 
 		foreach ( $fields as $field ) {
 			if ( ! empty( $snippet->$field ) ) {
-				$final_snippet[ $field ] = $snippet->$field;
+				$final_snippet[ $field ] = str_replace( "\r\n", "\n", $snippet->$field );
 			}
 		}
 
@@ -266,8 +273,8 @@ function export_snippets( $ids, $table_name = '' ) {
 	}
 
 	$data = array(
-		'generator'    => 'Code Snippets v' . CODE_SNIPPETS_VERSION,
-		'date_created' => date( 'Y-m-d H:i' ),
+		'generator'    => 'Code Snippets v' . code_snippets()->version,
+		'date_created' => gmdate( 'Y-m-d H:i' ),
 		'snippets'     => $final_snippets,
 	);
 

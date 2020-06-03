@@ -30,7 +30,7 @@ class ET_Builder_Value {
 	 *
 	 * @since 3.17.2
 	 *
-	 * @var array<string, mixed>
+	 * @var mixed[]
 	 */
 	protected $settings = array();
 
@@ -58,6 +58,17 @@ class ET_Builder_Value {
 	 */
 	public function is_dynamic() {
 		return $this->dynamic;
+	}
+
+	/**
+	 * Retrieve the value content.
+	 *
+	 * @since 4.4.4
+	 *
+	 * @return string
+	 */
+	public function get_content() {
+		return $this->content;
 	}
 
 	/**

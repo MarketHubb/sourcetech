@@ -164,7 +164,7 @@ class Caldera_Forms_Forms {
 	 * @param bool|false $with_details Optional. If false, the default, just form IDs are returned. If true, basic details of each are returned.
 	 * @param bool|false $internal_only Optional. If false, the default, all forms -- in DB and in files system -- are returned -- If true, only those in DB are returned.
 	 *
-	 * @return array|mixed|void
+	 * @return array
 	 */
 	public static function get_forms( $with_details = false, $internal_only = false, $orderby = false ){
 		if( isset( $_GET[ 'cf-cache-clear' ] ) ){
@@ -174,7 +174,6 @@ class Caldera_Forms_Forms {
 		if( empty( static::$index ) ){
 		    static::$index = static::get_stored_forms();
         }
-
 
         if ( false === $internal_only ) {
             /**
@@ -190,21 +189,20 @@ class Caldera_Forms_Forms {
                     $forms[$form_id] = $form_id;
                 }
             }
-            self::$index = $forms;
+
         }
 
+		$forms = isset($forms) && false === $internal_only ? $forms : static::$index;
 
 		if( $with_details ){
-			$forms = self::add_details( static::$index );
-		}else{
-		    return static::$index;
-        }
-
-		if( $orderby && ! empty( $forms ) ){
-			return self::order_forms( $forms, $orderby );
+			$forms = self::add_details( $forms );
 		}
 
-		return $forms;
+		if( $orderby && ! empty( $forms ) ){
+			$forms = self::order_forms( $forms, $orderby );
+		}
+
+		return is_array($forms) ? $forms : [];
 
 	}
 
@@ -256,7 +254,7 @@ class Caldera_Forms_Forms {
             }
 		}
 
-		return self::$stored_forms;
+		return is_array(self::$stored_forms ) ? self::$stored_forms : [];
 	}
 
 	/**
@@ -412,16 +410,14 @@ class Caldera_Forms_Forms {
 	 * @return array
 	 */
 	protected static function add_details( $forms ){
-	    if( empty( $forms ) ){
-	        return [];
-        }
+		if( empty( $forms ) ){
+			return [];
+		}
 
-        if( ! empty( $valid_forms = get_transient( self::$registry_cache_key ) ) ) {
-            return $valid_forms;
-        }else{
-            $valid_forms = [];
-        }
-		
+		//Intentionally avoiding using form cache here.
+		//See: https://github.com/CalderaWP/Caldera-Forms/pull/3354
+		$valid_forms = [];
+
 		foreach( $forms as $id => $form  ){
 			$_form = self::get_form( $id );
 			if( empty( $_form ) ){
@@ -444,9 +440,6 @@ class Caldera_Forms_Forms {
 				}else {
 					$valid_forms[ $id ][ $key ] = '';
 				}
-
-
-
 			}
 		}
 
@@ -462,13 +455,8 @@ class Caldera_Forms_Forms {
 			}
 		}
 
-		if ( ! empty( $valid_forms ) ) {
-			set_transient( self::$registry_cache_key, $valid_forms, HOUR_IN_SECONDS );
-		}
-
-		self::$registry_cache = $valid_forms;
-		return self::$registry_cache;
-
+		set_transient( self::$registry_cache_key, $valid_forms, HOUR_IN_SECONDS );
+		return $valid_forms;
 	}
 
 	/**
@@ -483,16 +471,20 @@ class Caldera_Forms_Forms {
 	 * @return string|bool Form ID if updated, false if not
 	 */
 	public static function save_form( $data, $type = 'primary' ){
-
-		// option value labels
+		
+		
 		if(!empty($data['fields'])){
 			foreach($data['fields'] as &$field){
+				// option value labels
 				if(!empty($field['config']['option']) && is_array($field['config']['option'])){
 					foreach($field['config']['option'] as &$option){
 						if(!isset($option['value'])){
 							$option['value'] = $option['label'];
 						}
 					}
+				// trim manual calculations
+				} else if(!empty($field["config"]["manual_formula"]) && is_string($field["config"]["manual_formula"])){
+					$field["config"]["manual_formula"] = Caldera_Forms_Sanitize::finish_trim( Caldera_Forms_Sanitize::sanitize_header( $field["config"]["manual_formula"] ) );
 				}
 			}
 		}
@@ -570,8 +562,7 @@ class Caldera_Forms_Forms {
 		// get form templates (PROBABLY NEED TO MOVE METHOD INTO THIS CLASS)
 		$form_templates = Caldera_Forms_Admin::internal_form_templates();
 
-        	$original_function_args = $newform;
-
+		$original_function_args = $newform;
 		if(!empty($newform['clone'])){
 			$clone = $newform['clone'];
 		}
@@ -608,6 +599,7 @@ class Caldera_Forms_Forms {
 		// is template?
 		if( !empty( $form_template ) && is_array( $form_template ) ){
 			$newform = array_merge( $form_template, $newform );
+			$newform[ 'ID' ] = $id;
 		}
 
 		/**
@@ -634,8 +626,10 @@ class Caldera_Forms_Forms {
 		$added = self::save_to_db( $newform, 'primary' );
 		if( ! $added ){
 			return false;
-
 		}
+
+		// Fixes https://github.com/CalderaWP/Caldera-Forms/issues/3455
+		self::clear_cache();
 
 		/**
 		 * Runs after form is created
@@ -662,6 +656,7 @@ class Caldera_Forms_Forms {
 	public static function delete_form( $id ){
 		$forms = self::get_forms();
 		if( ! isset( $forms[ $id ] ) ){
+			var_dump(false);
 			return false;
 		}
 
@@ -724,7 +719,7 @@ class Caldera_Forms_Forms {
 	 * @return bool
 	 */
 	public static function is_internal_form( $id_name ){
-		return in_array( $id_name, self::get_stored_forms() );
+		return ! empty(self::get_stored_forms() ) && in_array( $id_name, self::get_stored_forms() );
 	}
 
 	/**
@@ -1124,3 +1119,5 @@ class Caldera_Forms_Forms {
         return uniqid( 'CF' );
     }
 }
+
+

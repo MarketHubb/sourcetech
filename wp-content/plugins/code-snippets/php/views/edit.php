@@ -3,8 +3,10 @@
 /**
  * HTML code for the Add New/Edit Snippet page
  *
- * @package Code_Snippets
+ * @package    Code_Snippets
  * @subpackage Views
+ *
+ * @var Code_Snippets_Edit_Menu $this
  */
 
 /* Bail if accessed directly */
@@ -12,13 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	return;
 }
 
-$table = code_snippets()->db->get_table_name();
-$edit_id = isset( $_REQUEST['id'] ) && intval( $_REQUEST['id'] ) ? absint( $_REQUEST['id'] ) : 0;
-$snippet = get_snippet( $edit_id );
-
+$snippet = $this->snippet;
 $classes = array();
 
-if ( ! $edit_id ) {
+if ( ! $snippet->id ) {
 	$classes[] = 'new-snippet';
 } elseif ( 'single-use' === $snippet->scope ) {
 	$classes[] = 'single-use-snippet';
@@ -30,7 +29,7 @@ if ( ! $edit_id ) {
 <div class="wrap">
 	<h1><?php
 
-		if ( $edit_id ) {
+		if ( $snippet->id ) {
 			esc_html_e( 'Edit Snippet', 'code-snippets' );
 			printf( ' <a href="%1$s" class="page-title-action add-new-h2">%2$s</a>',
 				code_snippets()->get_menu_url( 'add' ),
@@ -83,6 +82,46 @@ if ( ! $edit_id ) {
 			</div>
 		</div>
 
+		<?php if ( apply_filters( 'code_snippets/extra_save_buttons', true ) ) { ?>
+			<p class="submit-inline">
+				<?php
+
+				$actions['save_snippet'] = array(
+					__( 'Save Changes', 'code-snippets' ),
+					__( 'Save Snippet', 'code-snippets' ),
+				);
+
+				if ( 'single-use' === $snippet->scope ) {
+					$actions['save_snippet_execute'] = array(
+						__( 'Execute Once', 'code-snippets' ),
+						__( 'Save Snippet and Execute Once', 'code-snippets' ),
+					);
+
+				} elseif ( ! $snippet->shared_network || ! is_network_admin() ) {
+
+					if ( $snippet->active ) {
+						$actions['save_snippet_deactivate'] = array(
+							__( 'Deactivate', 'code-snippets' ),
+							__( 'Save Snippet and Deactivate', 'code-snippets' ),
+						);
+
+					} else {
+						$actions['save_snippet_activate'] = array(
+							__( 'Activate', 'code-snippets' ),
+							__( 'Save Snippet and Activate', 'code-snippets' ),
+						);
+					}
+				}
+
+				foreach ( $actions as $action => $labels ) {
+					$other_attributes = array( 'title' => $labels[1], 'id' => $action . '_extra' );
+					submit_button( $labels[0], 'secondary small', $action, false, $other_attributes );
+				}
+
+				?>
+			</p>
+		<?php } ?>
+
 		<h2>
 			<label for="snippet_code">
 				<?php _e( 'Code', 'code-snippets' ); ?>
@@ -103,35 +142,52 @@ if ( ! $edit_id ) {
 				<?php
 
 				$keys = array(
-					'Cmd' => esc_html_x( 'Cmd', 'keyboard key', 'code-snippets' ),
-					'Ctrl' => esc_html_x( 'Ctrl', 'keyboard key', 'code-snippets' ),
-					'Shift' => esc_html_x( 'Shift', 'keyboard key', 'code-snippets' ),
+					'Cmd'    => esc_html_x( 'Cmd', 'keyboard key', 'code-snippets' ),
+					'Ctrl'   => esc_html_x( 'Ctrl', 'keyboard key', 'code-snippets' ),
+					'Shift'  => esc_html_x( 'Shift', 'keyboard key', 'code-snippets' ),
 					'Option' => esc_html_x( 'Option', 'keyboard key', 'code-snippets' ),
-					'Alt' => esc_html_x( 'Alt', 'keyboard key', 'code-snippets' ),
-					'F' => esc_html_x( 'F', 'keyboard key', 'code-snippets' ),
-					'G' => esc_html_x( 'G', 'keyboard key', 'code-snippets' ),
-					'R' => esc_html_x( 'R', 'keyboard key', 'code-snippets' ),
+					'Alt'    => esc_html_x( 'Alt', 'keyboard key', 'code-snippets' ),
+					'F'      => esc_html_x( 'F', 'keyboard key', 'code-snippets' ),
+					'G'      => esc_html_x( 'G', 'keyboard key', 'code-snippets' ),
+					'R'      => esc_html_x( 'R', 'keyboard key', 'code-snippets' ),
+					'S'      => esc_html_x( 'S', 'keyboard key', 'code-snippets' ),
 				);
+
 				?>
 
 				<div class="editor-help-text">
 					<table>
 						<tr>
+							<td><?php esc_html_e( 'Save changes', 'code-snippets' ); ?></td>
+							<td>
+								<kbd class="pc-key"><?php echo $keys['Ctrl']; ?></kbd><kbd class="mac-key"><?php
+									echo $keys['Cmd']; ?></kbd>&hyphen;<kbd><?php echo $keys['S']; ?></kbd>
+							</td>
+						</tr>
+						<tr>
 							<td><?php esc_html_e( 'Begin searching', 'code-snippets' ); ?></td>
-							<td><kbd class="pc-key"><?php echo $keys['Ctrl']; ?></kbd><kbd class="mac-key"><?php
-									echo $keys['Cmd']; ?></kbd>&hyphen;<kbd><?php echo $keys['F']; ?></kbd></td>
+							<td>
+								<kbd class="pc-key"><?php echo $keys['Ctrl']; ?></kbd><kbd class="mac-key"><?php
+									echo $keys['Cmd']; ?></kbd>&hyphen;<kbd><?php echo $keys['F']; ?></kbd>
+							</td>
 						</tr>
 						<tr>
 							<td><?php esc_html_e( 'Find next', 'code-snippets' ); ?></td>
-							<td><kbd class="pc-key"><?php echo $keys['Ctrl']; ?></kbd><kbd class="mac-key"><?php echo $keys['Cmd']; ?></kbd>&hyphen;<kbd><?php echo $keys['G']; ?></kbd></td>
+							<td>
+								<kbd class="pc-key"><?php echo $keys['Ctrl']; ?></kbd><kbd class="mac-key"><?php echo $keys['Cmd']; ?></kbd>&hyphen;<kbd><?php echo $keys['G']; ?></kbd>
+							</td>
 						</tr>
 						<tr>
 							<td><?php esc_html_e( 'Find previous', 'code-snippets' ); ?></td>
-							<td><kbd><?php echo $keys['Shift']; ?></kbd>-<kbd class="pc-key"><?php echo $keys['Ctrl']; ?></kbd><kbd class="mac-key"><?php echo $keys['Cmd']; ?></kbd>&hyphen;<kbd><?php echo $keys['G']; ?></kbd></td>
+							<td>
+								<kbd><?php echo $keys['Shift']; ?></kbd>-<kbd class="pc-key"><?php echo $keys['Ctrl']; ?></kbd><kbd class="mac-key"><?php echo $keys['Cmd']; ?></kbd>&hyphen;<kbd><?php echo $keys['G']; ?></kbd>
+							</td>
 						</tr>
 						<tr>
 							<td><?php esc_html_e( 'Replace', 'code-snippets' ); ?></td>
-							<td><kbd><?php echo $keys['Shift']; ?></kbd>&hyphen;<kbd class="pc-key"><?php echo $keys['Ctrl']; ?></kbd><kbd class="mac-key"><?php echo $keys['Cmd']; ?></kbd>&hyphen;<kbd><?php echo $keys['F']; ?></kbd></td>
+							<td>
+								<kbd><?php echo $keys['Shift']; ?></kbd>&hyphen;<kbd class="pc-key"><?php echo $keys['Ctrl']; ?></kbd><kbd class="mac-key"><?php echo $keys['Cmd']; ?></kbd>&hyphen;<kbd><?php echo $keys['F']; ?></kbd>
+							</td>
 						</tr>
 						<tr>
 							<td><?php esc_html_e( 'Replace all', 'code-snippets' ); ?></td>
@@ -141,7 +197,9 @@ if ( ! $edit_id ) {
 						</tr>
 						<tr>
 							<td><?php esc_html_e( 'Persistent search', 'code-snippets' ); ?></td>
-							<td><kbd><?php echo $keys['Alt']; ?></kbd>&hyphen;<kbd><?php echo $keys['F']; ?></kbd></td>
+							<td>
+								<kbd><?php echo $keys['Alt']; ?></kbd>&hyphen;<kbd><?php echo $keys['F']; ?></kbd>
+							</td>
 						</tr>
 					</table>
 				</div>
@@ -157,80 +215,6 @@ if ( ! $edit_id ) {
 
 		?>
 
-		<p class="submit">
-			<?php
-
-			/* Make the 'Save and Activate' button the default if the setting is enabled */
-
-			if ( $snippet->shared_network && is_network_admin() ) {
-
-				submit_button( null, 'primary', 'save_snippet', false );
-
-			} elseif ( 'single-use' === $snippet->scope ) {
-
-				submit_button( null, 'primary', 'save_snippet', false );
-
-				submit_button( __( 'Save Changes and Execute Once', 'code-snippets' ), 'secondary', 'save_snippet_execute', false );
-
-			} elseif ( ! $snippet->active && code_snippets_get_setting( 'general', 'activate_by_default' ) ) {
-
-				submit_button(
-					__( 'Save Changes and Activate', 'code-snippets' ),
-					'primary', 'save_snippet_activate', false
-				);
-
-				submit_button( null, 'secondary', 'save_snippet', false );
-
-			} else {
-
-				/* Save Snippet button */
-				submit_button( null, 'primary', 'save_snippet', false );
-
-				/* Save Snippet and Activate/Deactivate button */
-				if ( ! $snippet->active ) {
-					submit_button(
-						__( 'Save Changes and Activate', 'code-snippets' ),
-						'secondary', 'save_snippet_activate', false
-					);
-
-				} else {
-					submit_button(
-						__( 'Save Changes and Deactivate', 'code-snippets' ),
-						'secondary', 'save_snippet_deactivate', false
-					);
-				}
-			}
-
-			if ( 0 !== $snippet->id ) {
-
-				/* Download button */
-
-				if ( apply_filters( 'code_snippets/enable_downloads', true ) ) {
-					submit_button( __( 'Download', 'code-snippets' ), 'secondary', 'download_snippet', false );
-				}
-
-				/* Export button */
-
-				submit_button( __( 'Export', 'code-snippets' ), 'secondary', 'export_snippet', false );
-
-				/* Delete button */
-
-				$confirm_delete_js = esc_js(
-					sprintf(
-						'return confirm("%s");',
-						__( 'You are about to permanently delete this snippet.', 'code-snippets' ) . "\n" .
-						__( "'Cancel' to stop, 'OK' to delete.", 'code-snippets' )
-					)
-				);
-
-				submit_button(
-					__( 'Delete', 'code-snippets' ),
-					'secondary', 'delete_snippet', false,
-					sprintf( 'onclick="%s"', $confirm_delete_js )
-				);
-			}
-
-			?>
-		</p>
+		<p class="submit"><?php $this->render_submit_buttons( $snippet ); ?></p>
 	</form>
 </div>

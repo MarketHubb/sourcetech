@@ -2,7 +2,7 @@
 Contributors: infinitewp
 Tags: admin, administration, amazon, api, authentication, automatic, dashboard, dropbox, events, integration, manage, multisite, multiple, notification, performance, s3, security, seo, stats, tracking, infinitewp, updates, backup, restore, iwp, infinite
 Requires at least: 3.1
-Tested up to: 4.9.8
+Tested up to: 5.3.2
 Stable tag: trunk
 
 Install this plugin on unlimited sites and manage them all from a central dashboard.
@@ -47,6 +47,71 @@ Credits: [Vladimir Prelovac](http://prelovac.com/vladimir) for his worker plugin
 5. One-click updates
 
 == Changelog ==
+= 1.9.4.5 - Jan 8th 2020 =
+* Fix: Important security fix.
+
+= 1.9.4.4 - Dec 17th 2019 =
+* Improvement: Implemented a new method to fetch database details for the following operations. Restore, same server staging and existing site cloning.
+* Improvement: Support for V3 PPL addon.
+* Improvement: Now, the WPTC plugin gets a higher priority than the IWP client plugin.
+* Fix: File uploader throws a fatal error if the selected folder doesn't have permission to upload.
+* Fix: Error: "Failed to upload to Amazon S3. Please check your details and set Managed Policies on your users to AmazonS3FullAccess" while backing up the site to s3 bucket using the single call method.
+* Fix: With the Phoenix method, Backups are shown as completed if the backup folder does not have write permission.
+* Fix: iwp-restore-log.txt file excluded in the multicall and single call method backups.
+
+= 1.9.4.1 - July 25th 2019 =
+* Feature: Full Support for Multisite Installations.
+* Feature: SSH support - You can use your SSH keys to backup your WordPress sites.
+* Feature: You can Encrypt your DB backups using the Phoenix backup method.
+* Feature: Server Side encryption for Amazon S3 backups is enabled for all three backup mechanisms.
+* Feature: Notifications for WooCommerce DB updates.
+* Improvement: IWP client plugin will add a must-use plugin to WordPress sites.
+* Improvement: Support for WPTC backups to include on IWP Client reports.
+* Improvement: File Iterator process is improved in the Multicall backup method.
+* Improvement: You can now manage the users on your Multisites.
+* Improvement: The activation key will not be shown to subscriber users.
+* Improvement: Enabled support for Autoptimize plugin.
+* Improvement: "site_map.xml" and "virtual files" are excluded from the backup while backing up the site using the single and multicall method.
+* Improvement: Phoenix backup failure retry count decreased as the backup is running for a prolonged time.
+* Improvement: By default, backup logs will be created for the multicall backup method.
+* Improvement: Backup debug chart added.
+* Improvement: Added an option to exclude Database tables on backup.
+* Improvement: Google drive and Dropbox will respect the multicall loop break time.
+* Improvement: Curl version, SSL version are added in server info.
+* Improvement: Response header will now have the correct HTTP version.
+* Improvement: MySQL dump backup process improved.
+* Improvement: Support for manage users, manage comments, broken link checker, iThemes, Wordfence and Malware Scanner addons for v3.
+* Fix: Duo security plugin on WordPress site breaks the IWP client plugin connection while performing open admin action.
+* Fix: Backup is retried when it failed with error "Failed to connect to content.dropboxapi.com port 443: Connection timed out. and Could not resolve host: api.dropboxapi.com.".
+* Fix: Plugin updates count showing in plugin menu on WP admin page while hide plugin updates setting is enabled on InfiniteWP admin panel via Client Plugin Branding.
+* Fix: Phoenix backup SFTP or FTP not using the custom port.
+* Fix: FTP SSL not working on Phoenix backup.
+* Fix: Ithemes security data is not included in the client reports.
+* Fix: Backups failed with error "Database backup failed. Try to enable MySQL dump on your server.".
+* Fix: Table "w1.wp_iwp_backup_status" doesnot exist , IWP will now create the table automatically instead of throwing an error.
+* Fix: Removed FTP credentials from error messages.
+* Fix: Few PHP 7.2 warnings are fixed.
+* Fix: Backups taken with Phoenix method are not erased from Google drive Storage while deleting the backups from via admin panel.
+* Fix: "*Number of Backups to Keep*" setting was not working for the Phoenix method backups.
+* Fix: Backup entries are not removed on WordPress database table wp_iwp_backup_status while deleting the backup schedules with phoenix method.
+* Fix: S3 verification failed: File may be corrupted.
+* Fix: Broken link checker update link and un-dismiss options throw fatal error.
+* Fix: Submitted input out of alignment: got [4194300] expected [4194304].
+* Fix: Dropbox account/info did not return HTTP 200. (only for specific users).
+* Fix: Open admin not working if iThemes hide backend option enabled.
+* Fix: PHP Fatal error occurred: Uncaught Guzzle\Service\Exception\ValidationException: Validation errors: [Key] is a required string.
+* Fix: If dump fails, the dump .sql file will be deleted.
+* Fix: IWP Client Plugin error, Curl 18 and Curl 92 on updates and install option due to Cloud Flare setup on WordPress sites.
+
+= 1.8.6 - Feb 11th 2019 =
+* Fix: Duo security plugin on WordPress site breaks the IWP client plugin connection while performing open admin action.
+* Fix: Backup is retried when it failed with error "Failed to connect to content.dropboxapi.com port 443: Connection timed out. and Could not resolve host: api.dropboxapi.com.".
+* Fix: Plugin updates count showing in plugin menu on WP admin page while hide plugin updates setting is enabled on InfiniteWP admin panel via Client Plugin Branding.
+* Fix: Phoenix backup SFTP or FTP not using the custom port.
+* Fix: FTP SSL not working on Phoenix backup.
+* Fix: Ithemes security data is not included in the client reports.
+* Fix: Backups failed with error "Database backup failed. Try to enable MySQL dump on your server.".
+
 = 1.8.5 - Sep 4th 2018 =
 * Improvement: Multisite support for broken link checker plugin.
 * Improvement: MySQL DB dump process is improved in multicall and single call backup.

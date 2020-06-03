@@ -7,14 +7,34 @@
  */
 class Code_Snippets_DB {
 
+	/**
+	 * Unprefixed site-wide table name
+	 */
+	const TABLE_NAME = 'snippets';
+
+	/**
+	 * Unprefixed network-wide table name
+	 */
+	const MS_TABLE_NAME = 'ms_snippets';
+
+	/**
+	 * Side-wide table name
+	 *
+	 * @var string
+	 */
 	public $table;
 
+	/**
+	 * Network-wide table name
+	 *
+	 * @var string
+	 */
 	public $ms_table;
 
 	/**
 	 * Class constructor
 	 */
-	function __construct() {
+	public function __construct() {
 		$this->set_table_vars();
 	}
 
@@ -22,17 +42,20 @@ class Code_Snippets_DB {
 	 * Register the snippet table names with WordPress
 	 *
 	 * @since 2.0
-	 * @uses $wpdb
+	 * @uses  $wpdb
 	 */
 	function set_table_vars() {
 		global $wpdb;
 
-		$this->table = $wpdb->prefix . 'snippets';
-		$this->ms_table = $wpdb->base_prefix . 'ms_snippets';
+		$this->table = $wpdb->prefix . self::TABLE_NAME;
+		$this->ms_table = $wpdb->base_prefix . self::MS_TABLE_NAME;
 
 		/* Register the snippet table names with WordPress */
-		$wpdb->tables[] = $wpdb->snippets = $this->table;
-		$wpdb->ms_global_tables[] = $wpdb->ms_snippets = $this->ms_table;
+		$wpdb->snippets = $this->table;
+		$wpdb->ms_snippets = $this->ms_table;
+
+		$wpdb->tables[] = self::TABLE_NAME;
+		$wpdb->ms_global_tables[] = self::MS_TABLE_NAME;
 	}
 
 	/**
@@ -60,11 +83,11 @@ class Code_Snippets_DB {
 	/**
 	 * Return the appropriate snippet table name
 	 *
-	 * @since 2.0
-	 *
 	 * @param string|bool|null $multisite Retrieve the multisite table name or the site table name?
 	 *
 	 * @return string The snippet table name
+	 * @since 2.0
+	 *
 	 */
 	function get_table_name( $multisite = null ) {
 
@@ -102,7 +125,10 @@ class Code_Snippets_DB {
 	 * Create the snippet tables, or upgrade them if they already exist
 	 */
 	public function create_or_upgrade_tables() {
-		$this->create_table( $this->ms_table );
+		if ( is_multisite() ) {
+			$this->create_table( $this->ms_table );
+		}
+
 		$this->create_table( $this->table );
 	}
 
@@ -124,12 +150,11 @@ class Code_Snippets_DB {
 	/**
 	 * Create a single snippet table
 	 *
-	 * @since 1.6
-	 * @uses dbDelta() to apply the SQL code
-	 *
 	 * @param string $table_name The name of the table to create
 	 *
 	 * @return bool whether the table creation was successful
+	 * @since 1.6
+	 * @uses  dbDelta() to apply the SQL code
 	 */
 	public static function create_table( $table_name ) {
 		global $wpdb;
@@ -145,6 +170,7 @@ class Code_Snippets_DB {
 				scope       VARCHAR(15) NOT NULL DEFAULT 'global',
 				priority    SMALLINT    NOT NULL DEFAULT 10,
 				active      TINYINT(1)  NOT NULL DEFAULT 0,
+				modified    DATETIME    NOT NULL DEFAULT '0000-00-00 00:00:00',
 				PRIMARY KEY  (id)
 			) $charset_collate;";
 
@@ -158,25 +184,5 @@ class Code_Snippets_DB {
 		}
 
 		return $success;
-	}
-
-	/**
-	 * Occasionally the dbDelta process seems to fail to create new columns on some sites,
-	 * so attempt to create columns which appear to be missing
-	 *
-	 * @param string $table_name
-	 */
-	public function create_missing_columns( $table_name ) {
-		global $wpdb;
-
-		$columns = array(
-			'priority' => 'SMALLINT NOT NULL DEFAULT 10',
-		);
-
-		foreach ( $columns as $column => $creation_sql ) {
-			if ( $wpdb->get_var( "SHOW COLUMNS FROM {$table_name} LIKE '{$column}';" ) !== $column ) {
-				$wpdb->query( "ALTER TABLE {$table_name} ADD {$column} {$creation_sql};" );
-			}
-		}
 	}
 }

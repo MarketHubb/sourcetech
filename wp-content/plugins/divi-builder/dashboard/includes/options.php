@@ -118,7 +118,7 @@ $dashboard_options_all = array(
 			'validation_type'      => 'simple_text',
 			'hint_text'            => et_get_safe_localization( sprintf( __( 'Disable this option to remove the Google Maps API script from your Divi Builder Pages. This may improve compatibility with third party plugins that also enqueue this script. Please Note: Modules that rely on the Google Maps API in order to function properly, such as the Maps and Fullwidth Maps Modules, will still be available but will not function while this option is disabled (unless you manually add Google Maps API script).', 'et_builder_plugin' ), 'http://www.elegantthemes.com/gallery/divi/documentation/map/#gmaps-api-key' ) ),
 		),
-		
+
 		'option_use_google_fonts' => array(
 			'type'                 => 'checkbox',
 			'default'              => 'on',
@@ -185,30 +185,6 @@ $dashboard_options_all = array(
 		),
 	),
 
-	'enable_bfb' => array(
-		'section_start' => array(
-			'type'      => 'section_start',
-			'title'     => esc_html__( 'Use Visual Builder in WP Admin', 'et_builder' ),
-		),
-		'option' => array(
-			'type'               => 'yes_no_button',
-			'options'            => array(
-				'on'             => __( 'On', 'et_builder' ),
-				'off'            => __( 'Off', 'et_builder' ),
-			),
-			'default'            => 'off',
-			'label'              => esc_html__( 'Use Visual Builder in WP Admin', 'et_builder_plugin' ),
-			'title'              => esc_html__( 'Use Visual Builder in WP Admin', 'et_builder_plugin' ),
-			'main_setting_name'  => 'et_bfb_settings',
-			'sub_setting_name'   => 'enable_bfb',
-			'is_global'          => true,
-			'name'               => 'et_enable_bfb',
-			'class'              => 'enable_bfb',
-			'validation_type'    => 'simple_text',
-			'hint_text'          => et_get_safe_localization( __( 'By default the legacy Divi Builder will be used when editing Divi Builder enabled post types. Turn this setting on to enable the Visual Builder instead of the legacy non-visual builder.', 'et_builder_plugin' ) ),
-		),
-	),
-
 	'updates_title' => array(
 		'type'  => 'main_title',
 		'title' => esc_html__( 'Authenticate Your Subscription', 'et_builder_plugin' ),
@@ -227,11 +203,6 @@ $dashboard_options_all = array(
 	'minify_combine_styles_title' => array(
 		'type'  => 'main_title',
 		'title' => esc_html__( 'Minify and Combine CSS Files', 'et_builder_plugin' ),
-	),
-
-	'enable_bfb_title' => array(
-		'type'  => 'main_title',
-		'title' => esc_html__( 'Use Visual Builder in WP Admin', 'et_builder_plugin' ),
 	),
 
 	'end_of_section' => array(
@@ -279,11 +250,6 @@ $assigned_options = array(
 		$dashboard_options_all[ 'minify_combine_styles_title' ],
 		$dashboard_options_all[ 'minify_combine_styles' ][ 'section_start' ],
 			$dashboard_options_all[ 'minify_combine_styles' ][ 'option' ],
-			$dashboard_options_all[ 'end_of_section' ],
-
-		$dashboard_options_all[ 'enable_bfb_title' ],
-		$dashboard_options_all[ 'enable_bfb' ][ 'section_start' ],
-			$dashboard_options_all[ 'enable_bfb' ][ 'option' ],
 			$dashboard_options_all[ 'end_of_section' ],
 	),
 );

@@ -35,10 +35,10 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 			if ( ! $filename ) {
 				$filename = $this->generate_filename( null, null, $extension );
 			}
-			if ( ( ! defined( 'EWWWIO_EDITOR_OVERWRITE' ) || ! EWWWIO_EDITOR_OVERWRITE ) && is_file( $filename ) ) {
+			if ( ( ! defined( 'EWWWIO_EDITOR_OVERWRITE' ) || ! EWWWIO_EDITOR_OVERWRITE ) && ewwwio_is_file( $filename ) ) {
 				ewwwio_debug_message( "detected existing file: $filename" );
 				$current_size = getimagesize( $filename );
-				if ( $current_size && $this->size['width'] == $current_size[0] && $this->size['height'] == $current_size[1] ) {
+				if ( $current_size && (int) $this->size['width'] === (int) $current_size[0] && (int) $this->size['height'] === (int) $current_size[1] ) {
 					ewwwio_debug_message( "existing file has same dimensions, not saving $filename" );
 					return array(
 						'path'      => $filename,
@@ -112,10 +112,10 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 			if ( ! $filename ) {
 				$filename = $this->generate_filename( null, null, $extension );
 			}
-			if ( ( ! defined( 'EWWWIO_EDITOR_OVERWRITE' ) || ! EWWWIO_EDITOR_OVERWRITE ) && is_file( $filename ) ) {
+			if ( ( ! defined( 'EWWWIO_EDITOR_OVERWRITE' ) || ! EWWWIO_EDITOR_OVERWRITE ) && ewwwio_is_file( $filename ) ) {
 				ewwwio_debug_message( "detected existing file: $filename" );
 				$current_size = getimagesize( $filename );
-				if ( $current_size && $this->size['width'] == $current_size[0] && $this->size['height'] == $current_size[1] ) {
+				if ( $current_size && (int) $this->size['width'] === (int) $current_size[0] && (int) $this->size['height'] === (int) $current_size[1] ) {
 					ewwwio_debug_message( "existing file has same dimensions, not saving $filename" );
 					return array(
 						'path'      => $filename,
@@ -189,10 +189,10 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 			if ( ! $filename ) {
 				$filename = $this->generate_filename( null, null, $extension );
 			}
-			if ( ( ! defined( 'EWWWIO_EDITOR_OVERWRITE' ) || ! EWWWIO_EDITOR_OVERWRITE ) && is_file( $filename ) ) {
+			if ( ( ! defined( 'EWWWIO_EDITOR_OVERWRITE' ) || ! EWWWIO_EDITOR_OVERWRITE ) && ewwwio_is_file( $filename ) ) {
 				ewwwio_debug_message( "detected existing file: $filename" );
 				$current_size = getimagesize( $filename );
-				if ( $current_size && $this->size['width'] == $current_size[0] && $this->size['height'] == $current_size[1] ) {
+				if ( $current_size && (int) $this->size['width'] === (int) $current_size[0] && (int) $this->size['height'] === (int) $current_size[1] ) {
 					ewwwio_debug_message( "existing file has same dimensions, not saving $filename" );
 					return array(
 						'path'      => $filename,
@@ -223,126 +223,6 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 			return $saved;
 		}
 	}
-} elseif ( class_exists( 'S3_Uploads_Image_Editor_Imagick' ) ) {
-	/**
-	 * Extension of the WP_Image_Editor_Imagick class to auto-compress edited S3 images.
-	 *
-	 * We extend the WP class directly, because extending the S3 class would be too late to work.
-	 * So we pretty much have to duplicate the S3 Uploads class with the IO function thrown in
-	 * the middle: https://github.com/humanmade/S3-Uploads/blob/master/inc/class-s3-uploads-image-editor-imagick.php
-	 *
-	 * @see WP_Image_Editor_Imagick
-	 */
-	class EWWWIO_Imagick_Editor extends WP_Image_Editor_Imagick {
-
-		/**
-		 * A temp file created during pdf_setup().
-		 *
-		 * @since 4.4.0
-		 * @var string $temp_file_to_cleanup
-		 */
-		protected $temp_file_to_cleanup = null;
-
-		/**
-		 * Saves a file from the image editor and sends it to S3 after optimization.
-		 *
-		 * @param resource $image An Imagick image object.
-		 * @param string   $filename Optional. The name of the file to be saved to.
-		 * @param string   $mime_type Optional. The mimetype of the file.
-		 * @return WP_Error| array The full path, base filename, width, height, and mimetype.
-		 */
-		protected function _save( $image, $filename = null, $mime_type = null ) {
-			ewwwio_debug_message( '<b>wp_image_editor_imagick(s3uploads)::' . __FUNCTION__ . '()</b>' );
-			global $ewww_preempt_editor;
-			list( $filename, $extension, $mime_type ) = $this->get_output_format( $filename, $mime_type );
-			if ( ! $filename ) {
-				$filename = $this->generate_filename( null, null, $extension );
-			}
-			global $s3_uploads_image;
-			$s3_uploads_image = $filename;
-			if ( ! defined( 'EWWW_IMAGE_OPTIMIZER_CLOUD' ) ) {
-				ewww_image_optimizer_cloud_init();
-			}
-			$upload_dir = wp_upload_dir();
-
-			$temp_filename = tempnam( get_temp_dir(), 's3-uploads' );
-
-			$saved = parent::_save( $image, $temp_filename, $mime_type );
-
-			if ( is_wp_error( $saved ) ) {
-				unlink( $temp_filename );
-				unset( $s3_uploads_image );
-				return $saved;
-			}
-			if ( is_file( $saved['path'] ) && empty( $ewww_preempt_editor ) ) {
-				$temp_filename = $saved['path'];
-				ewww_image_optimizer( $temp_filename );
-				ewwwio_debug_message( "image editor (s3 uploads) saved: $temp_filename" );
-				$image_size = ewww_image_optimizer_filesize( $temp_filename );
-				ewwwio_debug_message( "image editor size: $image_size" );
-			}
-			$copy_result = copy( $saved['path'], $filename );
-			if ( is_file( $saved['path'] ) ) {
-				unlink( $saved['path'] );
-			}
-			if ( is_file( $temp_filename ) ) {
-				unlink( $temp_filename );
-			}
-			if ( ! $copy_result ) {
-				unset( $s3_uploads_image );
-				return new WP_Error( 'unable-to-copy-to-s3', 'Unable to copy the temp image to S3' );
-			}
-			$saved['path'] = $filename;
-			$saved['file'] = wp_basename( apply_filters( 'image_make_intermediate_size', $filename ) );
-			unset( $s3_uploads_image );
-			ewwwio_memory( __FUNCTION__ );
-			return $saved;
-		}
-
-		/**
-		 * Custom loader for S3 Uploads.
-		 *
-		 * @since 4.4.0
-		 *
-		 * @return bool|WP_Error True on success, WP_Error on failure.
-		 */
-		public function load() {
-			$result = parent::load();
-
-			// `load` can call pdf_setup() which has to copy the file to a temp local copy.
-			// In this event we want to clean it up once `load` has been completed.
-			if ( $this->temp_file_to_cleanup ) {
-				unlink( $this->temp_file_to_cleanup );
-				$this->temp_file_to_cleanup = null;
-			}
-			return $result;
-		}
-
-		/**
-		 * Sets up Imagick for PDF processing.
-		 * Increases rendering DPI and only loads first page.
-		 *
-		 * @since 4.4.0
-		 *
-		 * @return string|WP_Error File to load or WP_Error on failure.
-		 */
-		protected function pdf_setup() {
-			$temp_filename              = tempnam( get_temp_dir(), 's3-uploads' );
-			$this->temp_file_to_cleanup = $temp_filename;
-			copy( $this->file, $temp_filename );
-
-			try {
-				// By default, PDFs are rendered in a very low resolution.
-				// We want the thumbnail to be readable, so increase the rendering DPI.
-				$this->image->setResolution( 128, 128 );
-
-				// Only load the first page.
-				return $temp_filename . '[0]';
-			} catch ( Exception $e ) {
-				return new WP_Error( 'pdf_setup_failed', $e->getMessage(), $this->file );
-			}
-		}
-	}
 } else {
 	/**
 	 * Extension of the WP_Image_Editor_Imagick class to auto-compress edited images.
@@ -368,7 +248,7 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 		 */
 		public function resize( $max_w, $max_h, $crop = false ) {
 			ewwwio_debug_message( '<b>wp_image_editor_gd::' . __FUNCTION__ . '()</b>' );
-			if ( ( $this->size['width'] == $max_w ) && ( $this->size['height'] == $max_h ) ) {
+			if ( (int) $this->size['width'] === (int) $max_w && (int) $this->size['height'] === (int) $max_h ) {
 				return true;
 			}
 
@@ -378,9 +258,7 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 			}
 			list( $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h ) = $dims;
 
-			$crop = $crop ? $dims : false;
-
-			$resized = $this->_resize( $dst_w, $dst_h, $crop );
+			$resized = $this->_resize( $dims, $crop );
 
 			if ( is_string( $resized ) ) {
 				$this->ewww_image = $resized;
@@ -398,39 +276,44 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 		 *
 		 * @since 4.6.0
 		 *
-		 * @param int|null $max_w Image width.
-		 * @param int|null $max_h Image height.
-		 * @param array    $crop Optional. Scale by default, crop if true. Will contain all
-		 *                       parameters necessary for crop method.
+		 * @param array $dims {
+		 *     All parameters necessary for resizing.
+		 *
+		 *     @type int $dst_x X-coordinate of destination image (usually 0).
+		 *     @type int $dst_y Y-coordinate of destination image (usually 0).
+		 *     @type int $src_x X-coordinate of source image (usually 0 unless cropping).
+		 *     @type int $src_y Y-coordinate of source image (usually 0 unless cropping).
+		 *     @type int $dst_w Desired image width.
+		 *     @type int $dst_h Desired image height.
+		 *     @type int $src_w Source width.
+		 *     @type int $src_h Source height.
+		 * }
+		 * @param bool  $crop Should we crop or should we scale.
 		 * @return bool|WP_Error
 		 */
-		protected function _resize( $max_w, $max_h, $crop = false ) {
+		protected function _resize( $dims, $crop ) {
 			ewwwio_debug_message( '<b>wp_image_editor_gd::' . __FUNCTION__ . '()</b>' );
-			if ( ( ! $max_w || $max_w >= $this->size['width'] ) && ( ! $max_h || $max_h >= $this->size['height'] ) ) {
-				return new WP_Error( 'image_resize_error', __( 'Image resize failed.' ) );
-			}
+			list( $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h ) = $dims;
 			if ( defined( 'EWWWIO_EDITOR_AGR' ) && ! EWWWIO_EDITOR_AGR ) {
 				ewwwio_debug_message( 'AGR disabled' );
 				if ( $crop ) {
-					list( $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h ) = $crop;
 					return $this->crop( $src_x, $src_y, $src_w, $src_h, $dst_w, $dst_h );
 				}
-				return $this->thumbnail_image( $max_w, $max_h );
+				return $this->thumbnail_image( $dst_w, $dst_h );
 			}
 			if ( defined( 'EWWWIO_EDITOR_BETTER_RESIZE' ) && ! EWWW_IO_EDITOR_BETTER_RESIZE ) {
 				ewwwio_debug_message( 'API resize disabled' );
 				if ( $crop ) {
-					list( $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h ) = $crop;
 					return $this->crop( $src_x, $src_y, $src_w, $src_h, $dst_w, $dst_h );
 				}
-				return $this->thumbnail_image( $max_w, $max_h );
+				return $this->thumbnail_image( $dst_w, $dst_h );
 			}
 			$return_parent = false; // An indicator for whether we should short-circuit and use the parent thumbnail_image method.
 			if ( ! defined( 'EWWW_IMAGE_OPTIMIZER_CLOUD' ) ) {
 				ewww_image_optimizer_cloud_init();
 			}
 			$ewww_status = get_transient( 'ewww_image_optimizer_cloud_status' );
-			if ( 'image/gif' === $this->mime_type && function_exists( 'ewww_image_optimizer_path_check' ) ) {
+			if ( 'image/gif' === $this->mime_type && function_exists( 'ewww_image_optimizer_path_check' ) && ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ) {
 				ewww_image_optimizer_path_check( false, false, true, false, false, false );
 			}
 			if ( 'image/gif' === $this->mime_type && ( ! defined( 'EWWW_IMAGE_OPTIMIZER_GIFSICLE' ) || ! EWWW_IMAGE_OPTIMIZER_GIFSICLE ) ) {
@@ -456,18 +339,17 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 				ewwwio_debug_message( 'GIF already altered, leave it alone' );
 				$return_parent = true;
 			}
-			if ( ! $this->file || 0 === strpos( $this->file, 's3' ) || 0 === strpos( $this->file, 'http' ) || 0 === strpos( $this->file, 'ftp' ) || ! is_file( $this->file ) ) {
+			if ( ! $this->file || ewww_image_optimizer_stream_wrapped( $this->file ) || 0 === strpos( $this->file, 'http' ) || 0 === strpos( $this->file, 'ftp' ) || ! ewwwio_is_file( $this->file ) ) {
 				ewwwio_debug_message( 'could not load original file, or remote path detected' );
 				$return_parent = true;
 			}
 			if ( $return_parent ) {
 				if ( $crop ) {
-					list( $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h ) = $crop;
 					return $this->crop( $src_x, $src_y, $src_w, $src_h, $dst_w, $dst_h );
 				}
-				return $this->thumbnail_image( $max_w, $max_h );
+				return $this->thumbnail_image( $dst_w, $dst_h );
 			}
-			$resize_result = ewww_image_optimizer_better_resize( $this->file, $max_w, $max_h, $crop );
+			$resize_result = ewww_image_optimizer_better_resize( $this->file, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h );
 			if ( is_wp_error( $resize_result ) ) {
 				return $resize_result;
 			}
@@ -545,7 +427,7 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 				}
 
 				$resize_result = $this->resize( $size_data['width'], $size_data['height'], $size_data['crop'] );
-				$duplicate     = ( ( $orig_size['width'] == $size_data['width'] ) && ( $orig_size['height'] == $size_data['height'] ) );
+				$duplicate     = ( (int) $orig_size['width'] === (int) $size_data['width'] && (int) $orig_size['height'] === (int) $size_data['height'] );
 
 				if ( ! is_wp_error( $resize_result ) && ! $duplicate ) {
 					if ( is_string( $resize_result ) ) {
@@ -655,10 +537,10 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 				return parent::_save( $image, $filename, $mime_type );
 			}
 			global $ewww_preempt_editor;
-			if ( ( ! defined( 'EWWWIO_EDITOR_OVERWRITE' ) || ! EWWWIO_EDITOR_OVERWRITE ) && is_file( $filename ) && empty( $ewww_preempt_editor ) ) {
+			if ( ( ! defined( 'EWWWIO_EDITOR_OVERWRITE' ) || ! EWWWIO_EDITOR_OVERWRITE ) && ewwwio_is_file( $filename ) && empty( $ewww_preempt_editor ) ) {
 				ewwwio_debug_message( "detected existing file: $filename" );
 				$current_size = getimagesize( $filename );
-				if ( $current_size && $this->size['width'] == $current_size[0] && $this->size['height'] == $current_size[1] ) {
+				if ( $current_size && (int) $this->size['width'] === (int) $current_size[0] && (int) $this->size['height'] === (int) $current_size[1] ) {
 					ewwwio_debug_message( "existing file has same dimensions, not saving $filename" );
 					return array(
 						'path'      => $filename,
@@ -716,10 +598,10 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 			if ( ! $filename ) {
 				$filename = $this->generate_filename( null, null, $extension );
 			}
-			if ( ( ! defined( 'EWWWIO_EDITOR_OVERWRITE' ) || ! EWWWIO_EDITOR_OVERWRITE ) && is_file( $filename ) ) {
+			if ( ( ! defined( 'EWWWIO_EDITOR_OVERWRITE' ) || ! EWWWIO_EDITOR_OVERWRITE ) && ewwwio_is_file( $filename ) ) {
 				ewwwio_debug_message( "detected existing file: $filename" );
 				$current_size = getimagesize( $filename );
-				if ( $current_size && $this->size['width'] == $current_size[0] && $this->size['height'] == $current_size[1] ) {
+				if ( $current_size && (int) $this->size['width'] === (int) $current_size[0] && (int) $this->size['height'] === (int) $current_size[1] ) {
 					ewwwio_debug_message( "existing file has same dimensions, not saving $filename" );
 					return array(
 						'path'      => $filename,

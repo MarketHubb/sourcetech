@@ -275,6 +275,12 @@ function iwp_mmb_direct_to_any_copy($source, $destination, $overwrite = false, $
         if ( is_wp_error($copy_result) ){
             $wp_temp_direct2 = new WP_Filesystem_Direct('');
             $wp_temp_direct2->delete($new_temp_folder, true);
+
+            if(is_wp_error($copy_result)){
+                $result['error_code'] = $copy_result->get_error_code();
+                $result['error'] = $copy_result->get_error_message();
+                return $result;
+            }
             return $copy_result;
         }
 

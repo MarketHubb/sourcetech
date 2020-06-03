@@ -274,11 +274,13 @@ abstract class Sharing_Source {
 			implode( ' ', $klasses ),
 			esc_attr(
 				$is_deprecated
+					/* translators: %1$s is the name of a deprecated Sharing Service like "Google+" */
 					? sprintf( __( 'The %1$s service has shut down. This sharing button is not displayed to your visitors and should be removed.', 'jetpack' ), $this->get_name() )
 					: $this->get_name()
 			),
 			esc_html(
 				$is_deprecated
+					/* translators: %1$s is the name of a deprecated Sharing Service like "Google+" */
 					? sprintf( __( '%1$s has shut down', 'jetpack' ), $this->get_name() )
 					: $text
 			)
@@ -422,7 +424,9 @@ abstract class Deprecated_Sharing_Source extends Sharing_Source {
 	public function display_deprecated( $post ) {
 		return $this->get_link(
 			$this->get_share_url( $post->ID ),
+			/* translators: %1$s is the name of a deprecated Sharing Service like "Google+" */
 			sprintf( __( '%1$s has shut down', 'jetpack' ), $this->get_name() ),
+			/* translators: %1$s is the name of a deprecated Sharing Service like "Google+" */
 			sprintf( __( 'The %1$s service has shut down. This sharing button is not displayed to your visitors and should be removed.', 'jetpack' ), $this->get_name() )
 		);
 	}
@@ -1127,7 +1131,7 @@ class Share_PressThis extends Sharing_Source {
 	}
 
 	public function process_request( $post, array $post_data ) {
-		global $current_user, $wp_version;
+		global $current_user;
 
 		$primary_blog = (int) get_user_meta( $current_user->ID, 'primary_blog', true );
 		if ( $primary_blog ) {
@@ -1158,16 +1162,8 @@ class Share_PressThis extends Sharing_Source {
 			'u' => rawurlencode( $this->get_share_url( $post->ID ) ),
 			);
 
-		if ( version_compare( $wp_version, '4.9-RC1-42107', '>=' ) ) {
-			$args[ 'url-scan-submit' ] = 'Scan';
-			$args[ '_wpnonce' ]        = wp_create_nonce( 'scan-site' );
-
-		} else { // Remove once 4.9 is the minimum.
-			$args['t'] = rawurlencode( $this->get_share_title( $post->ID ) );
-			if ( isset( $_GET['sel'] ) ) {
-				$args['s'] = rawurlencode( $_GET['sel'] );
-			}
-		}
+		$args[ 'url-scan-submit' ] = 'Scan';
+		$args[ '_wpnonce' ]        = wp_create_nonce( 'scan-site' );
 
 		$url = $blog->siteurl . '/wp-admin/press-this.php';
 		$url = add_query_arg( $args, $url );
@@ -1182,14 +1178,6 @@ class Share_PressThis extends Sharing_Source {
 
 	public function get_display( $post ) {
 		return $this->get_link( $this->get_process_request_url( $post->ID ), _x( 'Press This', 'share to', 'jetpack' ), __( 'Click to Press This!', 'jetpack' ), 'share=press-this' );
-	}
-}
-
-class Share_GooglePlus1 extends Deprecated_Sharing_Source {
-	public $shortname = 'googleplus1';
-
-	public function get_name() {
-		return __( 'Google+', 'jetpack' );
 	}
 }
 
@@ -1711,7 +1699,23 @@ class Jetpack_Share_WhatsApp extends Sharing_Source {
 	}
 
 	public function get_display( $post ) {
-		return $this->get_link( 'https://api.whatsapp.com/send?text=' . rawurlencode( $this->get_share_title( $post->ID ) . ' ' . $this->get_share_url( $post->ID ) ), _x( 'WhatsApp', 'share to', 'jetpack' ), __( 'Click to share on WhatsApp', 'jetpack' ) );
+		return $this->get_link( $this->get_process_request_url( $post->ID ), _x( 'WhatsApp', 'share to', 'jetpack' ), __( 'Click to share on WhatsApp', 'jetpack' ), 'share=jetpack-whatsapp' );
+	}
+
+	public function process_request( $post, array $post_data ) {
+		// Record stats
+		parent::process_request( $post, $post_data );
+
+		// Firefox for desktop doesn't handle the "api.whatsapp.com" URL properly, so use "web.whatsapp.com"
+		if ( Jetpack_User_Agent_Info::is_firefox_desktop() ) {
+			$url = 'https://web.whatsapp.com/send?text=';
+		} else {
+			$url = 'https://api.whatsapp.com/send?text=';
+		}
+
+		$url .= rawurlencode( $this->get_share_title( $post->ID ) . ' ' . $this->get_share_url( $post->ID ) );
+		wp_redirect( $url );
+		exit;
 	}
 }
 

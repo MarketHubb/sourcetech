@@ -93,7 +93,8 @@ class IWP_MMB_BLC extends IWP_MMB_Core
     {
         if($this->_checkBLC()){
             global $wpdb;
-            $sql = "SELECT l.*,i.container_id,i.link_text FROM (SELECT link_id,url,redirect_count,http_code,status_text,broken,false_positive,dismissed FROM ".$wpdb->prefix."blc_links) AS l INNER JOIN (SELECT link_id,container_id,link_text FROM ".$wpdb->prefix."blc_instances) AS i  ON l.link_id=i.link_id";
+            $sql = "SELECT l.*,i.container_id,i.link_text FROM (SELECT link_id,url,redirect_count,http_code,status_text,broken,false_positive,dismissed FROM ".$wpdb->prefix."blc_links) AS l INNER JOIN (SELECT link_id,container_id,link_text FROM ".$wpdb->prefix."blc_instances) AS i  ON l.link_id=i.link_id  GROUP BY l.link_id";
+            // refer file link-query.php get_links()
             $success = $wpdb->get_results($sql);
              if(!empty($success)){
                 foreach ($success as $link) {
@@ -206,7 +207,12 @@ class IWP_MMB_BLC extends IWP_MMB_Core
                 $redefinedParams = array('linkID'=>$params['linkData'][$i][0],'linkType'=>$params['linkData'][$i][1]);
                 array_push($result, $this->blc_dismiss_link($redefinedParams));
             }
-        } 
+        }else if($params['action'] == 'undismissBroken'){
+            for ($i=0; $i < count($params['linkData']); $i++) { 
+                $redefinedParams = array('linkID'=>$params['linkData'][$i][0],'linkType'=>$params['linkData'][$i][1]);
+                array_push($result, $this->blc_undismiss_link($redefinedParams));
+            }
+        }  
         return array($result,$params['action']);
     }
 

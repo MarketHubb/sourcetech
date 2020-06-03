@@ -1,5 +1,7 @@
 <?php
 
+use Automattic\Jetpack\Redirect;
+
 abstract class Publicize_Base {
 
 	/**
@@ -141,7 +143,7 @@ abstract class Publicize_Base {
 	abstract function get_services( $filter = 'all', $_blog_id = false, $_user_id = false );
 
 	function can_connect_service( $service_name ) {
-		return 'google_plus' !== $service_name;
+		return true;
 	}
 
 	/**
@@ -208,8 +210,9 @@ abstract class Publicize_Base {
 			case 'linkedin':
 				return 'LinkedIn';
 				break;
-			case 'google_plus':
-				return  'Google+';
+			case 'google_drive': // google-drive used to be called google_drive.
+			case 'google-drive':
+				return 'Google Drive';
 				break;
 			case 'twitter':
 			case 'facebook':
@@ -323,7 +326,7 @@ abstract class Publicize_Base {
 		$cmeta = $this->get_connection_meta( $connection );
 
 		if ( isset( $cmeta['connection_data']['meta']['link'] ) ) {
-			if ( 'facebook' == $service_name && 0 === strpos( parse_url( $cmeta['connection_data']['meta']['link'], PHP_URL_PATH ), '/app_scoped_user_id/' ) ) {
+			if ( 'facebook' == $service_name && 0 === strpos( wp_parse_url( $cmeta['connection_data']['meta']['link'], PHP_URL_PATH ), '/app_scoped_user_id/' ) ) {
 				// App-scoped Facebook user IDs are not usable profile links
 				return false;
 			}
@@ -332,19 +335,15 @@ abstract class Publicize_Base {
 		} elseif ( 'facebook' == $service_name && isset( $cmeta['connection_data']['meta']['facebook_page'] ) ) {
 			return 'https://facebook.com/' . $cmeta['connection_data']['meta']['facebook_page'];
 		} elseif ( 'tumblr' == $service_name && isset( $cmeta['connection_data']['meta']['tumblr_base_hostname'] ) ) {
-			 return 'http://' . $cmeta['connection_data']['meta']['tumblr_base_hostname'];
+			 return 'https://' . $cmeta['connection_data']['meta']['tumblr_base_hostname'];
 		} elseif ( 'twitter' == $service_name ) {
 			return 'https://twitter.com/' . substr( $cmeta['external_display'], 1 ); // Has a leading '@'
-		} elseif ( 'google_plus' == $service_name && isset( $cmeta['connection_data']['meta']['google_plus_page'] ) ) {
-			return 'https://plus.google.com/' . $cmeta['connection_data']['meta']['google_plus_page'];
-		} elseif ( 'google_plus' == $service_name ) {
-			return 'https://plus.google.com/' . $cmeta['external_id'];
 		} else if ( 'linkedin' == $service_name ) {
 			if ( !isset( $cmeta['connection_data']['meta']['profile_url'] ) ) {
 				return false;
 			}
 
-			$profile_url_query = parse_url( $cmeta['connection_data']['meta']['profile_url'], PHP_URL_QUERY );
+			$profile_url_query = wp_parse_url( $cmeta['connection_data']['meta']['profile_url'], PHP_URL_QUERY );
 			wp_parse_str( $profile_url_query, $profile_url_query_args );
 			if ( isset( $profile_url_query_args['key'] ) ) {
 				$id = $profile_url_query_args['key'];
@@ -354,7 +353,7 @@ abstract class Publicize_Base {
 				return false;
 			}
 
-			return esc_url_raw( add_query_arg( 'id', urlencode( $id ), 'http://www.linkedin.com/profile/view' ) );
+			return esc_url_raw( add_query_arg( 'id', urlencode( $id ), 'https://www.linkedin.com/profile/view' ) );
 		} else {
 			return false; // no fallback. we just won't link it
 		}
@@ -434,6 +433,19 @@ abstract class Publicize_Base {
 	}
 
 	/**
+	 * LinkedIn needs to be reauthenticated to use v2 of their API.
+	 * If it's using LinkedIn old API, it's an 'invalid' connection
+	 *
+	 * @param object|array The Connection object (WordPress.com) or array (Jetpack)
+	 * @return bool
+	 */
+	function is_invalid_linkedin_connection( $connection ) {
+		// LinkedIn API v1 included the profile link in the connection data.
+		$connection_meta = $this->get_connection_meta( $connection );
+		return isset( $connection_meta['connection_data']['meta']['profile_url'] );
+	}
+
+	/**
 	 * Whether the Connection currently being connected
 	 *
 	 * @param object|array The Connection object (WordPress.com) or array (Jetpack)
@@ -504,6 +516,13 @@ abstract class Publicize_Base {
 						$user_can_refresh = false;
 						$connection_test_message = __( 'Please select a Facebook Page to publish updates.', 'jetpack' );
 					}
+				}
+
+				// LinkedIn needs reauthentication to be compatible with v2 of their API
+				if ( 'linkedin' === $service_name && $this->is_invalid_linkedin_connection( $connection ) ) {
+					$connection_test_passed = 'must_reauth';
+					$user_can_refresh = false;
+					$connection_test_message = esc_html__( 'Your LinkedIn connection needs to be reauthenticated to continue working – head to Sharing to take care of it.', 'jetpack' );
 				}
 
 				$unique_id = null;
@@ -788,9 +807,9 @@ abstract class Publicize_Base {
 		// so we cannot pass one to `$this->current_user_can_access_publicize_data()`.
 
 		if ( $this->current_user_can_access_publicize_data() ) {
-			jetpack_register_plugin( 'publicize' );
+			Jetpack_Gutenberg::set_extension_available( 'jetpack/publicize' );
 		} else {
-			jetpack_set_extension_unavailability_reason( 'publicize', 'unauthorized' );
+			Jetpack_Gutenberg::set_extension_unavailable( 'jetpack/publicize', 'unauthorized' );
 
 		}
 	}
@@ -1040,6 +1059,12 @@ abstract class Publicize_Base {
 		if ( ! $this->post_type_is_publicizeable( $post_type ) ) {
 			return $messages;
 		}
+
+		// Bail early if the post is private.
+		if ( 'publish' !== $post->post_status ) {
+			return $messages;
+		}
+
 		$view_post_link_html = '';
 		$viewable = is_post_type_viewable( $post_type_object );
 		if ( $viewable ) {
@@ -1215,7 +1240,6 @@ abstract class Publicize_Base {
 }
 
 function publicize_calypso_url() {
-	$calypso_sharing_url = 'https://wordpress.com/sharing/';
 	if ( class_exists( 'Jetpack' ) && method_exists( 'Jetpack', 'build_raw_urls' ) ) {
 		$site_suffix = Jetpack::build_raw_urls( home_url() );
 	} elseif ( class_exists( 'WPCOM_Masterbar' ) && method_exists( 'WPCOM_Masterbar', 'get_calypso_site_slug' ) ) {
@@ -1223,8 +1247,8 @@ function publicize_calypso_url() {
 	}
 
 	if ( $site_suffix ) {
-		return $calypso_sharing_url . $site_suffix;
+		return Redirect::get_url( 'calypso-marketing-connections', array( 'site' => $site_suffix ) );
 	} else {
-		return $calypso_sharing_url;
+		return Redirect::get_url( 'calypso-marketing-connections-base' );
 	}
 }

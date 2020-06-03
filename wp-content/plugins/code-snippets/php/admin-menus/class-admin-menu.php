@@ -8,16 +8,33 @@ class Code_Snippets_Admin_Menu {
 	public $name, $label, $title;
 
 	/**
+	 * The base slug for the top-level admin menu.
+	 *
+	 * @var string
+	 */
+	protected $base_slug;
+
+	/**
+	 * The slug for this admin menu.
+	 *
+	 * @var string
+	 */
+	protected $slug;
+
+	/**
 	 * Constructor
 	 *
-	 * @param string $name The snippet page shortname
+	 * @param string $name The snippet page short name
 	 * @param string $label The label shown in the admin menu
 	 * @param string $title The text used for the page title
 	 */
-	function __construct( $name, $label, $title ) {
+	public function __construct( $name, $label, $title ) {
 		$this->name = $name;
 		$this->label = $label;
 		$this->title = $title;
+
+		$this->base_slug = code_snippets()->get_menu_slug();
+		$this->slug = code_snippets()->get_menu_slug( $name );
 	}
 
 	/**
@@ -40,7 +57,7 @@ class Code_Snippets_Admin_Menu {
 	 */
 	public function add_menu( $slug, $label, $title ) {
 		$hook = add_submenu_page(
-			code_snippets()->get_menu_slug(),
+			$this->base_slug,
 			$title,
 			$label,
 			code_snippets()->get_cap(),
@@ -55,7 +72,7 @@ class Code_Snippets_Admin_Menu {
 	 * Register the admin menu
 	 */
 	public function register() {
-		$this->add_menu( code_snippets()->get_menu_slug( $this->name ), $this->label, $this->title );
+		$this->add_menu( $this->slug, $this->label, $this->title );
 	}
 
 	/**

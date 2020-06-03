@@ -4,19 +4,32 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb5b06a960b225bf88b24cc3660efc896
+class ComposerStaticInit4a0992af3d6bb50f93e42590c6a71994
 {
     public static $files = array (
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        'edf8ef411b308ea9e315d190a754d91b' => __DIR__ . '/..' . '/a5hleyrich/wp-queue/src/functions.php',
         '653f15cae3415bbad33eff25628b45a8' => __DIR__ . '/..' . '/calderawp/caldera-forms-query/src/CalderaFormsQueries.php',
         '5e73ffc188f5a63fbd263c4490731358' => __DIR__ . '/..' . '/inpsyde/wonolog/inc/bootstrap.php',
+        '1788f000e5723cf54aa875ee1eec6c27' => __DIR__ . '/../..' . '/cf2/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         'c' => 
         array (
             'calderawp\\calderaforms\\pro\\' => 27,
+            'calderawp\\calderaforms\\cf2\\' => 27,
             'calderawp\\CalderaFormsQuery\\' => 28,
             'calderawp\\CalderaContainers\\' => 28,
+        ),
+        'W' => 
+        array (
+            'WP_Queue\\' => 9,
+        ),
+        'S' => 
+        array (
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Component\\Translation\\' => 30,
         ),
         'P' => 
         array (
@@ -31,10 +44,15 @@ class ComposerStaticInitb5b06a960b225bf88b24cc3660efc896
         'M' => 
         array (
             'Monolog\\' => 8,
+            'MathParser\\' => 11,
         ),
         'I' => 
         array (
             'Inpsyde\\Wonolog\\' => 16,
+        ),
+        'C' => 
+        array (
+            'Composer\\Installers\\' => 20,
         ),
     );
 
@@ -43,6 +61,10 @@ class ComposerStaticInitb5b06a960b225bf88b24cc3660efc896
         array (
             0 => __DIR__ . '/../..' . '/includes/cf-pro-client/classes',
         ),
+        'calderawp\\calderaforms\\cf2\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/cf2',
+        ),
         'calderawp\\CalderaFormsQuery\\' => 
         array (
             0 => __DIR__ . '/..' . '/calderawp/caldera-forms-query/src',
@@ -50,6 +72,18 @@ class ComposerStaticInitb5b06a960b225bf88b24cc3660efc896
         'calderawp\\CalderaContainers\\' => 
         array (
             0 => __DIR__ . '/..' . '/calderawp/caldera-containers/src',
+        ),
+        'WP_Queue\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/a5hleyrich/wp-queue/src/WP_Queue',
+        ),
+        'Symfony\\Polyfill\\Mbstring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Component\\Translation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/translation',
         ),
         'Psr\\Log\\' => 
         array (
@@ -71,13 +105,32 @@ class ComposerStaticInitb5b06a960b225bf88b24cc3660efc896
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
+        'MathParser\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser',
+        ),
         'Inpsyde\\Wonolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/inpsyde/wonolog/src',
         ),
+        'Composer\\Installers\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers',
+        ),
+    );
+
+    public static $fallbackDirsPsr4 = array (
+        0 => __DIR__ . '/..' . '/nesbot/carbon/src',
     );
 
     public static $prefixesPsr0 = array (
+        'U' => 
+        array (
+            'UpdateHelper\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/kylekatarnls/update-helper/src',
+            ),
+        ),
         'P' => 
         array (
             'Pimple' => 
@@ -88,6 +141,109 @@ class ComposerStaticInitb5b06a960b225bf88b24cc3660efc896
     );
 
     public static $classMap = array (
+        'Carbon\\Carbon' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Carbon.php',
+        'Carbon\\CarbonInterval' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonInterval.php',
+        'Carbon\\CarbonPeriod' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonPeriod.php',
+        'Carbon\\Exceptions\\InvalidDateException' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Exceptions/InvalidDateException.php',
+        'Carbon\\Laravel\\ServiceProvider' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Laravel/ServiceProvider.php',
+        'Carbon\\Translator' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Translator.php',
+        'Carbon\\Upgrade' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Upgrade.php',
+        'Composer\\Installers\\AglInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AglInstaller.php',
+        'Composer\\Installers\\AimeosInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AimeosInstaller.php',
+        'Composer\\Installers\\AnnotateCmsInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AnnotateCmsInstaller.php',
+        'Composer\\Installers\\AsgardInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AsgardInstaller.php',
+        'Composer\\Installers\\AttogramInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AttogramInstaller.php',
+        'Composer\\Installers\\BaseInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/BaseInstaller.php',
+        'Composer\\Installers\\BitrixInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/BitrixInstaller.php',
+        'Composer\\Installers\\BonefishInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/BonefishInstaller.php',
+        'Composer\\Installers\\CakePHPInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/CakePHPInstaller.php',
+        'Composer\\Installers\\ChefInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ChefInstaller.php',
+        'Composer\\Installers\\CiviCrmInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/CiviCrmInstaller.php',
+        'Composer\\Installers\\ClanCatsFrameworkInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ClanCatsFrameworkInstaller.php',
+        'Composer\\Installers\\CockpitInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/CockpitInstaller.php',
+        'Composer\\Installers\\CodeIgniterInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/CodeIgniterInstaller.php',
+        'Composer\\Installers\\Concrete5Installer' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/Concrete5Installer.php',
+        'Composer\\Installers\\CraftInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/CraftInstaller.php',
+        'Composer\\Installers\\CroogoInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/CroogoInstaller.php',
+        'Composer\\Installers\\DecibelInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/DecibelInstaller.php',
+        'Composer\\Installers\\DframeInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/DframeInstaller.php',
+        'Composer\\Installers\\DokuWikiInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/DokuWikiInstaller.php',
+        'Composer\\Installers\\DolibarrInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/DolibarrInstaller.php',
+        'Composer\\Installers\\DrupalInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/DrupalInstaller.php',
+        'Composer\\Installers\\ElggInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ElggInstaller.php',
+        'Composer\\Installers\\EliasisInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/EliasisInstaller.php',
+        'Composer\\Installers\\ExpressionEngineInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ExpressionEngineInstaller.php',
+        'Composer\\Installers\\EzPlatformInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/EzPlatformInstaller.php',
+        'Composer\\Installers\\FuelInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/FuelInstaller.php',
+        'Composer\\Installers\\FuelphpInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/FuelphpInstaller.php',
+        'Composer\\Installers\\GravInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/GravInstaller.php',
+        'Composer\\Installers\\HuradInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/HuradInstaller.php',
+        'Composer\\Installers\\ImageCMSInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ImageCMSInstaller.php',
+        'Composer\\Installers\\Installer' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/Installer.php',
+        'Composer\\Installers\\ItopInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ItopInstaller.php',
+        'Composer\\Installers\\JoomlaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/JoomlaInstaller.php',
+        'Composer\\Installers\\KanboardInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/KanboardInstaller.php',
+        'Composer\\Installers\\KirbyInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/KirbyInstaller.php',
+        'Composer\\Installers\\KnownInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/KnownInstaller.php',
+        'Composer\\Installers\\KodiCMSInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/KodiCMSInstaller.php',
+        'Composer\\Installers\\KohanaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/KohanaInstaller.php',
+        'Composer\\Installers\\LanManagementSystemInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/LanManagementSystemInstaller.php',
+        'Composer\\Installers\\LaravelInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/LaravelInstaller.php',
+        'Composer\\Installers\\LavaLiteInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/LavaLiteInstaller.php',
+        'Composer\\Installers\\LithiumInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/LithiumInstaller.php',
+        'Composer\\Installers\\MODULEWorkInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MODULEWorkInstaller.php',
+        'Composer\\Installers\\MODXEvoInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MODXEvoInstaller.php',
+        'Composer\\Installers\\MagentoInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MagentoInstaller.php',
+        'Composer\\Installers\\MajimaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MajimaInstaller.php',
+        'Composer\\Installers\\MakoInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MakoInstaller.php',
+        'Composer\\Installers\\MantisBTInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MantisBTInstaller.php',
+        'Composer\\Installers\\MauticInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MauticInstaller.php',
+        'Composer\\Installers\\MayaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MayaInstaller.php',
+        'Composer\\Installers\\MediaWikiInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MediaWikiInstaller.php',
+        'Composer\\Installers\\MicroweberInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MicroweberInstaller.php',
+        'Composer\\Installers\\ModxInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ModxInstaller.php',
+        'Composer\\Installers\\MoodleInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MoodleInstaller.php',
+        'Composer\\Installers\\OctoberInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/OctoberInstaller.php',
+        'Composer\\Installers\\OntoWikiInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/OntoWikiInstaller.php',
+        'Composer\\Installers\\OsclassInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/OsclassInstaller.php',
+        'Composer\\Installers\\OxidInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/OxidInstaller.php',
+        'Composer\\Installers\\PPIInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PPIInstaller.php',
+        'Composer\\Installers\\PhiftyInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PhiftyInstaller.php',
+        'Composer\\Installers\\PhpBBInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PhpBBInstaller.php',
+        'Composer\\Installers\\PimcoreInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PimcoreInstaller.php',
+        'Composer\\Installers\\PiwikInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PiwikInstaller.php',
+        'Composer\\Installers\\PlentymarketsInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PlentymarketsInstaller.php',
+        'Composer\\Installers\\Plugin' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/Plugin.php',
+        'Composer\\Installers\\PortoInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PortoInstaller.php',
+        'Composer\\Installers\\PrestashopInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PrestashopInstaller.php',
+        'Composer\\Installers\\PuppetInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PuppetInstaller.php',
+        'Composer\\Installers\\PxcmsInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PxcmsInstaller.php',
+        'Composer\\Installers\\RadPHPInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/RadPHPInstaller.php',
+        'Composer\\Installers\\ReIndexInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ReIndexInstaller.php',
+        'Composer\\Installers\\Redaxo5Installer' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/Redaxo5Installer.php',
+        'Composer\\Installers\\RedaxoInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/RedaxoInstaller.php',
+        'Composer\\Installers\\RoundcubeInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/RoundcubeInstaller.php',
+        'Composer\\Installers\\SMFInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/SMFInstaller.php',
+        'Composer\\Installers\\ShopwareInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ShopwareInstaller.php',
+        'Composer\\Installers\\SilverStripeInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/SilverStripeInstaller.php',
+        'Composer\\Installers\\SiteDirectInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/SiteDirectInstaller.php',
+        'Composer\\Installers\\SyDESInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/SyDESInstaller.php',
+        'Composer\\Installers\\SyliusInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/SyliusInstaller.php',
+        'Composer\\Installers\\Symfony1Installer' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/Symfony1Installer.php',
+        'Composer\\Installers\\TYPO3CmsInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/TYPO3CmsInstaller.php',
+        'Composer\\Installers\\TYPO3FlowInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/TYPO3FlowInstaller.php',
+        'Composer\\Installers\\TaoInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/TaoInstaller.php',
+        'Composer\\Installers\\TheliaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/TheliaInstaller.php',
+        'Composer\\Installers\\TuskInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/TuskInstaller.php',
+        'Composer\\Installers\\UserFrostingInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/UserFrostingInstaller.php',
+        'Composer\\Installers\\VanillaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/VanillaInstaller.php',
+        'Composer\\Installers\\VgmcpInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/VgmcpInstaller.php',
+        'Composer\\Installers\\WHMCSInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/WHMCSInstaller.php',
+        'Composer\\Installers\\WolfCMSInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/WolfCMSInstaller.php',
+        'Composer\\Installers\\WordPressInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/WordPressInstaller.php',
+        'Composer\\Installers\\YawikInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/YawikInstaller.php',
+        'Composer\\Installers\\ZendInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ZendInstaller.php',
+        'Composer\\Installers\\ZikulaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ZikulaInstaller.php',
         'Inpsyde\\Wonolog\\Channels' => __DIR__ . '/..' . '/inpsyde/wonolog/src/Channels.php',
         'Inpsyde\\Wonolog\\Controller' => __DIR__ . '/..' . '/inpsyde/wonolog/src/Controller.php',
         'Inpsyde\\Wonolog\\Data\\Alert' => __DIR__ . '/..' . '/inpsyde/wonolog/src/Data/Alert.php',
@@ -127,6 +283,59 @@ class ComposerStaticInitb5b06a960b225bf88b24cc3660efc896
         'Inpsyde\\Wonolog\\PhpErrorController' => __DIR__ . '/..' . '/inpsyde/wonolog/src/PhpErrorController.php',
         'Inpsyde\\Wonolog\\Processor\\ProcessorsRegistry' => __DIR__ . '/..' . '/inpsyde/wonolog/src/Processor/ProcessorsRegistry.php',
         'Inpsyde\\Wonolog\\Processor\\WpContextProcessor' => __DIR__ . '/..' . '/inpsyde/wonolog/src/Processor/WpContextProcessor.php',
+        'JsonSerializable' => __DIR__ . '/..' . '/nesbot/carbon/src/JsonSerializable.php',
+        'MathParser\\AbstractMathParser' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/AbstractMathParser.php',
+        'MathParser\\ComplexMathParser' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/ComplexMathParser.php',
+        'MathParser\\Exceptions\\DivisionByZeroException' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Exceptions/DivisionByZeroException.php',
+        'MathParser\\Exceptions\\MathParserException' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Exceptions/MathParserException.php',
+        'MathParser\\Exceptions\\ParenthesisMismatchException' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Exceptions/ParenthesisMismatchException.php',
+        'MathParser\\Exceptions\\SyntaxErrorException' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Exceptions/SyntaxErrorException.php',
+        'MathParser\\Exceptions\\UnknownConstantException' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Exceptions/UnknownConstantException.php',
+        'MathParser\\Exceptions\\UnknownFunctionException' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Exceptions/UnknownFunctionException.php',
+        'MathParser\\Exceptions\\UnknownOperatorException' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Exceptions/UnknownOperatorException.php',
+        'MathParser\\Exceptions\\UnknownTokenException' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Exceptions/UnknownTokenException.php',
+        'MathParser\\Exceptions\\UnknownVariableException' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Exceptions/UnknownVariableException.php',
+        'MathParser\\Extensions\\Complex' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Extensions/Complex.php',
+        'MathParser\\Extensions\\Math' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Extensions/Math.php',
+        'MathParser\\Extensions\\Rational' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Extensions/Rational.php',
+        'MathParser\\Interpreting\\ASCIIPrinter' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Interpreting/ASCIIPrinter.php',
+        'MathParser\\Interpreting\\ComplexEvaluator' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Interpreting/ComplexEvaluator.php',
+        'MathParser\\Interpreting\\Differentiator' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Interpreting/Differentiator.php',
+        'MathParser\\Interpreting\\Evaluator' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Interpreting/Evaluator.php',
+        'MathParser\\Interpreting\\LaTeXPrinter' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Interpreting/LaTeXPrinter.php',
+        'MathParser\\Interpreting\\RationalEvaluator' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Interpreting/RationalEvaluator.php',
+        'MathParser\\Interpreting\\TreePrinter' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Interpreting/TreePrinter.php',
+        'MathParser\\Interpreting\\Visitors\\Visitable' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Interpreting/Visitors/Visitable.php',
+        'MathParser\\Interpreting\\Visitors\\Visitor' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Interpreting/Visitors/Visitor.php',
+        'MathParser\\Lexing\\ComplexLexer' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Lexing/ComplexLexer.php',
+        'MathParser\\Lexing\\Lexer' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Lexing/Lexer.php',
+        'MathParser\\Lexing\\StdMathLexer' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Lexing/StdMathLexer.php',
+        'MathParser\\Lexing\\Token' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Lexing/Token.php',
+        'MathParser\\Lexing\\TokenDefinition' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Lexing/TokenDefinition.php',
+        'MathParser\\Lexing\\TokenType' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Lexing/TokenType.php',
+        'MathParser\\Parsing\\Nodes\\ConstantNode' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/ConstantNode.php',
+        'MathParser\\Parsing\\Nodes\\ExpressionNode' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/ExpressionNode.php',
+        'MathParser\\Parsing\\Nodes\\Factories\\AdditionNodeFactory' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/Factories/AdditionNodeFactory.php',
+        'MathParser\\Parsing\\Nodes\\Factories\\DivisionNodeFactory' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/Factories/DivisionNodeFactory.php',
+        'MathParser\\Parsing\\Nodes\\Factories\\ExponentiationNodeFactory' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/Factories/ExponentiationNodeFactory.php',
+        'MathParser\\Parsing\\Nodes\\Factories\\MultiplicationNodeFactory' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/Factories/MultiplicationNodeFactory.php',
+        'MathParser\\Parsing\\Nodes\\Factories\\NodeFactory' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/Factories/NodeFactory.php',
+        'MathParser\\Parsing\\Nodes\\Factories\\SubtractionNodeFactory' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/Factories/SubtractionNodeFactory.php',
+        'MathParser\\Parsing\\Nodes\\FunctionNode' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/FunctionNode.php',
+        'MathParser\\Parsing\\Nodes\\IntegerNode' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/IntegerNode.php',
+        'MathParser\\Parsing\\Nodes\\Interfaces\\ExpressionNodeFactory' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/Interfaces/ExpressionNodeFactory.php',
+        'MathParser\\Parsing\\Nodes\\Node' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/Node.php',
+        'MathParser\\Parsing\\Nodes\\NumberNode' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/NumberNode.php',
+        'MathParser\\Parsing\\Nodes\\PostfixOperatorNode' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/PostfixOperatorNode.php',
+        'MathParser\\Parsing\\Nodes\\RationalNode' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/RationalNode.php',
+        'MathParser\\Parsing\\Nodes\\SubExpressionNode' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/SubExpressionNode.php',
+        'MathParser\\Parsing\\Nodes\\Traits\\Numeric' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/Traits/Numeric.php',
+        'MathParser\\Parsing\\Nodes\\Traits\\Sanitize' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/Traits/Sanitize.php',
+        'MathParser\\Parsing\\Nodes\\VariableNode' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Nodes/VariableNode.php',
+        'MathParser\\Parsing\\Parser' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Parser.php',
+        'MathParser\\Parsing\\Stack' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/Parsing/Stack.php',
+        'MathParser\\RationalMathParser' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/RationalMathParser.php',
+        'MathParser\\StdMathParser' => __DIR__ . '/..' . '/mossadal/math-parser/src/MathParser/StdMathParser.php',
         'Monolog\\ErrorHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/ErrorHandler.php',
         'Monolog\\Formatter\\ChromePHPFormatter' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/ChromePHPFormatter.php',
         'Monolog\\Formatter\\ElasticaFormatter' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/ElasticaFormatter.php',
@@ -166,6 +375,8 @@ class ComposerStaticInitb5b06a960b225bf88b24cc3660efc896
         'Monolog\\Handler\\FirePHPHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/FirePHPHandler.php',
         'Monolog\\Handler\\FleepHookHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/FleepHookHandler.php',
         'Monolog\\Handler\\FlowdockHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/FlowdockHandler.php',
+        'Monolog\\Handler\\FormattableHandlerInterface' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/FormattableHandlerInterface.php',
+        'Monolog\\Handler\\FormattableHandlerTrait' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/FormattableHandlerTrait.php',
         'Monolog\\Handler\\GelfHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/GelfHandler.php',
         'Monolog\\Handler\\GroupHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/GroupHandler.php',
         'Monolog\\Handler\\HandlerInterface' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/HandlerInterface.php',
@@ -183,6 +394,8 @@ class ComposerStaticInitb5b06a960b225bf88b24cc3660efc896
         'Monolog\\Handler\\NewRelicHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/NewRelicHandler.php',
         'Monolog\\Handler\\NullHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/NullHandler.php',
         'Monolog\\Handler\\PHPConsoleHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/PHPConsoleHandler.php',
+        'Monolog\\Handler\\ProcessableHandlerInterface' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/ProcessableHandlerInterface.php',
+        'Monolog\\Handler\\ProcessableHandlerTrait' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/ProcessableHandlerTrait.php',
         'Monolog\\Handler\\PsrHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/PsrHandler.php',
         'Monolog\\Handler\\PushoverHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/PushoverHandler.php',
         'Monolog\\Handler\\RavenHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/RavenHandler.php',
@@ -308,6 +521,88 @@ class ComposerStaticInitb5b06a960b225bf88b24cc3660efc896
         'Psr\\Log\\Test\\DummyTest' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/LoggerInterfaceTest.php',
         'Psr\\Log\\Test\\LoggerInterfaceTest' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/LoggerInterfaceTest.php',
         'Psr\\Log\\Test\\TestLogger' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/TestLogger.php',
+        'Symfony\\Component\\Translation\\Catalogue\\AbstractOperation' => __DIR__ . '/..' . '/symfony/translation/Catalogue/AbstractOperation.php',
+        'Symfony\\Component\\Translation\\Catalogue\\MergeOperation' => __DIR__ . '/..' . '/symfony/translation/Catalogue/MergeOperation.php',
+        'Symfony\\Component\\Translation\\Catalogue\\OperationInterface' => __DIR__ . '/..' . '/symfony/translation/Catalogue/OperationInterface.php',
+        'Symfony\\Component\\Translation\\Catalogue\\TargetOperation' => __DIR__ . '/..' . '/symfony/translation/Catalogue/TargetOperation.php',
+        'Symfony\\Component\\Translation\\Command\\XliffLintCommand' => __DIR__ . '/..' . '/symfony/translation/Command/XliffLintCommand.php',
+        'Symfony\\Component\\Translation\\DataCollectorTranslator' => __DIR__ . '/..' . '/symfony/translation/DataCollectorTranslator.php',
+        'Symfony\\Component\\Translation\\DataCollector\\TranslationDataCollector' => __DIR__ . '/..' . '/symfony/translation/DataCollector/TranslationDataCollector.php',
+        'Symfony\\Component\\Translation\\DependencyInjection\\TranslationDumperPass' => __DIR__ . '/..' . '/symfony/translation/DependencyInjection/TranslationDumperPass.php',
+        'Symfony\\Component\\Translation\\DependencyInjection\\TranslationExtractorPass' => __DIR__ . '/..' . '/symfony/translation/DependencyInjection/TranslationExtractorPass.php',
+        'Symfony\\Component\\Translation\\DependencyInjection\\TranslatorPass' => __DIR__ . '/..' . '/symfony/translation/DependencyInjection/TranslatorPass.php',
+        'Symfony\\Component\\Translation\\Dumper\\CsvFileDumper' => __DIR__ . '/..' . '/symfony/translation/Dumper/CsvFileDumper.php',
+        'Symfony\\Component\\Translation\\Dumper\\DumperInterface' => __DIR__ . '/..' . '/symfony/translation/Dumper/DumperInterface.php',
+        'Symfony\\Component\\Translation\\Dumper\\FileDumper' => __DIR__ . '/..' . '/symfony/translation/Dumper/FileDumper.php',
+        'Symfony\\Component\\Translation\\Dumper\\IcuResFileDumper' => __DIR__ . '/..' . '/symfony/translation/Dumper/IcuResFileDumper.php',
+        'Symfony\\Component\\Translation\\Dumper\\IniFileDumper' => __DIR__ . '/..' . '/symfony/translation/Dumper/IniFileDumper.php',
+        'Symfony\\Component\\Translation\\Dumper\\JsonFileDumper' => __DIR__ . '/..' . '/symfony/translation/Dumper/JsonFileDumper.php',
+        'Symfony\\Component\\Translation\\Dumper\\MoFileDumper' => __DIR__ . '/..' . '/symfony/translation/Dumper/MoFileDumper.php',
+        'Symfony\\Component\\Translation\\Dumper\\PhpFileDumper' => __DIR__ . '/..' . '/symfony/translation/Dumper/PhpFileDumper.php',
+        'Symfony\\Component\\Translation\\Dumper\\PoFileDumper' => __DIR__ . '/..' . '/symfony/translation/Dumper/PoFileDumper.php',
+        'Symfony\\Component\\Translation\\Dumper\\QtFileDumper' => __DIR__ . '/..' . '/symfony/translation/Dumper/QtFileDumper.php',
+        'Symfony\\Component\\Translation\\Dumper\\XliffFileDumper' => __DIR__ . '/..' . '/symfony/translation/Dumper/XliffFileDumper.php',
+        'Symfony\\Component\\Translation\\Dumper\\YamlFileDumper' => __DIR__ . '/..' . '/symfony/translation/Dumper/YamlFileDumper.php',
+        'Symfony\\Component\\Translation\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/symfony/translation/Exception/ExceptionInterface.php',
+        'Symfony\\Component\\Translation\\Exception\\InvalidArgumentException' => __DIR__ . '/..' . '/symfony/translation/Exception/InvalidArgumentException.php',
+        'Symfony\\Component\\Translation\\Exception\\InvalidResourceException' => __DIR__ . '/..' . '/symfony/translation/Exception/InvalidResourceException.php',
+        'Symfony\\Component\\Translation\\Exception\\LogicException' => __DIR__ . '/..' . '/symfony/translation/Exception/LogicException.php',
+        'Symfony\\Component\\Translation\\Exception\\NotFoundResourceException' => __DIR__ . '/..' . '/symfony/translation/Exception/NotFoundResourceException.php',
+        'Symfony\\Component\\Translation\\Exception\\RuntimeException' => __DIR__ . '/..' . '/symfony/translation/Exception/RuntimeException.php',
+        'Symfony\\Component\\Translation\\Extractor\\AbstractFileExtractor' => __DIR__ . '/..' . '/symfony/translation/Extractor/AbstractFileExtractor.php',
+        'Symfony\\Component\\Translation\\Extractor\\ChainExtractor' => __DIR__ . '/..' . '/symfony/translation/Extractor/ChainExtractor.php',
+        'Symfony\\Component\\Translation\\Extractor\\ExtractorInterface' => __DIR__ . '/..' . '/symfony/translation/Extractor/ExtractorInterface.php',
+        'Symfony\\Component\\Translation\\Extractor\\PhpExtractor' => __DIR__ . '/..' . '/symfony/translation/Extractor/PhpExtractor.php',
+        'Symfony\\Component\\Translation\\Extractor\\PhpStringTokenParser' => __DIR__ . '/..' . '/symfony/translation/Extractor/PhpStringTokenParser.php',
+        'Symfony\\Component\\Translation\\Formatter\\ChoiceMessageFormatterInterface' => __DIR__ . '/..' . '/symfony/translation/Formatter/ChoiceMessageFormatterInterface.php',
+        'Symfony\\Component\\Translation\\Formatter\\MessageFormatter' => __DIR__ . '/..' . '/symfony/translation/Formatter/MessageFormatter.php',
+        'Symfony\\Component\\Translation\\Formatter\\MessageFormatterInterface' => __DIR__ . '/..' . '/symfony/translation/Formatter/MessageFormatterInterface.php',
+        'Symfony\\Component\\Translation\\IdentityTranslator' => __DIR__ . '/..' . '/symfony/translation/IdentityTranslator.php',
+        'Symfony\\Component\\Translation\\Interval' => __DIR__ . '/..' . '/symfony/translation/Interval.php',
+        'Symfony\\Component\\Translation\\Loader\\ArrayLoader' => __DIR__ . '/..' . '/symfony/translation/Loader/ArrayLoader.php',
+        'Symfony\\Component\\Translation\\Loader\\CsvFileLoader' => __DIR__ . '/..' . '/symfony/translation/Loader/CsvFileLoader.php',
+        'Symfony\\Component\\Translation\\Loader\\FileLoader' => __DIR__ . '/..' . '/symfony/translation/Loader/FileLoader.php',
+        'Symfony\\Component\\Translation\\Loader\\IcuDatFileLoader' => __DIR__ . '/..' . '/symfony/translation/Loader/IcuDatFileLoader.php',
+        'Symfony\\Component\\Translation\\Loader\\IcuResFileLoader' => __DIR__ . '/..' . '/symfony/translation/Loader/IcuResFileLoader.php',
+        'Symfony\\Component\\Translation\\Loader\\IniFileLoader' => __DIR__ . '/..' . '/symfony/translation/Loader/IniFileLoader.php',
+        'Symfony\\Component\\Translation\\Loader\\JsonFileLoader' => __DIR__ . '/..' . '/symfony/translation/Loader/JsonFileLoader.php',
+        'Symfony\\Component\\Translation\\Loader\\LoaderInterface' => __DIR__ . '/..' . '/symfony/translation/Loader/LoaderInterface.php',
+        'Symfony\\Component\\Translation\\Loader\\MoFileLoader' => __DIR__ . '/..' . '/symfony/translation/Loader/MoFileLoader.php',
+        'Symfony\\Component\\Translation\\Loader\\PhpFileLoader' => __DIR__ . '/..' . '/symfony/translation/Loader/PhpFileLoader.php',
+        'Symfony\\Component\\Translation\\Loader\\PoFileLoader' => __DIR__ . '/..' . '/symfony/translation/Loader/PoFileLoader.php',
+        'Symfony\\Component\\Translation\\Loader\\QtFileLoader' => __DIR__ . '/..' . '/symfony/translation/Loader/QtFileLoader.php',
+        'Symfony\\Component\\Translation\\Loader\\XliffFileLoader' => __DIR__ . '/..' . '/symfony/translation/Loader/XliffFileLoader.php',
+        'Symfony\\Component\\Translation\\Loader\\YamlFileLoader' => __DIR__ . '/..' . '/symfony/translation/Loader/YamlFileLoader.php',
+        'Symfony\\Component\\Translation\\LoggingTranslator' => __DIR__ . '/..' . '/symfony/translation/LoggingTranslator.php',
+        'Symfony\\Component\\Translation\\MessageCatalogue' => __DIR__ . '/..' . '/symfony/translation/MessageCatalogue.php',
+        'Symfony\\Component\\Translation\\MessageCatalogueInterface' => __DIR__ . '/..' . '/symfony/translation/MessageCatalogueInterface.php',
+        'Symfony\\Component\\Translation\\MessageSelector' => __DIR__ . '/..' . '/symfony/translation/MessageSelector.php',
+        'Symfony\\Component\\Translation\\MetadataAwareInterface' => __DIR__ . '/..' . '/symfony/translation/MetadataAwareInterface.php',
+        'Symfony\\Component\\Translation\\PluralizationRules' => __DIR__ . '/..' . '/symfony/translation/PluralizationRules.php',
+        'Symfony\\Component\\Translation\\Reader\\TranslationReader' => __DIR__ . '/..' . '/symfony/translation/Reader/TranslationReader.php',
+        'Symfony\\Component\\Translation\\Reader\\TranslationReaderInterface' => __DIR__ . '/..' . '/symfony/translation/Reader/TranslationReaderInterface.php',
+        'Symfony\\Component\\Translation\\Translator' => __DIR__ . '/..' . '/symfony/translation/Translator.php',
+        'Symfony\\Component\\Translation\\TranslatorBagInterface' => __DIR__ . '/..' . '/symfony/translation/TranslatorBagInterface.php',
+        'Symfony\\Component\\Translation\\TranslatorInterface' => __DIR__ . '/..' . '/symfony/translation/TranslatorInterface.php',
+        'Symfony\\Component\\Translation\\Util\\ArrayConverter' => __DIR__ . '/..' . '/symfony/translation/Util/ArrayConverter.php',
+        'Symfony\\Component\\Translation\\Writer\\TranslationWriter' => __DIR__ . '/..' . '/symfony/translation/Writer/TranslationWriter.php',
+        'Symfony\\Component\\Translation\\Writer\\TranslationWriterInterface' => __DIR__ . '/..' . '/symfony/translation/Writer/TranslationWriterInterface.php',
+        'Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
+        'UpdateHelper\\ComposerPlugin' => __DIR__ . '/..' . '/kylekatarnls/update-helper/src/UpdateHelper/ComposerPlugin.php',
+        'UpdateHelper\\NotUpdateInterfaceInstanceException' => __DIR__ . '/..' . '/kylekatarnls/update-helper/src/UpdateHelper/NotUpdateInterfaceInstanceException.php',
+        'UpdateHelper\\UpdateHelper' => __DIR__ . '/..' . '/kylekatarnls/update-helper/src/UpdateHelper/UpdateHelper.php',
+        'UpdateHelper\\UpdateHelperInterface' => __DIR__ . '/..' . '/kylekatarnls/update-helper/src/UpdateHelper/UpdateHelperInterface.php',
+        'WP_Queue\\Connections\\ConnectionInterface' => __DIR__ . '/..' . '/a5hleyrich/wp-queue/src/WP_Queue/Connections/ConnectionInterface.php',
+        'WP_Queue\\Connections\\DatabaseConnection' => __DIR__ . '/..' . '/a5hleyrich/wp-queue/src/WP_Queue/Connections/DatabaseConnection.php',
+        'WP_Queue\\Connections\\RedisConnection' => __DIR__ . '/..' . '/a5hleyrich/wp-queue/src/WP_Queue/Connections/RedisConnection.php',
+        'WP_Queue\\Connections\\SyncConnection' => __DIR__ . '/..' . '/a5hleyrich/wp-queue/src/WP_Queue/Connections/SyncConnection.php',
+        'WP_Queue\\Cron' => __DIR__ . '/..' . '/a5hleyrich/wp-queue/src/WP_Queue/Cron.php',
+        'WP_Queue\\Exceptions\\ConnectionNotFoundException' => __DIR__ . '/..' . '/a5hleyrich/wp-queue/src/WP_Queue/Exceptions/ConnectionNotFoundException.php',
+        'WP_Queue\\Exceptions\\WorkerAttemptsExceededException' => __DIR__ . '/..' . '/a5hleyrich/wp-queue/src/WP_Queue/Exceptions/WorkerAttemptsExceededException.php',
+        'WP_Queue\\Job' => __DIR__ . '/..' . '/a5hleyrich/wp-queue/src/WP_Queue/Job.php',
+        'WP_Queue\\Queue' => __DIR__ . '/..' . '/a5hleyrich/wp-queue/src/WP_Queue/Queue.php',
+        'WP_Queue\\QueueManager' => __DIR__ . '/..' . '/a5hleyrich/wp-queue/src/WP_Queue/QueueManager.php',
+        'WP_Queue\\Worker' => __DIR__ . '/..' . '/a5hleyrich/wp-queue/src/WP_Queue/Worker.php',
         'calderawp\\CalderaContainers\\Container' => __DIR__ . '/..' . '/calderawp/caldera-containers/src/Container.php',
         'calderawp\\CalderaContainers\\ControlledContainer' => __DIR__ . '/..' . '/calderawp/caldera-containers/src/ControlledContainer.php',
         'calderawp\\CalderaContainers\\Exceptions\\Exception' => __DIR__ . '/..' . '/calderawp/caldera-containers/src/Exceptions/Exception.php',
@@ -344,6 +639,52 @@ class ComposerStaticInitb5b06a960b225bf88b24cc3660efc896
         'calderawp\\CalderaFormsQuery\\Select\\SelectQueryBuilder' => __DIR__ . '/..' . '/calderawp/caldera-forms-query/src/Select/SelectQueryBuilder.php',
         'calderawp\\CalderaFormsQuery\\Select\\ValueSelectQueryBuilder' => __DIR__ . '/..' . '/calderawp/caldera-forms-query/src/Select/ValueSelectQueryBuilder.php',
         'calderawp\\CalderaFormsQuery\\SprintfPlaceHolderWriter' => __DIR__ . '/..' . '/calderawp/caldera-forms-query/src/SprintfPlaceHolderWriter.php',
+        'calderawp\\calderaforms\\cf2\\CalderaFormsV2' => __DIR__ . '/../..' . '/cf2/CalderaFormsV2.php',
+        'calderawp\\calderaforms\\cf2\\CalderaFormsV2Contract' => __DIR__ . '/../..' . '/cf2/CalderaFormsV2Contract.php',
+        'calderawp\\calderaforms\\cf2\\Exception' => __DIR__ . '/../..' . '/cf2/Exception.php',
+        'calderawp\\calderaforms\\cf2\\Exceptions\\NotFoundInContainerException' => __DIR__ . '/../..' . '/cf2/Exceptions/NotFoundInContainerException.php',
+        'calderawp\\calderaforms\\cf2\\Factories\\Processor' => __DIR__ . '/../..' . '/cf2/Factories/Processor.php',
+        'calderawp\\calderaforms\\cf2\\Factories\\ProcessorFactory' => __DIR__ . '/../..' . '/cf2/Factories/ProcessorFactory.php',
+        'calderawp\\calderaforms\\cf2\\Fields\\FieldType' => __DIR__ . '/../..' . '/cf2/Fields/FieldType.php',
+        'calderawp\\calderaforms\\cf2\\Fields\\FieldTypeContract' => __DIR__ . '/../..' . '/cf2/Fields/FieldTypeContract.php',
+        'calderawp\\calderaforms\\cf2\\Fields\\FieldTypeFactory' => __DIR__ . '/../..' . '/cf2/Fields/FieldTypeFactory.php',
+        'calderawp\\calderaforms\\cf2\\Fields\\FieldTypeFactoryContract' => __DIR__ . '/../..' . '/cf2/Fields/FieldTypeFactoryContract.php',
+        'calderawp\\calderaforms\\cf2\\Fields\\FieldTypes\\FileFieldType' => __DIR__ . '/../..' . '/cf2/Fields/FieldTypes/FileFieldType.php',
+        'calderawp\\calderaforms\\cf2\\Fields\\FieldTypes\\TextFieldType' => __DIR__ . '/../..' . '/cf2/Fields/FieldTypes/TextFieldType.php',
+        'calderawp\\calderaforms\\cf2\\Fields\\Handlers\\Cf1FileUploader' => __DIR__ . '/../..' . '/cf2/Fields/Handlers/Cf1FileUploader.php',
+        'calderawp\\calderaforms\\cf2\\Fields\\Handlers\\FieldHandler' => __DIR__ . '/../..' . '/cf2/Fields/Handlers/FieldHandler.php',
+        'calderawp\\calderaforms\\cf2\\Fields\\Handlers\\FieldHandlerContract' => __DIR__ . '/../..' . '/cf2/Fields/Handlers/FieldHandlerContract.php',
+        'calderawp\\calderaforms\\cf2\\Fields\\Handlers\\FileFieldHandler' => __DIR__ . '/../..' . '/cf2/Fields/Handlers/FileFieldHandler.php',
+        'calderawp\\calderaforms\\cf2\\Fields\\Handlers\\FileUpload' => __DIR__ . '/../..' . '/cf2/Fields/Handlers/FileUpload.php',
+        'calderawp\\calderaforms\\cf2\\Fields\\Handlers\\UploaderContract' => __DIR__ . '/../..' . '/cf2/Fields/Handlers/UploaderContract.php',
+        'calderawp\\calderaforms\\cf2\\Fields\\RegisterFields' => __DIR__ . '/../..' . '/cf2/Fields/RegisterFields.php',
+        'calderawp\\calderaforms\\cf2\\Fields\\RegisterFieldsContract' => __DIR__ . '/../..' . '/cf2/Fields/RegisterFieldsContract.php',
+        'calderawp\\calderaforms\\cf2\\Fields\\RenderField' => __DIR__ . '/../..' . '/cf2/Fields/RenderField.php',
+        'calderawp\\calderaforms\\cf2\\Fields\\RenderFieldContract' => __DIR__ . '/../..' . '/cf2/Fields/RenderFieldContract.php',
+        'calderawp\\calderaforms\\cf2\\Forms\\Collection' => __DIR__ . '/../..' . '/cf2/Forms/Collection.php',
+        'calderawp\\calderaforms\\cf2\\Forms\\FormCollection' => __DIR__ . '/../..' . '/cf2/Forms/FormCollection.php',
+        'calderawp\\calderaforms\\cf2\\Hooks' => __DIR__ . '/../..' . '/cf2/Hooks.php',
+        'calderawp\\calderaforms\\cf2\\Jobs\\DatabaseConnection' => __DIR__ . '/../..' . '/cf2/Jobs/DatabaseConnection.php',
+        'calderawp\\calderaforms\\cf2\\Jobs\\DeleteFileJob' => __DIR__ . '/../..' . '/cf2/Jobs/DeleteFileJob.php',
+        'calderawp\\calderaforms\\cf2\\Jobs\\DeleteTransientJob' => __DIR__ . '/../..' . '/cf2/Jobs/DeleteTransientJob.php',
+        'calderawp\\calderaforms\\cf2\\Jobs\\Job' => __DIR__ . '/../..' . '/cf2/Jobs/Job.php',
+        'calderawp\\calderaforms\\cf2\\Jobs\\Scheduler' => __DIR__ . '/../..' . '/cf2/Jobs/Scheduler.php',
+        'calderawp\\calderaforms\\cf2\\RestApi\\AuthorizesRestApiRequestWithCfProKeys' => __DIR__ . '/../..' . '/cf2/RestApi/AuthorizesRestApiRequestWithCfProKeys.php',
+        'calderawp\\calderaforms\\cf2\\RestApi\\CalderaRestApiContract' => __DIR__ . '/../..' . '/cf2/RestApi/CalderaRestApiContract.php',
+        'calderawp\\calderaforms\\cf2\\RestApi\\Endpoint' => __DIR__ . '/../..' . '/cf2/RestApi/Endpoint.php',
+        'calderawp\\calderaforms\\cf2\\RestApi\\File\\CreateFile' => __DIR__ . '/../..' . '/cf2/RestApi/File/CreateFile.php',
+        'calderawp\\calderaforms\\cf2\\RestApi\\File\\File' => __DIR__ . '/../..' . '/cf2/RestApi/File/File.php',
+        'calderawp\\calderaforms\\cf2\\RestApi\\Queue\\RunQueue' => __DIR__ . '/../..' . '/cf2/RestApi/Queue/RunQueue.php',
+        'calderawp\\calderaforms\\cf2\\RestApi\\Register' => __DIR__ . '/../..' . '/cf2/RestApi/Register.php',
+        'calderawp\\calderaforms\\cf2\\Services\\FormsService' => __DIR__ . '/../..' . '/cf2/Services/FormsService.php',
+        'calderawp\\calderaforms\\cf2\\Services\\ProcessorService' => __DIR__ . '/../..' . '/cf2/Services/ProcessorService.php',
+        'calderawp\\calderaforms\\cf2\\Services\\QueueSchedulerService' => __DIR__ . '/../..' . '/cf2/Services/QueueSchedulerService.php',
+        'calderawp\\calderaforms\\cf2\\Services\\QueueService' => __DIR__ . '/../..' . '/cf2/Services/QueueService.php',
+        'calderawp\\calderaforms\\cf2\\Services\\Service' => __DIR__ . '/../..' . '/cf2/Services/Service.php',
+        'calderawp\\calderaforms\\cf2\\Services\\ServiceContract' => __DIR__ . '/../..' . '/cf2/Services/ServiceContract.php',
+        'calderawp\\calderaforms\\cf2\\Traits\\ConvertsMimeTypes' => __DIR__ . '/../..' . '/cf2/Traits/ConvertsMimeTypes.php',
+        'calderawp\\calderaforms\\cf2\\Transients\\Cf1TransientsApi' => __DIR__ . '/../..' . '/cf2/Transients/Cf1TransientsApi.php',
+        'calderawp\\calderaforms\\cf2\\Transients\\TransientApiContract' => __DIR__ . '/../..' . '/cf2/Transients/TransientApiContract.php',
         'calderawp\\calderaforms\\pro\\admin\\menu' => __DIR__ . '/../..' . '/includes/cf-pro-client/classes/admin/menu.php',
         'calderawp\\calderaforms\\pro\\admin\\scripts' => __DIR__ . '/../..' . '/includes/cf-pro-client/classes/admin/scripts.php',
         'calderawp\\calderaforms\\pro\\admin\\tab' => __DIR__ . '/../..' . '/includes/cf-pro-client/classes/admin/tab.php',
@@ -379,10 +720,11 @@ class ComposerStaticInitb5b06a960b225bf88b24cc3660efc896
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb5b06a960b225bf88b24cc3660efc896::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb5b06a960b225bf88b24cc3660efc896::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitb5b06a960b225bf88b24cc3660efc896::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitb5b06a960b225bf88b24cc3660efc896::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4a0992af3d6bb50f93e42590c6a71994::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4a0992af3d6bb50f93e42590c6a71994::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInit4a0992af3d6bb50f93e42590c6a71994::$fallbackDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit4a0992af3d6bb50f93e42590c6a71994::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit4a0992af3d6bb50f93e42590c6a71994::$classMap;
 
         }, null, ClassLoader::class);
     }

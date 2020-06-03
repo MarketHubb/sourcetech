@@ -30,18 +30,12 @@ add_action('caldera_forms_includes_complete', function () {
 		$assets_url = plugin_dir_url(__FILE__) . 'dist/';
 		$view_dir = __DIR__ . '/dist';
 		$scripts = new scripts($assets_url, $slug, CF_PRO_VER);
-		if ( Caldera_Forms_Admin::is_edit() ) {
-			add_action('admin_init', function () use ($scripts, $view_dir) {
-				$tab = new \calderawp\calderaforms\pro\admin\tab(__DIR__ . '/dist/tab.php');
-				add_action('caldera_forms_get_panel_extensions', [ $tab, 'add_tab' ]);
-				container::get_instance()->set_tab_html($scripts->webpack($view_dir, 'tab', false));
+		// Pro Tab removed @see https://github.com/CalderaWP/Caldera-Forms/issues/3413
 
-			});
-
+		if( Caldera_Forms_Admin::show_pro_ui() ){
+			$menu = new menu($view_dir, $slug, $scripts);
+			add_action('admin_menu', [ $menu, 'display' ]);
 		}
-
-		$menu = new menu($view_dir, $slug, $scripts);
-		add_action('admin_menu', [ $menu, 'display' ]);
 	}
 
 	//add hooks
@@ -127,7 +121,7 @@ function caldera_forms_pro_db_delta_2()
 }
 
 /**
- * Get the URL for the Caldera Forms Pro App
+ * Get the URL for the Caldera Forms Pro DocSearchApp
  *
  * @since 0.0.1
  *
@@ -138,7 +132,7 @@ function caldera_forms_pro_app_url()
 
 	if ( !defined('CF_PRO_APP_URL') ) {
 		/**
-		 * Default URL for CF Pro App
+		 * Default URL for CF Pro DocSearchApp
 		 */
 		define('CF_PRO_APP_URL', 'https://app.calderaformspro.com');
 
@@ -259,8 +253,7 @@ if ( !function_exists('caldera_forms_safe_explode') ) {
 function caldera_forms_pro_compare_to_saved_keys($public, $token)
 {
 	$settings = container::get_instance()->get_settings();
-	return hash_equals($public,
-			$settings->get_api_keys()->get_public()) && hash_equals($settings->get_api_keys()->get_token(), $token);
+	return hash_equals($public, $settings->get_api_keys()->get_public()) && hash_equals($settings->get_api_keys()->get_token(), $token);
 }
 
 /**

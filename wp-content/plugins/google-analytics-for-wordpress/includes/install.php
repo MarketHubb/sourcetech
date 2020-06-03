@@ -57,7 +57,6 @@ class MonsterInsights_Install {
 		// Get a copy of the current MI settings.
 		$this->new_settings = get_option( monsterinsights_get_option_name() );
 
-
 		$version = get_option( 'monsterinsights_current_version', false );
 		$cachec  = false; // have we forced an object cache to be cleared already (so we don't clear it unnecessarily)
 
@@ -103,6 +102,30 @@ class MonsterInsights_Install {
 				$this->v740_upgrades();
 				// Do not increment! See below large comment
 				update_option( 'monsterinsights_db_version', '7.4.0' );
+			}
+
+			if ( version_compare( $version, '7.5.0', '<' ) ) {
+				$this->v750_upgrades();
+			}
+
+			if ( version_compare( $version, '7.6.0', '<' ) ) {
+				$this->v760_upgrades();
+			}
+
+			if ( version_compare( $version, '7.7.1', '<' ) ) {
+				$this->v771_upgrades();
+			}
+
+			if ( version_compare( $version, '7.8.0', '<' ) ) {
+				$this->v780_upgrades();
+			}
+
+			if ( version_compare( $version, '7.9.0', '<' ) ) {
+				$this->v790_upgrades();
+			}
+
+			if ( version_compare( $version, '7.10.0', '<' ) ) {
+				$this->v7100_upgrades();
 			}
 
 			// Do not use. See monsterinsights_after_install_routine comment below.
@@ -193,6 +216,8 @@ class MonsterInsights_Install {
 		// Add default settings values
 		$this->new_settings = $this->get_monsterinsights_default_values();
 
+		$this->maybe_import_thirstyaffiliates_options();
+
 		$data = array(
 			'installed_version' => MONSTERINSIGHTS_VERSION,
 			'installed_date'    => time(),
@@ -219,10 +244,10 @@ class MonsterInsights_Install {
 				)
 			),
 			'demographics'              => 1,
-			'ignore_users'              => array( 'administrator' ),
+			'ignore_users'              => array( 'administrator', 'editor' ),
 			'dashboards_disabled'       => 0,
 			'anonymize_ips'             => 0,
-			'extensions_of_files'       => 'doc,exe,js,pdf,ppt,tgz,zip,xls',
+			'extensions_of_files'       => 'doc,pdf,ppt,zip,xls,docx,pptx,xlsx',
 			'subdomain_tracking'        => '',
 			'link_attribution'          => true,
 			'tag_links_in_rss'          => true,
@@ -234,6 +259,44 @@ class MonsterInsights_Install {
 			'events_mode'               => 'js',
 			'tracking_mode'             => 'analytics',
 		);
+	}
+
+	/**
+	 * Check if ThirstyAffiliates plugin is installed and use the link prefix value in the affiliate settings.
+	 *
+	 * @return void
+	 */
+	public function maybe_import_thirstyaffiliates_options() {
+
+		// Check if ThirstyAffiliates is installed.
+		if ( ! function_exists( 'ThirstyAffiliates' ) ) {
+			return;
+		}
+
+		$link_prefix = get_option( 'ta_link_prefix', 'recommends' );
+
+		if ( $link_prefix === 'custom' ) {
+			$link_prefix = get_option( 'ta_link_prefix_custom', 'recommends' );
+		}
+
+		if ( ! empty( $link_prefix ) ) {
+
+			// Check if prefix exists.
+			$prefix_set = false;
+			foreach ( $this->new_settings['affiliate_links'] as $affiliate_link ) {
+				if ( $link_prefix === trim( $affiliate_link['path'], '/' ) ) {
+					$prefix_set = true;
+					break;
+				}
+			}
+
+			if ( ! $prefix_set ) {
+				$this->new_settings['affiliate_links'][] = array(
+					'path'  => '/' . $link_prefix . '/',
+					'label' => 'affiliate',
+				);
+			}
+		}
 	}
 
 	/**
@@ -440,5 +503,171 @@ class MonsterInsights_Install {
 		// }
 		//
 		// 2. Clear old settings ( 	'tracking_mode','events_mode',)
+
+
+		// 3. Attempt to extract the cross-domain settings from the Custom Code area and use in the new option.
+		$custom_code = isset( $this->new_settings['custom_code'] ) ? $this->new_settings['custom_code'] : '';
+		if ( ! empty( $custom_code ) ) {
+			$pattern = '/(?:\'linker:autoLink\', )(?:\[)(.*)(?:\])/m';
+			preg_match_all( $pattern, $custom_code, $matches, PREG_SET_ORDER, 0 );
+			if ( ! empty( $matches ) && isset( $matches[0] ) && isset( $matches[0][1] ) ) {
+				$cross_domains = array();
+				$domains       = explode( ',', $matches[0][1] );
+				foreach ( $domains as $key => $domain ) {
+					$domain          = trim( $domain );
+					$cross_domains[] = array(
+						'domain' => trim( $domain, '\'\"' ),
+					);
+				}
+				$this->new_settings['add_allow_linker'] = true;
+				$this->new_settings['cross_domains']    = $cross_domains;
+
+				$notices = get_option( 'monsterinsights_notices' );
+				if ( ! is_array( $notices ) ) {
+					$notices = array();
+				}
+				$notices['monsterinsights_cross_domains_extracted'] = false;
+				update_option( 'monsterinsights_notices', $notices );
+			}
+		}
+	}
+
+	/**
+	 * Upgrade routine for version 7.6.0
+	 */
+	public function v760_upgrades() {
+
+		$cross_domains = isset( $this->new_settings['cross_domains'] ) ? $this->new_settings['cross_domains'] : array();
+
+		if ( ! empty( $cross_domains ) && is_array( $cross_domains ) ) {
+			$current_domain = wp_parse_url( home_url() );
+			$current_domain = isset( $current_domain['host'] ) ? $current_domain['host'] : '';
+			if ( ! empty( $current_domain ) ) {
+				$regex = '/^(?:' . $current_domain . '|(?:.+)\.' . $current_domain . ')$/m';
+				foreach ( $cross_domains as $key => $cross_domain ) {
+					if ( ! isset( $cross_domain['domain'] ) ) {
+						continue;
+					}
+					preg_match( $regex, $cross_domain['domain'], $matches );
+					if ( count( $matches ) > 0 ) {
+						unset( $this->new_settings['cross_domains'][ $key ] );
+					}
+				}
+			}
+		}
+
+	}
+
+	/**
+	 * Upgrade routine for version 7.7.1
+	 */
+	public function v771_upgrades() {
+
+		if ( ! monsterinsights_is_pro_version() ) {
+			// We only need to run this for the Pro version.
+			return;
+		}
+		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+
+		$plugin = 'wp-scroll-depth/wp-scroll-depth.php';
+		// Check if wp-scroll-depth is active and deactivate to avoid conflicts with the pro scroll tracking feature.
+		if ( is_plugin_active( $plugin ) ) {
+			deactivate_plugins( $plugin );
+		}
+
+	}
+
+	/**
+	 * Upgrade routine for version 7.8.0
+	 */
+	public function v780_upgrades() {
+
+		if ( monsterinsights_get_ua() ) {
+			// If we have a UA, don't show the first run notice.
+			monsterinsights_update_option( 'monsterinsights_first_run_notice', true );
+
+			// If they are already tracking when they upgrade, mark connected time as now.
+			$over_time = get_option( 'monsterinsights_over_time', array() );
+			if ( empty( $over_time['connected_date'] ) ) {
+				$over_time['connected_date'] = time();
+				update_option( 'monsterinsights_over_time', $over_time );
+			}
+		}
+
+	}
+
+	/**
+	 * Upgrade routine for version 7.9.0
+	 */
+	public function v790_upgrades() {
+
+		// If they are already tracking, don't show the notice.
+		if ( monsterinsights_get_ua() ) {
+			update_option( 'monsterinsights_frontend_tracking_notice_viewed', true );
+
+			// If they are already tracking when they upgrade & not already marked mark connected time as now.
+			// Adding this here again as 7.8.0 upgrade didn't run for all users.
+			$over_time = get_option( 'monsterinsights_over_time', array() );
+			if ( empty( $over_time['connected_date'] ) ) {
+				$over_time['connected_date'] = time();
+				update_option( 'monsterinsights_over_time', $over_time );
+			}
+		}
+
+	}
+
+	/**
+	 * Upgrade routine for version 8.0.0
+	 */
+	public function v7100_upgrades() {
+
+		// Remove exe js and tgz from file downloads tracking.
+		$current_downloads = isset( $this->new_settings['extensions_of_files'] ) ? $this->new_settings['extensions_of_files'] : array();
+
+		if ( ! empty( $current_downloads ) ) {
+			$extensions_to_remove = array(
+				'exe',
+				'js',
+				'tgz'
+			);
+			$extensions_to_add    = array(
+				'docx',
+				'pptx',
+				'xlsx',
+			);
+
+			$extensions         = explode( ',', $current_downloads );
+			$updated_extensions = array();
+
+			if ( ! empty( $extensions ) && is_array( $extensions ) ) {
+				foreach ( $extensions as $extension ) {
+					if ( ! in_array( $extension, $extensions_to_remove ) ) {
+						$updated_extensions[] = $extension;
+					}
+				}
+			}
+
+			foreach ( $extensions_to_add as $extension_to_add ) {
+				if ( ! in_array( $extension_to_add, $updated_extensions ) ) {
+					$updated_extensions[] = $extension_to_add;
+				}
+			}
+		} else {
+			$updated_extensions = array(
+				'pdf',
+				'doc',
+				'ppt',
+				'xls',
+				'zip',
+				'docx',
+				'pptx',
+				'xlsx',
+			);
+		}
+
+		$updated_extensions = implode( ',', $updated_extensions );
+
+		$this->new_settings['extensions_of_files'] = $updated_extensions;
+
 	}
 }

@@ -8,7 +8,6 @@
  * @link
  * @copyright 2014 David Cramer
  */
-
 /**
  * Caldera_Forms Plugin class.
  * @package Caldera_Forms
@@ -1221,15 +1220,9 @@ class Caldera_Forms_Admin {
             do_action( 'caldera_forms_admin_enqueue_form_editor' );
 
 		} else {
-
 			Caldera_Forms_Render_Assets::enqueue_all_fields();
-
-
 			if ( ! empty( $_GET[ 'edit-entry' ] ) ) {
-				Caldera_Forms_Render_Assets::enqueue_style( 'grid' );
-			}else{
-                $clippy = new Caldera_Forms_Admin_Clippy( $this->plugin_slug, site_url() );
-                $clippy->assets();
+                Caldera_Forms_Render_Assets::enqueue_style('grid');
             }
 		}
 
@@ -1481,7 +1474,8 @@ class Caldera_Forms_Admin {
 			WHERE `entry`.`form_id` = %s
 			" . $filter . "
 			AND `entry`.`status` = 'active'
-			ORDER BY `entry`.`datestamp` DESC;", $_GET['export']));
+			ORDER BY `entry`.`datestamp` DESC;", Caldera_Forms_Sanitize::sanitize($_GET['export'])));
+
 
 			$data = array();
 
@@ -1495,7 +1489,10 @@ class Caldera_Forms_Admin {
 				}
 
 				foreach ($structure as $slug => $field_id) {
-					$data[$entry->_entryid][$slug] = ( isset( $submission['data'][$field_id]['value'] ) ? $submission['data'][$field_id]['value'] : null );
+					$data[$entry->_entryid][$slug] = (
+					        isset( $submission['data'][$field_id]['view'] ) ? $submission['data'][$field_id]['view']
+                                : ( isset( $submission['data'][$field_id]['value'] ) ? $submission['data'][$field_id]['value'] : null )
+                    );
 				}
 
 			}
@@ -1543,6 +1540,9 @@ class Caldera_Forms_Admin {
 								if( is_array( $row_part ) && isset( $row_part['label'] ) ){
 									$subs[] = $row_part['value'];
 								}else{
+									if( is_string( $row_part ) && '{"opt' == substr( $row_part, 0, 5 ) ){
+									    continue;
+									}
 									$subs[] = $row_part;
 								}
 							}
@@ -1688,7 +1688,6 @@ class Caldera_Forms_Admin {
 		echo $newform['ID'];
 		exit;
 
-
 	}
 
 
@@ -1768,16 +1767,6 @@ class Caldera_Forms_Admin {
 							'text' => __( 'Processors getting started guide', 'caldera-forms' )
 						)
 					),
-                    "antispam" => array(
-                        "name" => __( 'Anti-Spam', 'caldera-forms' ),
-                        "location" => "lower",
-                        "label" => __( 'Anti Spam', 'caldera-forms' ),
-                        "canvas" => $path . "anti-spam.php",
-                        'tip' => array(
-                            'link' => 'https://calderaforms.com/doc/protect-form-spam-caldera-forms/?utm_source=wp-admin&utm_medium=form-editor&utm_term=tabs',
-                            'text' => __( 'Anti-spam documentation', 'caldera-forms' )
-                        )
-                    ),
 					"conditions" => array(
 						"name" => __( 'Conditions', 'caldera-forms' ),
 						"location" => "lower",
@@ -1855,6 +1844,20 @@ class Caldera_Forms_Admin {
 			),
 		);
 
+		if( Caldera_Forms_Admin::show_pro_ui() ){
+			
+			$internal_panels['form_layout']["tabs"]["antispam"] = array(
+				"name" => __( 'Anti-Spam', 'caldera-forms' ),
+				"location" => "lower",
+				"label" => __( 'Anti Spam', 'caldera-forms' ),
+				"canvas" => $path . "anti-spam.php",
+				'tip' => array(
+					'link' => 'https://calderaforms.com/doc/protect-form-spam-caldera-forms/?utm_source=wp-admin&utm_medium=form-editor&utm_term=tabs',
+					'text' => __( 'Anti-spam documentation', 'caldera-forms' )
+				)
+			);
+
+		}
 
 		if( self::is_revision_edit() ){
 			unset( $internal_panels[ 'revisions' ] );
@@ -2119,7 +2122,7 @@ class Caldera_Forms_Admin {
             'scripts' => [
                 'privacy',
                 'admin',
-
+                Caldera_Forms_Render_Assets::make_slug('cf-react')
             ],
             'styles' => [
                 'editor-grid'
@@ -2180,6 +2183,26 @@ class Caldera_Forms_Admin {
         }
     }
 
+    /**
+     * Check if we should show the Caldera Forms Pro UI
+     *
+     * If Caldera Forms Pro is activated, UI should show.
+     * If Caldera Forms Pro is not activated, UI should not show.
+     * Use caldera_forms_show_pro_ui filter to override.
+     *
+     * @return bool
+     */
+    public static function show_pro_ui(){
+        /**
+         * Should we add Caldera Forms Pro sub-menu page and UI
+         *
+         * @since 1.8.9
+         * @see https://github.com/CalderaWP/Caldera-Forms/issues/3413
+         *
+         * @param bool $show_pro Whether to show or not
+         */
+        return (bool) apply_filters( 'caldera_forms_show_pro_ui', caldera_forms_pro_is_active() );
+    }
 
 
 }

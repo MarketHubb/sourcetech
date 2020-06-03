@@ -36,9 +36,22 @@ class EWWWIO_Convert_Tests extends WP_UnitTestCase {
 	 * Downloads test images.
 	 */
 	public static function setUpBeforeClass() {
-		self::$test_jpg = download_url( 'https://s3-us-west-2.amazonaws.com/exactlywww/DCClogo.jpg' );
-		self::$test_png = download_url( 'https://s3-us-west-2.amazonaws.com/exactlywww/common-loon.png' );
-		self::$test_gif = download_url( 'https://s3-us-west-2.amazonaws.com/exactlywww/xhtml11.gif' );
+		$wp_upload_dir   = wp_upload_dir();
+		$temp_upload_dir = trailingslashit( $wp_upload_dir['basedir'] ) . 'testing/';
+		wp_mkdir_p( $temp_upload_dir );
+
+		$test_jpg = download_url( 'https://s3-us-west-2.amazonaws.com/exactlywww/DCClogo.jpg' );
+		rename( $test_jpg, $temp_upload_dir . basename( $test_jpg ) );
+		self::$test_jpg = $temp_upload_dir . basename( $test_jpg );
+
+		$test_png = download_url( 'https://s3-us-west-2.amazonaws.com/exactlywww/common-loon.png' );
+		rename( $test_png, $temp_upload_dir . basename( $test_png ) );
+		self::$test_png = $temp_upload_dir . basename( $test_png );
+
+		$test_gif = download_url( 'https://s3-us-west-2.amazonaws.com/exactlywww/xhtml11.gif' );
+		rename( $test_gif, $temp_upload_dir . basename( $test_gif ) );
+		self::$test_gif = $temp_upload_dir . basename( $test_gif );
+
 		ewww_image_optimizer_set_defaults();
 		update_option( 'ewww_image_optimizer_jpg_level', 10 );
 		update_option( 'ewww_image_optimizer_gif_level', 10 );
@@ -76,7 +89,7 @@ class EWWWIO_Convert_Tests extends WP_UnitTestCase {
 		$_REQUEST['ewww_force'] = 1;
 		$filename = $original . ".jpg";
 		copy( $original, $filename );
-		$results = ewww_image_optimizer( $filename, 1 );
+		$results = ewww_image_optimizer( $filename, 1, false, false, true );
 		return $results;
 	}
 
@@ -92,7 +105,7 @@ class EWWWIO_Convert_Tests extends WP_UnitTestCase {
 		$_REQUEST['ewww_force'] = 1;
 		$filename = $original . ".png";
 		copy( $original, $filename );
-		$results = ewww_image_optimizer( $filename, 1 );
+		$results = ewww_image_optimizer( $filename, 1, false, false, true );
 		return $results;
 	}
 
@@ -108,7 +121,7 @@ class EWWWIO_Convert_Tests extends WP_UnitTestCase {
 		$_REQUEST['ewww_force'] = 1;
 		$filename = $original . ".gif";
 		copy( $original, $filename );
-		$results = ewww_image_optimizer( $filename, 1 );
+		$results = ewww_image_optimizer( $filename, 1, false, false, true );
 		return $results;
 	}
 
@@ -187,6 +200,9 @@ class EWWWIO_Convert_Tests extends WP_UnitTestCase {
 
 		// No background, conversion will fail.
 		$test_png = download_url( 'https://s3-us-west-2.amazonaws.com/exactlywww/books.png' );
+		rename( $test_png, dirname( self::$test_png ) . basename( $test_png ) );
+		$test_png = dirname( self::$test_png ) . basename( $test_png );
+
 		$results = $this->optimize_png( $test_png );
 		$this->assertEquals( 'image/png', ewww_image_optimizer_mimetype( $results[0], 'i' ) );
 		unlink( $results[0] );
@@ -255,7 +271,7 @@ class EWWWIO_Convert_Tests extends WP_UnitTestCase {
 	 */
 	function test_convert_png_attachment() {
 		ewww_image_optimizer_set_option( 'ewww_image_optimizer_png_level', 0 );
-		ewww_image_optimizer_set_option( 'ewww_image_optimizer_disable_autoconvert', true );
+		define( 'EWWW_IMAGE_OPTIMIZER_DISABLE_AUTOCONVERT', true );
 
 		$upload_png = self::$test_png . '.png';
 		copy( self::$test_png, $upload_png );
@@ -328,13 +344,13 @@ class EWWWIO_Convert_Tests extends WP_UnitTestCase {
 	 * Cleans up the temp images.
 	 */
 	public static function tearDownAfterClass() {
-		if ( is_file( self::$test_jpg ) ) {
+		if ( ewwwio_is_file( self::$test_jpg ) ) {
 			unlink( self::$test_jpg );
 		}
-		if ( is_file( self::$test_png ) ) {
+		if ( ewwwio_is_file( self::$test_png ) ) {
 			unlink( self::$test_png );
 		}
-		if ( is_file( self::$test_gif ) ) {
+		if ( ewwwio_is_file( self::$test_gif ) ) {
 			unlink( self::$test_gif );
 		}
 		ewww_image_optimizer_remove_binaries();

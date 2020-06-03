@@ -6,10 +6,20 @@
 class Code_Snippets_Edit_Menu extends Code_Snippets_Admin_Menu {
 
 	/**
+	 * The snippet object currently being edited
+	 *
+	 * @var Code_Snippet
+	 * @see Code_Snippets_Edit_Menu::load_snippet_data()
+	 */
+	protected $snippet = null;
+
+	/**
 	 * Constructor
 	 */
 	public function __construct() {
-		parent::__construct( 'edit',
+
+		parent::__construct(
+			'edit',
 			_x( 'Edit Snippet', 'menu label', 'code-snippets' ),
 			__( 'Edit Snippet', 'code-snippets' )
 		);
@@ -27,10 +37,11 @@ class Code_Snippets_Edit_Menu extends Code_Snippets_Admin_Menu {
 	 * Register the admin menu
 	 */
 	public function register() {
+		parent::register();
 
-		/* Add edit menu if we are currently editing a snippet */
-		if ( isset( $_REQUEST['page'] ) && code_snippets()->get_menu_slug( 'edit' ) === $_REQUEST['page'] ) {
-			parent::register();
+		/* Only preserve the edit menu if we are currently editing a snippet */
+		if ( ! isset( $_REQUEST['page'] ) || $_REQUEST['page'] !== $this->slug ) {
+			remove_submenu_page( $this->base_slug, $this->slug );
 		}
 
 		/* Add New Snippet menu */
@@ -47,12 +58,19 @@ class Code_Snippets_Edit_Menu extends Code_Snippets_Admin_Menu {
 	public function load() {
 		parent::load();
 
+		// Retrieve the current snippet object
+		$this->load_snippet_data();
+
+		$screen = get_current_screen();
+		$edit_hook = get_plugin_page_hookname( $this->slug, $this->base_slug );
+		if ( $screen->in_admin( 'network' ) ) {
+			$edit_hook .= '-network';
+		}
+
 		/* Don't allow visiting the edit snippet page without a valid ID */
-		if ( code_snippets()->get_menu_slug( 'edit' ) === $_REQUEST['page'] ) {
-			if ( ! isset( $_REQUEST['id'] ) || 0 == $_REQUEST['id'] ) {
-				wp_redirect( code_snippets()->get_menu_url( 'add' ) );
-				exit;
-			}
+		if ( $screen->base === $edit_hook && ( ! isset( $_REQUEST['id'] ) || 0 === $this->snippet->id ) ) {
+			wp_redirect( code_snippets()->get_menu_url( 'add' ) );
+			exit;
 		}
 
 		/* Load the contextual help tabs */
@@ -82,6 +100,14 @@ class Code_Snippets_Edit_Menu extends Code_Snippets_Admin_Menu {
 	}
 
 	/**
+	 * Load the data for the snippet currently being edited
+	 */
+	public function load_snippet_data() {
+		$edit_id = isset( $_REQUEST['id'] ) && intval( $_REQUEST['id'] ) ? absint( $_REQUEST['id'] ) : 0;
+		$this->snippet = get_snippet( $edit_id );
+	}
+
+	/**
 	 * Process data sent from the edit page
 	 */
 	private function process_actions() {
@@ -92,7 +118,7 @@ class Code_Snippets_Edit_Menu extends Code_Snippets_Admin_Menu {
 		}
 
 		if ( isset( $_POST['save_snippet'] ) || isset( $_POST['save_snippet_execute'] ) ||
-			isset( $_POST['save_snippet_activate'] ) || isset( $_POST['save_snippet_deactivate'] ) ) {
+		     isset( $_POST['save_snippet_activate'] ) || isset( $_POST['save_snippet_deactivate'] ) ) {
 			$this->save_posted_snippet();
 		}
 
@@ -125,7 +151,7 @@ class Code_Snippets_Edit_Menu extends Code_Snippets_Admin_Menu {
 	private function unshare_network_snippet( $snippet_id ) {
 		$shared_snippets = get_site_option( 'shared_network_snippets', array() );
 
-		if ( ! in_array( $snippet_id, $shared_snippets ) ) {
+		if ( ! in_array( $snippet_id, $shared_snippets, true ) ) {
 			return;
 		}
 
@@ -176,7 +202,7 @@ class Code_Snippets_Edit_Menu extends Code_Snippets_Admin_Menu {
 	 *
 	 * @return bool true if code produces errors
 	 */
-	private function validate_code( Code_Snippet $snippet ) {
+	private function test_code( Code_Snippet $snippet ) {
 
 		if ( empty( $snippet->code ) ) {
 			return false;
@@ -230,7 +256,14 @@ class Code_Snippets_Edit_Menu extends Code_Snippets_Admin_Menu {
 
 		/* Deactivate snippet if code contains errors */
 		if ( $snippet->active && 'single-use' !== $snippet->scope ) {
-			if ( $code_error = $this->validate_code( $snippet ) ) {
+			$validator = new Code_Snippets_Validator( $snippet->code );
+			$code_error = $validator->validate();
+
+			if ( ! $code_error ) {
+				$code_error = $this->test_code( $snippet );
+			}
+
+			if ( $code_error ) {
 				$snippet->active = 0;
 			}
 		}
@@ -245,7 +278,7 @@ class Code_Snippets_Edit_Menu extends Code_Snippets_Admin_Menu {
 				$shared_snippets = get_site_option( 'shared_network_snippets', array() );
 
 				/* Add the snippet ID to the array if it isn't already */
-				if ( ! in_array( $snippet_id, $shared_snippets ) ) {
+				if ( ! in_array( $snippet_id, $shared_snippets, true ) ) {
 					$shared_snippets[] = $snippet_id;
 					update_site_option( 'shared_network_snippets', array_values( $shared_snippets ) );
 				}
@@ -399,7 +432,7 @@ class Code_Snippets_Edit_Menu extends Code_Snippets_Admin_Menu {
 			<h2 class="screen-reader-text"><?php _e( 'Sharing Settings', 'code-snippets' ); ?></h2>
 			<label for="snippet_sharing">
 				<input type="checkbox" name="snippet_sharing"
-					<?php checked( in_array( $snippet->id, $shared_snippets ) ); ?>>
+					<?php checked( in_array( $snippet->id, $shared_snippets, true ) ); ?>>
 				<?php esc_html_e( 'Allow this snippet to be activated on individual sites on the network', 'code-snippets' ); ?>
 			</label>
 		</div>
@@ -424,6 +457,12 @@ class Code_Snippets_Edit_Menu extends Code_Snippets_Admin_Menu {
 
 		if ( '' === $snippet->code ) {
 			return false;
+		}
+
+		$validator = new Code_Snippets_Validator( $snippet->code );
+
+		if ( $error = $validator->validate() ) {
+			return $error;
 		}
 
 		ob_start();
@@ -554,5 +593,84 @@ class Code_Snippets_Edit_Menu extends Code_Snippets_Admin_Menu {
 		}
 
 		remove_action( 'debug_bar_enqueue_scripts', 'debug_bar_console_scripts' );
+	}
+
+	/**
+	 * Retrieve a list of submit actions for a given snippet
+	 *
+	 * @param Code_Snippet $snippet
+	 * @param bool         $extra_actions
+	 *
+	 * @return array
+	 */
+	public function get_actions_list( $snippet, $extra_actions = true ) {
+		$actions = array(
+			'save_snippet' => __( 'Save Changes', 'code-snippets' ),
+		);
+
+		if ( 'single-use' === $snippet->scope ) {
+			$actions['save_snippet_execute'] = __( 'Save Changes and Execute Once', 'code-snippets' );
+
+		} elseif ( ! $snippet->shared_network || ! is_network_admin() ) {
+
+			if ( $snippet->active ) {
+				$actions['save_snippet_deactivate'] = __( 'Save Changes and Deactivate', 'code-snippets' );
+			} else {
+				$actions['save_snippet_activate'] = __( 'Save Changes and Activate', 'code-snippets' );
+			}
+		}
+
+		// Make the 'Save and Activate' button the default if the setting is enabled
+		if ( ! $snippet->active && 'single-use' !== $snippet->scope &&
+		     code_snippets_get_setting( 'general', 'activate_by_default' ) ) {
+			$actions = array_reverse( $actions );
+		}
+
+		if ( $extra_actions && 0 !== $snippet->id ) {
+
+			if ( apply_filters( 'code_snippets/enable_downloads', true ) ) {
+				$actions['download_snippet'] = __( 'Download', 'code-snippets' );
+			}
+
+			$actions['export_snippet'] = __( 'Export', 'code-snippets' );
+			$actions['delete_snippet'] = __( 'Delete', 'code-snippets' );
+		}
+
+		return $actions;
+	}
+
+	/**
+	 * Render the submit buttons for a code snippet
+	 *
+	 * @param Code_Snippet $snippet
+	 * @param string       $size
+	 * @param bool         $extra_actions
+	 */
+	public function render_submit_buttons( $snippet, $size = '', $extra_actions = true ) {
+
+		$actions = $this->get_actions_list( $snippet, $extra_actions );
+		$type = 'primary';
+		$size = $size ? ' ' . $size : '';
+
+		foreach ( $actions as $action => $label ) {
+			$other = null;
+
+			if ( 'delete_snippet' === $action ) {
+
+				$other = sprintf( 'onclick="%s"', esc_js(
+					sprintf(
+						'return confirm("%s");',
+						__( 'You are about to permanently delete this snippet.', 'code-snippets' ) . "\n" .
+						__( "'Cancel' to stop, 'OK' to delete.", 'code-snippets' )
+					)
+				) );
+			}
+
+			submit_button( $label, $type . $size, $action, false, $other );
+
+			if ( 'primary' === $type ) {
+				$type = 'secondary';
+			}
+		}
 	}
 }

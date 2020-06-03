@@ -31,6 +31,11 @@ if ( ! class_exists( 'WC_Connect_Jetpack' ) ) {
 		 * @return bool
 		 */
 		public static function is_staging_site() {
+			if ( method_exists( '\\Automattic\\Jetpack\\Status', 'is_staging_site' ) ) {
+				$status = new \Automattic\Jetpack\Status();
+				return $status->is_staging_site();
+			}
+
 			if ( method_exists( 'Jetpack', 'is_staging_site' ) ) {
 				return Jetpack::is_staging_site();
 			}
@@ -85,6 +90,24 @@ if ( ! class_exists( 'WC_Connect_Jetpack' ) ) {
 				$redirect_url,
 				'woocommerce-services-auto-authorize'
 			);
+		}
+
+		/**
+		 * Records a Tracks event
+		 * @param $user
+		 * @param $event_type
+		 * @param
+		 */
+		public static function tracks_record_event( $user, $event_type, $data ) {
+			if ( version_compare( JETPACK__VERSION, '7.5', '<' ) ) {
+				if ( function_exists( 'jetpack_tracks_record_event' ) ) {
+					return jetpack_tracks_record_event( $user, $event_type, $data );
+				}
+			} elseif ( class_exists( 'Automattic\\Jetpack\\Tracking' ) ) {
+				$tracking = new Automattic\Jetpack\Tracking();
+				return $tracking->tracks_record_event( $user, $event_type, $data );
+			}
+			return false;
 		}
 	}
 }

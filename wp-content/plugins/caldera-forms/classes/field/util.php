@@ -220,7 +220,7 @@ class Caldera_Forms_Field_Util {
 			'asin',
 			'atan',
 			'atan2',
-			'ciel',
+			'ceil',
 			'cos',
 			'exp',
 			'floor',
@@ -456,10 +456,11 @@ class Caldera_Forms_Field_Util {
 	 *
 	 * @param array|string $field Field config or field ID
 	 * @param array $form Form config
+     * @param int|string|null $entry_id Optional. ID of saved entry.
 	 *
 	 * @return bool
 	 */
-	public static function check_conditional( $field, array $form ){
+	public static function check_conditional( $field, array $form, $entry_id = null ){
 		if ( is_string( $field ) ) {
 			$field = self::get_field( $field, $form );
 		}
@@ -470,7 +471,7 @@ class Caldera_Forms_Field_Util {
 				$conditional = $form[ 'conditional_groups' ][ 'conditions' ][ $field[ 'conditions' ][ 'type' ] ];
 			}
 
-			return Caldera_Forms::check_condition( $conditional, $form );
+			return Caldera_Forms::check_condition( $conditional, $form,$entry_id );
 		}
 
 		return true;
@@ -520,7 +521,7 @@ class Caldera_Forms_Field_Util {
 	 */
 	public static function get_option_calculation_value( $option, array $field, array  $form ){
 		$calc_val = 0;
-		if( is_string( $option ) ){
+		if( is_string( $option ) || is_int( $option ) ){
 			if( ! empty( $field[ 'config' ][ 'option' ] ) && array_key_exists( $option, $field[ 'config' ][ 'option' ]  ) ){
 				$option = $field[ 'config' ][ 'option' ][ $option ];
 			}
@@ -670,4 +671,44 @@ class Caldera_Forms_Field_Util {
 
         return isset( $field[ 'config' ][ self::CONFIG_EMAIL_IDENTIFIER ] ) && rest_sanitize_boolean($field[ 'config' ][ self::CONFIG_EMAIL_IDENTIFIER ] );
     }
+
+    /**
+     * Is this field a cf2 field type?
+	 *
+     * @since 1.8.0
+     *
+     * @param string $field_type
+     * @return bool
+     */
+    public static function is_cf2_field_type($field_type){
+	    //This array should be created dynamically
+	    return in_array( $field_type, ['cf2_file', 'cf2_text'] );
+    }
+
+    /**
+     * Generate a field control ID for file fields
+	 *
+     * @since 1.8.0
+     *
+	 * @param array $field Field config
+	 * @param array $form Form config
+     *
+     * @return string
+     */
+    public static function generate_file_field_unique_id(array $field,array $form){
+        $uniqu_code = uniqid('trupl');
+        /**
+         * Runs when a unique code for an field field is generated
+         *
+         * @since 1.5.9
+         *
+         * @param string $uniqid Unqiue Code for field
+         * @param array $field Field config
+         * @param array $form Form config
+         */
+        do_action( 'caldera_forms_file_uniqid', $uniqu_code, $field, $form );
+        return $uniqu_code;
+    }
+
+
 }

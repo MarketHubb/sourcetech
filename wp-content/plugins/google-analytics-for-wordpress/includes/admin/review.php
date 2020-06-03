@@ -30,11 +30,6 @@ class MonsterInsights_Review {
 			return;
 		}
 
-		// Don't show to lite users
-		if ( ! monsterinsights_is_pro_version() ) {
-			return;
-		}
-
 		// If the user has opted out of product annoucement notifications, don't
 		// display the review request.
 		if ( monsterinsights_get_option( 'hide_am_notices', false ) || monsterinsights_get_option( 'network_hide_am_notices', false ) ) {
@@ -74,36 +69,70 @@ class MonsterInsights_Review {
 	public function review() {
 		// Fetch when plugin was initially installed.
 		$activated = get_option( 'monsterinsights_over_time', array() );
-		if ( ! empty( $activated['installed_date'] ) ) {
-			// Only continue if plugin has been installed for at least 14 days.
-			if ( ( $activated['installed_date'] + ( DAY_IN_SECONDS * 14 ) ) > time() ) {
+		$ua_code   = monsterinsights_get_ua();
+
+		if ( ! empty( $activated['connected_date'] ) ) {
+			// Only continue if plugin has been tracking for at least 14 days.
+			if ( ( $activated['connected_date'] + ( DAY_IN_SECONDS * 14 ) ) > time() ) {
 				return;
 			}
 		} else {
-			$data = array(
-				'installed_version' => MONSTERINSIGHTS_VERSION,
-				'installed_date'    => time(),
-				'installed_pro'     => monsterinsights_is_pro_version(),
-			);
+			if ( empty( $activated ) ) {
+				$data = array(
+					'installed_version' => MONSTERINSIGHTS_VERSION,
+					'installed_date'    => time(),
+					'installed_pro'     => monsterinsights_is_pro_version(),
+				);
+			} else {
+				$data = $activated;
+			}
+			// If already has a UA code mark as connected now.
+			if ( ! empty( $ua_code ) ) {
+				$data['connected_date'] = time();
+			}
 
 			update_option( 'monsterinsights_over_time', $data );
 			return;
 		}
+
 		// Only proceed with displaying if the user is tracking.
-		$ua_code = monsterinsights_get_ua_to_output();
 		if ( empty( $ua_code ) ) {
 			return;
 		}
+
+		$feedback_url = add_query_arg( array(
+			'wpf192157_24' => untrailingslashit( home_url() ),
+			'wpf192157_26' => monsterinsights_get_license_key(),
+			'wpf192157_27' => monsterinsights_is_pro_version() ? 'pro' : 'lite',
+			'wpf192157_28' => MONSTERINSIGHTS_VERSION,
+		), 'https://www.monsterinsights.com/plugin-feedback/' );
+		$feedback_url = monsterinsights_get_url( 'review-notice', 'feedback', $feedback_url );
 		// We have a candidate! Output a review message.
 		?>
 		<div class="notice notice-info is-dismissible monsterinsights-review-notice">
-			<p><?php esc_html_e( 'Hey, I noticed you\'ve been using MonsterInsights for a while - that’s awesome! Could you please do me a BIG favor and give it a 5-star rating on WordPress to help us spread the word and boost our motivation?', 'google-analytics-for-wordpress' ); ?></p>
-			<p><strong><?php echo wp_kses( __( '~ Syed Balkhi<br>Co-Founder of MonsterInsights', 'google-analytics-for-wordpress' ), array( 'br' => array() ) ); ?></strong></p>
-			<p>
-				<a href="https://wordpress.org/support/plugin/google-analytics-for-wordpress/reviews/?filter=5#new-post" class="monsterinsights-dismiss-review-notice monsterinsights-review-out" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Ok, you deserve it', 'google-analytics-for-wordpress' ); ?></a><br>
-				<a href="#" class="monsterinsights-dismiss-review-notice" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Nope, maybe later', 'google-analytics-for-wordpress' ); ?></a><br>
-				<a href="#" class="monsterinsights-dismiss-review-notice" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'I already did', 'google-analytics-for-wordpress' ); ?></a>
-			</p>
+			<div class="monsterinsights-review-step monsterinsights-review-step-1">
+				<p><?php esc_html_e( 'Are you enjoying MonsterInsights?', 'google-analytics-for-wordpress' ); ?></p>
+				<p>
+					<a href="#" class="monsterinsights-review-switch-step" data-step="3"><?php esc_html_e( 'Yes', 'google-analytics-for-wordpress' ); ?></a><br />
+					<a href="#" class="monsterinsights-review-switch-step" data-step="2"><?php esc_html_e( 'Not Really', 'google-analytics-for-wordpress' ); ?></a>
+				</p>
+			</div>
+			<div class="monsterinsights-review-step monsterinsights-review-step-2" style="display: none">
+				<p><?php esc_html_e( 'We\'re sorry to hear you aren\'t enjoying MonsterInsights. We would love a chance to improve. Could you take a minute and let us know what we can do better?', 'google-analytics-for-wordpress' ); ?></p>
+				<p>
+					<a href="<?php echo esc_url( $feedback_url ); ?>" class="monsterinsights-dismiss-review-notice monsterinsights-review-out"><?php esc_html_e( 'Give Feedback', 'google-analytics-for-wordpress' ); ?></a><br>
+					<a href="#" class="monsterinsights-dismiss-review-notice" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'No thanks', 'google-analytics-for-wordpress' ); ?></a>
+				</p>
+			</div>
+			<div class="monsterinsights-review-step monsterinsights-review-step-3" style="display: none">
+				<p><?php esc_html_e( 'That’s awesome! Could you please do me a BIG favor and give it a 5-star rating on WordPress to help us spread the word and boost our motivation?', 'google-analytics-for-wordpress' ); ?></p>
+				<p><strong><?php echo wp_kses( __( '~ Syed Balkhi<br>Co-Founder of MonsterInsights', 'google-analytics-for-wordpress' ), array( 'br' => array() ) ); ?></strong></p>
+				<p>
+					<a href="https://wordpress.org/support/plugin/google-analytics-for-wordpress/reviews/?filter=5#new-post" class="monsterinsights-dismiss-review-notice monsterinsights-review-out" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Ok, you deserve it', 'google-analytics-for-wordpress' ); ?></a><br>
+					<a href="#" class="monsterinsights-dismiss-review-notice" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Nope, maybe later', 'google-analytics-for-wordpress' ); ?></a><br>
+					<a href="#" class="monsterinsights-dismiss-review-notice" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'I already did', 'google-analytics-for-wordpress' ); ?></a>
+				</p>
+			</div>
 		</div>
 		<script type="text/javascript">
 			jQuery( document ).ready( function ( $ ) {
@@ -116,6 +145,20 @@ class MonsterInsights_Review {
 					} );
 					$( '.monsterinsights-review-notice' ).remove();
 				} );
+
+				$( document ).on( 'click', '.monsterinsights-review-switch-step', function ( e ) {
+					e.preventDefault();
+					var target = $( this ).attr( 'data-step' );
+					if ( target ) {
+						var notice = $( this ).closest( '.monsterinsights-review-notice' );
+						var review_step = notice.find( '.monsterinsights-review-step-' + target );
+						if ( review_step.length > 0 ) {
+							notice.find( '.monsterinsights-review-step:visible').fadeOut( function (  ) {
+								review_step.fadeIn();
+							});
+						}
+					}
+				})
 			} );
 		</script>
 		<?php
@@ -130,7 +173,20 @@ class MonsterInsights_Review {
 		$review['time']      = time();
 		$review['dismissed'] = true;
 		update_option( 'monsterinsights_review', $review );
+
+		if ( is_super_admin() && is_multisite() ) {
+			$site_list = get_sites();
+			foreach ( (array) $site_list as $site ) {
+				switch_to_blog( $site->blog_id );
+
+				update_option( 'monsterinsights_review', $review );
+
+				restore_current_blog();
+			}
+		}
+
 		die;
 	}
 }
-new MonsterInsights_Review;
+
+new MonsterInsights_Review();

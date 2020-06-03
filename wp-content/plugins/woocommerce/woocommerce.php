@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce
  * Plugin URI: https://woocommerce.com/
  * Description: An eCommerce toolkit that helps you sell anything. Beautifully.
- * Version: 3.5.4
+ * Version: 4.2.0
  * Author: Automattic
  * Author URI: https://woocommerce.com
  * Text Domain: woocommerce
@@ -12,31 +12,35 @@
  * @package WooCommerce
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
-}
+defined( 'ABSPATH' ) || exit;
 
-// Define WC_PLUGIN_FILE.
 if ( ! defined( 'WC_PLUGIN_FILE' ) ) {
 	define( 'WC_PLUGIN_FILE', __FILE__ );
 }
 
+// Load core packages and the autoloader.
+require __DIR__ . '/src/Autoloader.php';
+require __DIR__ . '/src/Packages.php';
+
+if ( ! \Automattic\WooCommerce\Autoloader::init() ) {
+	return;
+}
+\Automattic\WooCommerce\Packages::init();
+
 // Include the main WooCommerce class.
-if ( ! class_exists( 'WooCommerce' ) ) {
-	include_once dirname( __FILE__ ) . '/includes/class-woocommerce.php';
+if ( ! class_exists( 'WooCommerce', false ) ) {
+	include_once dirname( WC_PLUGIN_FILE ) . '/includes/class-woocommerce.php';
 }
 
 /**
- * Main instance of WooCommerce.
- *
- * Returns the main instance of WC to prevent the need to use globals.
+ * Returns the main instance of WC.
  *
  * @since  2.1
  * @return WooCommerce
  */
-function wc() {
+function WC() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	return WooCommerce::instance();
 }
 
 // Global for backwards compatibility.
-$GLOBALS['woocommerce'] = wc();
+$GLOBALS['woocommerce'] = WC();

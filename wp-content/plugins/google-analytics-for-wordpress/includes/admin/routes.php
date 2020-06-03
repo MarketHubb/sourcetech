@@ -21,8 +21,14 @@ class MonsterInsights_Rest_Routes {
 		add_action( 'wp_ajax_monsterinsights_vue_update_settings', array( $this, 'update_settings' ) );
 		add_action( 'wp_ajax_monsterinsights_vue_get_addons', array( $this, 'get_addons' ) );
 		add_action( 'wp_ajax_monsterinsights_update_manual_ua', array( $this, 'update_manual_ua' ) );
+		add_action( 'wp_ajax_monsterinsights_vue_get_report_data', array( $this, 'get_report_data' ) );
+		add_action( 'wp_ajax_monsterinsights_vue_install_plugin', array( $this, 'install_plugin' ) );
+
+		add_action( 'wp_ajax_monsterinsights_handle_settings_import', array( $this, 'handle_settings_import' ) );
 
 		add_action( 'admin_notices', array( $this, 'hide_old_notices' ), 0 );
+
+		add_action( 'wp_ajax_monsterinsights_vue_dismiss_first_time_notice', array( $this, 'dismiss_first_time_notice' ) );
 	}
 
 	/**
@@ -32,7 +38,7 @@ class MonsterInsights_Rest_Routes {
 
 		check_ajax_referer( 'mi-admin-nonce', 'nonce' );
 
-		if ( ! current_user_can( 'monsterinsights_save_settings' ) ) {
+		if ( ! current_user_can( 'monsterinsights_view_dashboard' ) || ! monsterinsights_is_pro_version() ) {
 			return;
 		}
 
@@ -59,7 +65,7 @@ class MonsterInsights_Rest_Routes {
 	}
 
 	/**
-	 * Ajax handler for grabbing the license
+	 * Ajax handler for grabbing the current authenticated profile.
 	 */
 	public function get_profile() {
 
@@ -81,7 +87,7 @@ class MonsterInsights_Rest_Routes {
 	}
 
 	/**
-	 * Ajax handler for grabbing the license
+	 * Ajax handler for grabbing the settings.
 	 */
 	public function get_settings() {
 
@@ -109,7 +115,7 @@ class MonsterInsights_Rest_Routes {
 	}
 
 	/**
-	 * Ajax handler for grabbing the license
+	 * Ajax handler for updating the settings.
 	 */
 	public function update_settings() {
 
@@ -197,17 +203,25 @@ class MonsterInsights_Rest_Routes {
 			return;
 		}
 
+		if ( isset( $_POST['network'] ) && intval( $_POST['network'] ) > 0 ) {
+			define( 'WP_NETWORK_ADMIN', true );
+		}
+
 		$addons_data       = monsterinsights_get_addons();
 		$parsed_addons     = array();
 		$installed_plugins = get_plugins();
 
+		if ( ! is_array( $addons_data ) ) {
+			$addons_data = array();
+		}
+
 		foreach ( $addons_data as $addons_type => $addons ) {
 			foreach ( $addons as $addon ) {
-				$slug      = 'monsterinsights-' . $addon->slug;
+				$slug = 'monsterinsights-' . $addon->slug;
 				if ( 'monsterinsights-ecommerce' === $slug ) {
 					$addon = $this->get_addon( $installed_plugins, $addons_type, $addon, $slug );
 					if ( empty( $addon->installed ) ) {
-						$slug = 'ga-ecommerce';
+						$slug  = 'ga-ecommerce';
 						$addon = $this->get_addon( $installed_plugins, $addons_type, $addon, $slug );
 					}
 				} else {
@@ -230,6 +244,10 @@ class MonsterInsights_Rest_Routes {
 		$parsed_addons['memberpress'] = array(
 			'active' => defined( 'MEPR_VERSION' ) && version_compare( MEPR_VERSION, '1.3.43', '>' ),
 		);
+		// LifterLMS.
+		$parsed_addons['lifterlms'] = array(
+			'active' => function_exists( 'LLMS' ) && version_compare( LLMS()->version, '3.32.0', '>=' ),
+		);
 		// Cookiebot.
 		$parsed_addons['cookiebot'] = array(
 			'active' => function_exists( 'cookiebot_active' ) && cookiebot_active(),
@@ -248,7 +266,60 @@ class MonsterInsights_Rest_Routes {
 		);
 		// WPForms.
 		$parsed_addons['wpforms'] = array(
-			'active' => function_exists( 'wpforms' ),
+			'active'    => function_exists( 'wpforms' ),
+			'icon'      => plugin_dir_url( MONSTERINSIGHTS_PLUGIN_FILE ) . 'assets/images/plugin-wpforms.png',
+			'title'     => 'WPForms',
+			'excerpt'   => __( 'The most beginner friendly drag & drop WordPress forms plugin allowing you to create beautiful contact forms, subscription forms, payment forms, and more in minutes, not hours!', 'google-analytics-for-wordpress' ),
+			'installed' => array_key_exists( 'wpforms-lite/wpforms.php', $installed_plugins ),
+			'slug'      => 'wpforms-lite',
+		);
+		// OptinMonster.
+		$parsed_addons['optinmonster'] = array(
+			'active'    => class_exists( 'OMAPI' ),
+			'icon'      => plugin_dir_url( MONSTERINSIGHTS_PLUGIN_FILE ) . 'assets/images/plugin-om.png',
+			'title'     => 'OptinMonster',
+			'excerpt'   => __( 'Our high-converting optin forms like Exit-Intent® popups, Fullscreen Welcome Mats, and Scroll boxes help you dramatically boost conversions and get more email subscribers.', 'google-analytics-for-wordpress' ),
+			'installed' => array_key_exists( 'optinmonster/optin-monster-wp-api.php', $installed_plugins ),
+			'basename'  => 'optinmonster/optin-monster-wp-api.php',
+			'slug'      => 'optinmonster',
+		);
+		// OptinMonster.
+		$parsed_addons['wp-mail-smtp'] = array(
+			'active'    => function_exists( 'wp_mail_smtp' ),
+			'icon'      => plugin_dir_url( MONSTERINSIGHTS_PLUGIN_FILE ) . 'assets/images/plugin-smtp.png',
+			'title'     => 'WP Mail SMTP',
+			'excerpt'   => __( 'SMTP (Simple Mail Transfer Protocol) is an industry standard for sending emails. SMTP helps increase email deliverability by using proper authentication', 'google-analytics-for-wordpress' ),
+			'installed' => array_key_exists( 'wp-mail-smtp/wp_mail_smtp.php', $installed_plugins ),
+			'basename'  => 'wp-mail-smtp/wp_mail_smtp.php',
+			'slug'      => 'wp-mail-smtp',
+		);
+		// SeedProd.
+		$parsed_addons['coming-soon'] = array(
+			'active'    => function_exists( 'seed_csp4_activation' ),
+			'icon'      => plugin_dir_url( MONSTERINSIGHTS_PLUGIN_FILE ) . 'assets/images/seedprod.png',
+			'title'     => 'SeedProd',
+			'excerpt'   => __( 'Better Coming Soon & Maintenance Mode Pages', 'google-analytics-for-wordpress' ),
+			'installed' => array_key_exists( 'coming-soon/coming-soon.php', $installed_plugins ),
+			'basename'  => 'coming-soon/coming-soon.php',
+			'slug'      => 'coming-soon',
+		);
+		$parsed_addons['rafflepress'] = array(
+			'active'    => function_exists( 'rafflepress_lite_activation' ),
+			'icon'      => plugin_dir_url( MONSTERINSIGHTS_PLUGIN_FILE ) . 'assets/images/rafflepress.png',
+			'title'     => 'RafflePress',
+			'excerpt'   => __( 'Get More Traffic with Viral Giveaways', 'google-analytics-for-wordpress' ),
+			'installed' => array_key_exists( 'rafflepress/rafflepress.php', $installed_plugins ),
+			'basename'  => 'rafflepress/rafflepress.php',
+			'slug'      => 'rafflepress',
+		);
+		$parsed_addons['trustpulse-api'] = array(
+			'active'    => class_exists( 'TPAPI' ),
+			'icon'      => plugin_dir_url( MONSTERINSIGHTS_PLUGIN_FILE ) . 'assets/images/trustpulse.png',
+			'title'     => 'TrustPulse',
+			'excerpt'   => __( 'Social Proof Notifications that Boost Sales', 'google-analytics-for-wordpress' ),
+			'installed' => array_key_exists( 'trustpulse-api/trustpulse.php', $installed_plugins ),
+			'basename'  => 'trustpulse-api/trustpulse.php',
+			'slug'      => 'trustpulse-api',
 		);
 		// Gravity Forms.
 		$parsed_addons['gravity_forms'] = array(
@@ -269,14 +340,12 @@ class MonsterInsights_Rest_Routes {
 	}
 
 	public function get_addon( $installed_plugins, $addons_type, $addon, $slug ) {
-		$active    = false;
-		$installed = false;
+		$active          = false;
+		$installed       = false;
 		$plugin_basename = monsterinsights_get_plugin_basename_from_slug( $slug );
 
 		if ( isset( $installed_plugins[ $plugin_basename ] ) ) {
 			$installed = true;
-			$ms_active = is_plugin_active_for_network( $plugin_basename );
-			$ss_active = is_plugin_active( $plugin_basename );
 
 			if ( is_multisite() && is_network_admin() ) {
 				$active = is_plugin_active_for_network( $plugin_basename );
@@ -288,10 +357,11 @@ class MonsterInsights_Rest_Routes {
 			$addon->url = '';
 		}
 
-		$addon->type                   = $addons_type;
-		$addon->installed              = $installed;
-		$addon->active                 = $active;
-		$addon->basename               = $plugin_basename;
+		$addon->type      = $addons_type;
+		$addon->installed = $installed;
+		$addon->active    = $active;
+		$addon->basename  = $plugin_basename;
+
 		return $addon;
 	}
 
@@ -300,6 +370,12 @@ class MonsterInsights_Rest_Routes {
 	 */
 	public function hide_old_notices() {
 
+		global $wp_version;
+		if ( version_compare( $wp_version, '4.6', '<' ) ) {
+			// remove_all_actions triggers an infinite loop on older versions.
+			return;
+		}
+
 		$screen = get_current_screen();
 		// Bail if we're not on a MonsterInsights screen.
 		if ( empty( $screen->id ) || strpos( $screen->id, 'monsterinsights' ) === false ) {
@@ -307,12 +383,7 @@ class MonsterInsights_Rest_Routes {
 		}
 
 		// Hide admin notices on the settings screen.
-		if ( in_array( $screen->id, array(
-			'insights_page_monsterinsights_settings',
-			'toplevel_page_monsterinsights_settings',
-			'toplevel_page_monsterinsights_network-network',
-			'insights_page_monsterinsights_network',
-		), true ) ) {
+		if ( monsterinsights_is_settings_page() ) {
 			remove_all_actions( 'admin_notices' );
 		}
 
@@ -329,12 +400,12 @@ class MonsterInsights_Rest_Routes {
 			return;
 		}
 
-		$manual_ua_code     = isset( $_POST['manual_ua_code'] ) ? sanitize_text_field( wp_unslash( $_POST['manual_ua_code'] ) ) : '';
-		$manual_ua_code     = monsterinsights_is_valid_ua( $manual_ua_code ); // Also sanitizes the string.
-		$manual_ua_code_old = MonsterInsights()->auth->get_manual_ua();
+		$manual_ua_code = isset( $_POST['manual_ua_code'] ) ? sanitize_text_field( wp_unslash( $_POST['manual_ua_code'] ) ) : '';
+		$manual_ua_code = monsterinsights_is_valid_ua( $manual_ua_code ); // Also sanitizes the string.
 		if ( ! empty( $_REQUEST['isnetwork'] ) && sanitize_text_field( wp_unslash( $_REQUEST['isnetwork'] ) ) ) {
 			define( 'WP_NETWORK_ADMIN', true );
 		}
+		$manual_ua_code_old = is_network_admin() ? MonsterInsights()->auth->get_network_manual_ua() : MonsterInsights()->auth->get_manual_ua();
 
 		if ( $manual_ua_code && $manual_ua_code_old && $manual_ua_code_old === $manual_ua_code ) {
 			// Same code we had before
@@ -364,8 +435,272 @@ class MonsterInsights_Rest_Routes {
 		} else if ( isset( $_POST['manual_ua_code'] ) && empty( $manual_ua_code ) ) {
 			wp_send_json_error( array(
 				'error' => __( 'Invalid UA code', 'google-analytics-for-wordpress' ),
-			));
+			) );
 		}
+
+		wp_send_json_success();
+	}
+
+	/**
+	 *
+	 */
+	public function handle_settings_import() {
+
+		check_ajax_referer( 'mi-admin-nonce', 'nonce' );
+
+		if ( ! current_user_can( 'monsterinsights_save_settings' ) ) {
+			return;
+		}
+
+		if ( ! isset( $_FILES['import_file'] ) ) {
+			return;
+		}
+
+		$extension = explode( '.', sanitize_text_field( wp_unslash( $_FILES['import_file']['name'] ) ) );
+		$extension = end( $extension );
+
+		if ( 'json' !== $extension ) {
+			wp_send_json_error( array(
+				'message' => esc_html__( 'Please upload a valid .json file', 'google-analytics-for-wordpress' ),
+			) );
+		}
+
+		$import_file = sanitize_text_field( wp_unslash( $_FILES['import_file']['tmp_name'] ) );
+
+		$file = file_get_contents( $import_file );
+		if ( empty( $file ) ) {
+			wp_send_json_error( array(
+				'message' => esc_html__( 'Please upload a file to import', 'google-analytics-for-wordpress' ),
+			) );
+		}
+
+		// Retrieve the settings from the file and convert the json object to an array.
+		$new_settings = json_decode( wp_json_encode( json_decode( $file ) ), true );
+		$settings     = monsterinsights_get_options();
+		$exclude      = array(
+			'analytics_profile',
+			'analytics_profile_code',
+			'analytics_profile_name',
+			'oauth_version',
+			'cron_last_run',
+			'monsterinsights_oauth_status',
+		);
+
+		foreach ( $exclude as $e ) {
+			if ( ! empty( $new_settings[ $e ] ) ) {
+				unset( $new_settings[ $e ] );
+			}
+		}
+
+		if ( ! is_super_admin() ) {
+			if ( ! empty( $new_settings['custom_code'] ) ) {
+				unset( $new_settings['custom_code'] );
+			}
+		}
+
+		foreach ( $exclude as $e ) {
+			if ( ! empty( $settings[ $e ] ) ) {
+				$new_settings = $settings[ $e ];
+			}
+		}
+
+		global $monsterinsights_settings;
+		$monsterinsights_settings = $new_settings;
+
+		update_option( monsterinsights_get_option_name(), $new_settings );
+
+		wp_send_json_success( $new_settings );
+
+	}
+
+	/**
+	 * Generic Ajax handler for grabbing report data in JSON.
+	 */
+	public function get_report_data() {
+
+		check_ajax_referer( 'mi-admin-nonce', 'nonce' );
+
+		if ( ! current_user_can( 'monsterinsights_view_dashboard' ) ) {
+			wp_send_json_error( array( 'message' => __( "You don't have permission to view MonsterInsights reports.", 'google-analytics-for-wordpress' ) ) );
+		}
+
+		if ( ! empty( $_REQUEST['isnetwork'] ) && $_REQUEST['isnetwork'] ) {
+			define( 'WP_NETWORK_ADMIN', true );
+		}
+		$settings_page = admin_url( 'admin.php?page=monsterinsights_settings' );
+
+		// Only for Pro users, require a license key to be entered first so we can link to things.
+		if ( monsterinsights_is_pro_version() ) {
+			if ( ! MonsterInsights()->license->is_site_licensed() && ! MonsterInsights()->license->is_network_licensed() ) {
+				wp_send_json_error( array(
+					'message' => __( "You can't view MonsterInsights reports because you are not licensed.", 'google-analytics-for-wordpress' ),
+					'footer'  => '<a href="' . $settings_page . '">' . __( 'Add your license', 'google-analytics-for-wordpress' ) . '</a>',
+				) );
+			} else if ( MonsterInsights()->license->is_site_licensed() && ! MonsterInsights()->license->site_license_has_error() ) {
+				// Good to go: site licensed.
+			} else if ( MonsterInsights()->license->is_network_licensed() && ! MonsterInsights()->license->network_license_has_error() ) {
+				// Good to go: network licensed.
+			} else {
+				wp_send_json_error( array( 'message' => __( "You can't view MonsterInsights reports due to license key errors.", 'google-analytics-for-wordpress' ) ) );
+			}
+		}
+
+		// We do not have a current auth.
+		$site_auth = MonsterInsights()->auth->get_viewname();
+		$ms_auth   = is_multisite() && MonsterInsights()->auth->get_network_viewname();
+		if ( ! $site_auth && ! $ms_auth ) {
+			wp_send_json_error( array( 'message' => __( 'You must authenticate with MonsterInsights before you can view reports.', 'google-analytics-for-wordpress' ) ) );
+		}
+
+		$report_name = isset( $_POST['report'] ) ? sanitize_text_field( wp_unslash( $_POST['report'] ) ) : '';
+
+		if ( empty( $report_name ) ) {
+			wp_send_json_error( array( 'message' => __( 'Unknown report. Try refreshing and retrying. Contact support if this issue persists.', 'google-analytics-for-wordpress' ) ) );
+		}
+
+		$report = MonsterInsights()->reporting->get_report( $report_name );
+
+		$isnetwork = ! empty( $_REQUEST['isnetwork'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['isnetwork'] ) ) : '';
+		$start     = ! empty( $_POST['start'] ) ? sanitize_text_field( wp_unslash( $_POST['start'] ) ) : date( 'Y-m-d', strtotime( '-30 days' ) );
+		$end       = ! empty( $_POST['end'] ) ? sanitize_text_field( wp_unslash( $_POST['end'] ) ) : date( 'Y-m-d', strtotime( '-1 day' ) );
+
+		$args      = array(
+			'start' => $start,
+			'end'   => $end,
+		);
+
+		if ( $isnetwork ) {
+			$args['network'] = true;
+		}
+
+		if ( monsterinsights_is_pro_version() && ! MonsterInsights()->license->license_can( $report->level ) ) {
+			$data = array(
+				'success' => false,
+				'error'   => 'license_level',
+			);
+		} else {
+			$data = apply_filters( 'monsterinsights_vue_reports_data', $report->get_data( $args ), $report_name, $report );
+		}
+
+		if ( ! empty( $data['success'] ) && ! empty( $data['data'] ) ) {
+			wp_send_json_success( $data['data'] );
+		} else if ( isset( $data['success'] ) && false === $data['success'] && ! empty( $data['error'] ) ) {
+			// Use a custom handler for invalid_grant errors.
+			if ( strpos( $data['error'], 'invalid_grant' ) > 0 ) {
+				wp_send_json_error(
+					array(
+						'message' => 'invalid_grant',
+						'footer'  => '',
+					)
+				);
+			}
+
+			wp_send_json_error(
+				array(
+					'message' => $data['error'],
+					'footer'  => isset( $data['data']['footer'] ) ? $data['data']['footer'] : '',
+				)
+			);
+		}
+
+		wp_send_json_error( array( 'message' => __( 'We encountered an error when fetching the report data.', 'google-analytics-for-wordpress' ) ) );
+
+	}
+
+	/**
+	 * Install plugins which are not addons.
+	 */
+	public function install_plugin() {
+		check_ajax_referer( 'mi-admin-nonce', 'nonce' );
+
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			wp_send_json( array(
+				'message' => esc_html__( 'You are not allowed to install plugins', 'ga-premium' ),
+			) );
+		}
+
+		$slug = isset( $_POST['slug'] ) ? sanitize_text_field( wp_unslash( $_POST['slug'] ) ) : false;
+
+		if ( ! $slug ) {
+			wp_send_json( array(
+				'message' => esc_html__( 'Missing plugin name.', 'ga-premium' ),
+			) );
+		}
+
+		include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+
+		$api = plugins_api( 'plugin_information', array(
+			'slug'   => $slug,
+			'fields' => array(
+				'short_description' => false,
+				'sections'          => false,
+				'requires'          => false,
+				'rating'            => false,
+				'ratings'           => false,
+				'downloaded'        => false,
+				'last_updated'      => false,
+				'added'             => false,
+				'tags'              => false,
+				'compatibility'     => false,
+				'homepage'          => false,
+				'donate_link'       => false,
+			),
+		) );
+
+		if ( is_wp_error( $api ) ) {
+			return $api->get_error_message();
+		}
+
+		$download_url = $api->download_link;
+
+		$method = '';
+		$url    = add_query_arg(
+			array(
+				'page' => 'monsterinsights-settings',
+			),
+			admin_url( 'admin.php' )
+		);
+		$url    = esc_url( $url );
+
+		ob_start();
+		if ( false === ( $creds = request_filesystem_credentials( $url, $method, false, false, null ) ) ) {
+			$form = ob_get_clean();
+
+			wp_send_json( array( 'form' => $form ) );
+		}
+
+		// If we are not authenticated, make it happen now.
+		if ( ! WP_Filesystem( $creds ) ) {
+			ob_start();
+			request_filesystem_credentials( $url, $method, true, false, null );
+			$form = ob_get_clean();
+
+			wp_send_json( array( 'form' => $form ) );
+
+		}
+
+		// We do not need any extra credentials if we have gotten this far, so let's install the plugin.
+		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+		$base = MonsterInsights();
+		require_once plugin_dir_path( $base->file ) . '/includes/admin/licensing/skin.php';
+
+		// Create the plugin upgrader with our custom skin.
+		$installer = new Plugin_Upgrader( new MonsterInsights_Skin() );
+		$installer->install( $download_url );
+
+		// Flush the cache and return the newly installed plugin basename.
+		wp_cache_flush();
+		wp_send_json_success();
+
+		wp_die();
+	}
+
+	/**
+	 * Store that the first run notice has been dismissed so it doesn't show up again.
+	 */
+	public function dismiss_first_time_notice() {
+
+		monsterinsights_update_option( 'monsterinsights_first_run_notice', true );
 
 		wp_send_json_success();
 	}

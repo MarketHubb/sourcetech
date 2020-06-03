@@ -68,7 +68,7 @@ class ET_Builder_Module_Hover_Options {
 	public function is_enabled( $setting, $attrs ) {
 		$name = $setting === 'background_color' ? 'background' : $setting;
 
-		return 'on' == $this->util_get( $this->get_hover_enabled_field( $name ), $attrs );
+		return strpos( $this->util_get( $this->get_hover_enabled_field( $name ), $attrs ), 'on' ) === 0;
 	}
 
 	/**
@@ -179,6 +179,3 @@ class ET_Builder_Module_Hover_Options {
 	}
 }
 
-function et_pb_hover_options() {
-	return ET_Builder_Module_Hover_Options::get();
-}

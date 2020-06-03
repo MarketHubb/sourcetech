@@ -2,10 +2,10 @@
 Contributors: dualcube, greyparrots, itzmekhokan
 Tags: catalog, woocommerce catalog, product catalog, woocommerce catalog enquiry, woocommerce product enquiry, woocommerce enquiry form, woocommerce catalogue only, product catalogue, catalog for woocommerce, catalog mode, remove add to cart 
 Donate link: https://wc-marketplace.com/donate
-Requires at least: 4.2
-Tested up to: 5.0.2
+Requires at least: 4.4
+Tested up to: 5.4
 Requires PHP: 5.6
-Stable tag: 3.2.0
+Stable tag: 3.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,7 @@ Following is a non-comprehensive list of the FREE features of our catalog plugin
 * Change labeling for enquiry form headers and fields from backend settings
 * Captcha support on enquiry form
 * Fully customizable enquiry button
+* Add Enquiry button anywhere in single product page via shortcode [wce_enquiry_button] 
 
 = WC Catalog Enquiry Pro features =
 Pro provides more control, more features and an additional support of [WC Marketplace](https://wc-marketplace.com/), the highest rated multi vendor plugin for WooCommerce. 
@@ -74,8 +75,8 @@ For more information or to go pro, [visit our plugin website](https://wc-marketp
 We are adding new features as you are reading. So if your required feature is currently not available, feel free to request in the support forum.
 
 = Compatibility =
-* WooCommerce 3.0+
-* WordPress 4.2+
+* WooCommerce 3.6+
+* WordPress 4.4+
 * WC Marketplace - [demo](http://wcmpdemos.com/addon/wcmp_catalog_enquiry/my-account/ "Vendor - Marketplace Catalog Mode")
 * The theme should be WooCommerce standards compliant.
 * WPML compatible
@@ -128,6 +129,19 @@ Ans. Yes, you can use this plugin for shop and catalog simultaneously.You can al
 10.Catalog Enquiry with WC Marketplace - Vendor Catalog Settings
 
 == Changelog ==
+= 3.2.2 =
+* Added: Exclusion settings for user roles.
+* Tweak: Backend settings dropdown UI.
+* Tweak: Calatog data session storing replaced with transients.
+* Fixed: Remove catalog orderby price dropdown option based on settings.
+* Fixed: Duplicate button click issue.
+* Fixed: Rest API critical site health issue.
+* Updated: Language file.
+
+= 3.2.1 =
+* Added: WooCommerce 3.6+ compatibility.
+* Added: Emquiry button shortcode [wce_enquiry_button].
+
 = 3.2.0 =
 * Added: Wordpress 5.0+ compatibility.
 * Fixed: Inline settings css issue with W3 validation.

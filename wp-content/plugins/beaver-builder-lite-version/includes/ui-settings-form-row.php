@@ -11,8 +11,12 @@
 			i	   = 0;
 
 		data.name += '[]';
-	#>
-	<tbody id="fl-field-{{data.rootName}}" class="fl-field fl-builder-field-multiples" data-type="form" data-preview='{{{data.preview}}}' data-connections="{{{connections}}}">
+
+		var limit = 0;
+		if ( 'undefined' !== typeof data.field.limit ) {
+			limit = data.field.limit
+		} #>
+	<tbody id="fl-field-{{data.rootName}}" class="fl-field fl-builder-field-multiples" data-limit="{{limit}}" data-type="form" data-preview='{{{data.preview}}}' data-connections="{{{connections}}}">
 		<# for( ; i < values.length; i++ ) {
 			data.index = i;
 			data.value = values[ i ];
@@ -38,7 +42,7 @@
 		</tr>
 	</tbody>
 	<# } else { #>
-	<tr id="fl-field-{{data.name}}" class="fl-field{{data.rowClass}}" data-type="{{data.field.type}}" data-preview='{{{data.preview}}}' data-connections="{{{connections}}}">
+	<tr id="fl-field-{{data.name}}" class="fl-field{{data.rowClass}}" data-type="{{data.field.type}}" data-is-style="{{data.field.is_style}}" data-preview='{{{data.preview}}}' data-connections="{{{connections}}}">
 		<# var field = FLBuilderSettingsForms.renderField( data ); #>
 		{{{field}}}
 	</tr>

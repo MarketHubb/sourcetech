@@ -1,6 +1,6 @@
-/** 
+/**
  * Developer's Notice:
- * 
+ *
  * Note: JS in this file (and this file itself) is not garunteed backwards compatibility. JS can be added, changed or removed at any time without notice.
  * For more information see the `Backwards Compatibility Guidelines for Developers` section of the README.md file.
  */
@@ -17,8 +17,8 @@ var MonsterInsights = function(){
 	   for IE 7/8 will continue to work, with the exception of events tracking of downloads. */
 	var lastClicked  = [];
 	var internalAsOutboundCategory = '';
-	
-	this.setLastClicked = function(valuesArray,fieldsArray,tracked){ 
+
+	this.setLastClicked = function(valuesArray,fieldsArray,tracked){
 		valuesArray = typeof valuesArray !== 'undefined' ? valuesArray : [];
 		fieldsArray = typeof fieldsArray !== 'undefined' ? fieldsArray : [];
 		tracked     = typeof tracked !== 'undefined' ? tracked : false;
@@ -37,6 +37,10 @@ var MonsterInsights = function(){
 
 	this.getInternalAsOutboundCategory = function () {
 		return internalAsOutboundCategory;
+	};
+
+	this.sendEvent = function ( fieldsArray ) {
+		__gaTrackerSend( [], fieldsArray );
 	};
 
 	function __gaTrackerIsDebug () {
@@ -167,16 +171,17 @@ var MonsterInsights = function(){
 		if ( link.match( /^javascript\:/i ) ) {
 			type = 'internal'; /* if it's a JS link, it's internal */
 		} else if ( protocol && protocol.length > 0 && ( __gaTrackerStringTrim( protocol ) == 'tel' || __gaTrackerStringTrim( protocol ) == 'tel:' ) ) { /* If it's a telephone link */
-			type = "tel"; 
+			type = "tel";
 		} else if ( protocol && protocol.length > 0 && ( __gaTrackerStringTrim( protocol ) == 'mailto' ||  __gaTrackerStringTrim( protocol ) == 'mailto:' ) ) { /* If it's a email */
-			type = "mailto"; 
-		} else if ( hostname && currentdomain && hostname.length > 0 && currentdomain.length > 0 && ! hostname.endsWith( currentdomain ) ) { /* If it's a outbound */
-			type = "external"; 
+			type = "mailto";
+		} else if ( hostname && currentdomain && hostname.length > 0 && currentdomain.length > 0 && ! hostname.endsWith( '.' + currentdomain)  && hostname !== currentdomain ) { /* If it's a outbound */
+			type = "external";
 		} else if ( pathname && JSON.stringify( inbound_paths ) != "{}" && pathname.length > 0 ) { /* If it's an internal as outbound */
-			for ( index in inbound_paths ) {
-			  if ( inbound_paths[ index ].path.length > 0 && inbound_paths[ index ].label.length > 0 && pathname.startsWith( inbound_paths[ index ].path ) ) {
+			var inbound_paths_length = inbound_paths.length;
+			for ( var inbound_paths_index = 0; inbound_paths_index < inbound_paths_length; inbound_paths_index ++ ) {
+				if ( inbound_paths[ inbound_paths_index ].path && inbound_paths[ inbound_paths_index ].label && inbound_paths[ inbound_paths_index ].path.length > 0 && inbound_paths[ inbound_paths_index ].label.length > 0 && pathname.startsWith( inbound_paths[ inbound_paths_index ].path ) ) {
 					type         				= "internal-as-outbound";
-					internalAsOutboundCategory  = "outbound-link-" + inbound_paths[ index ].label;
+					internalAsOutboundCategory  = "outbound-link-" + inbound_paths[ inbound_paths_index ].label;
 					break;
 				}
 			}
@@ -210,6 +215,44 @@ var MonsterInsights = function(){
 			target = "_blank";
 		}
 		return target;
+	}
+
+	function __gaTrackerGetTitle( el ) {
+		if ( el.getAttribute("data-vars-ga-label") && el.getAttribute("data-vars-ga-label").replace(/\n/ig, '') ) {
+			return el.getAttribute("data-vars-ga-label").replace(/\n/ig, '');
+		} else if ( el.title && el.title.replace(/\n/ig, '') ) {
+			return el.title.replace(/\n/ig, '');
+		} else if ( el.innerText && el.innerText.replace(/\n/ig, '') ) {
+			return el.innerText.replace(/\n/ig, '');
+		} else if ( el.getAttribute('aria-label') && el.getAttribute('aria-label').replace(/\n/ig, '') ) {
+			return el.getAttribute('aria-label').replace(/\n/ig, '');
+		} else if ( el.alt && el.alt.replace(/\n/ig, '') ) {
+			return el.alt.replace(/\n/ig, '');
+		} else if ( el.textContent && el.textContent.replace(/\n/ig, '') ) {
+			return el.textContent.replace(/\n/ig, '');
+		} else {
+			return undefined;
+		}
+	}
+
+	function __gaTrackerGetInnerTitle( el ) {
+		var children = el.children;
+		var count    = 0;
+		var child;
+		var value;
+		for (var i = 0; i < children.length; i++) {
+		  child = children[i];
+		  value = __gaTrackerGetTitle( child );
+		  if ( value ) {
+		     return value;
+		  }
+		  /* max search 100 elements to ensure performance */
+		  if ( count == 99 ) {
+		  	return undefined;
+		  }
+		  count++;
+		}
+		return undefined;
 	}
 
 	function __gaTrackerClickEvent( event ) {
@@ -269,7 +312,12 @@ var MonsterInsights = function(){
 			valuesArray.extension           = extension; 			/* What extension is this link */
 			valuesArray.type                = type; 				/* What type of link is this */
 			valuesArray.target              = target;				/* Is a new tab/window being opened? */
-			valuesArray.title 				= el.title || el.textContent || el.innerText; /* Try link title, then text content */
+			valuesArray.title 				= __gaTrackerGetTitle( el ); /* Try link title, then text content */
+
+			/* only find innerTitle if we need one */
+			if ( ! valuesArray.label && ! valuesArray.title ) {
+				valuesArray.title = __gaTrackerGetInnerTitle( el );
+			}
 
 			/* Let's track everything but internals (that aren't internal-as-externals) and javascript */
 			if ( type !== 'internal' && type !== 'javascript' ) {
@@ -370,7 +418,7 @@ var MonsterInsights = function(){
 							__gaTrackerNotSend( valuesArray );
 						}
 					}
-				} else { 
+				} else {
 					/* Prevent standard click, track then open */
 					if ( type != 'cross-hostname' && type != 'external' && type != 'internal-as-outbound' ) {
 						if (! event.defaultPrevented ) {
@@ -451,7 +499,7 @@ var MonsterInsights = function(){
 									event.returnValue = false;
 								}
 							}
-							
+
 							fieldsArray = {
 								hitType       : 'event',
 								eventCategory : 'cross-hostname',
@@ -466,7 +514,7 @@ var MonsterInsights = function(){
 
 							__gaTrackerSend( valuesArray, fieldsArray );
 							setTimeout( __gaTrackerHitBack, 1000 );
-						};						
+						};
 					} else {
 						if ( type && type !== 'internal' ) {
 							fieldsArray = {
@@ -522,22 +570,22 @@ var MonsterInsights = function(){
 	/* Attach the event to all clicks in the document after page has loaded */
 	var __gaTrackerWindow    = window;
 	if ( __gaTrackerWindow.addEventListener ) {
-		__gaTrackerWindow.addEventListener( 
-			"load", 
-			function() { 
+		__gaTrackerWindow.addEventListener(
+			"load",
+			function() {
 				document.body.addEventListener(
-					"click", 
+					"click",
 					__gaTrackerClickEvent,
 					 false
 				);
-			}, 
+			},
 			false
 		);
 		window.addEventListener("hashchange", __gaTrackerHashChangeEvent, false	);
-	} else { 
+	} else {
 		if ( __gaTrackerWindow.attachEvent ) {
 			__gaTrackerWindow.attachEvent(
-				"onload", 
+				"onload",
 				function() {
 					document.body.attachEvent( "onclick", __gaTrackerClickEvent);
 				}
