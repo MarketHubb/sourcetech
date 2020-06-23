@@ -117,15 +117,17 @@ ul.post-categories li {
 *****************************************/
 .post-overview {
     background-color: #f5f8fa;
-    margin-bottom: -1rem;
     margin-top: 1rem;
     padding-top: 1rem !important;
     padding-bottom: 1rem !important;
     box-shadow: 0 10px 20px -5px rgba(51,71,91,0.1);
     border-radius: 3px;
     border-left: 4px solid #0087c7;
+    margin-left: .25rem !important;
+    margin-right: .25rem !important;
 }
 .post-overview ul {
+    list-style-type: none;
     padding-inline-start: 0;
     margin-left: 0;
     margin-bottom: 0;
@@ -139,8 +141,37 @@ ul.post-categories li {
     font-weight: bold;
 }
 /****************************************
+*** Tables ***
+*****************************************/
+.tablepress .blog-table-sub {
+    display: block;
+    font-size: .8rem;
+    font-style: italic;
+}
+#tablepress-32 .row-11, #tablepress-33 .row-8 {
+    border: 3px solid red;
+}
+.table-sub {
+    display: block;
+    text-align: center;
+    position: relative;
+    bottom: 1.5rem;
+}
+/****************************************
 *** Content ***
 *****************************************/
+.post-conclusion {
+    background-color: #d9edf7;
+    width: 106%;
+    padding-left: 3%;
+    padding-right: 3%;
+    position: relative;
+    right: 3%;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-radius: 3px;
+    margin: .5rem 0 1rem;
+}
 .post-callout {
     margin-top: 1rem;
     margin-bottom: 3rem;
@@ -159,15 +190,13 @@ ul.post-categories li {
     position: relative;
     bottom: 2rem;
 }
-.post-content-container .row:first-of-type {
+.post-content-container > .row:first-of-type {
     padding: 1rem 2.5rem 1.5rem;
-}
-.post-content-container .row {
-    padding: 2.5rem;
-}
-.post-content-container .row:first-of-type {
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
+}
+.post-content-container .row {
+    padding: 2.5rem 1rem;
 }
 .post-content-container .row:last-of-type {
     border-bottom-left-radius: 3px;
