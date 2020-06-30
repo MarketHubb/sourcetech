@@ -127,18 +127,16 @@ ul.post-categories li {
     margin-right: .25rem !important;
 }
 .post-overview ul {
-    list-style-type: none;
-    padding-inline-start: 0;
     margin-left: 0;
     margin-bottom: 0;
 }
 .post-overview ul li {
-    padding-top: .35rem;
-    padding-bottom: .35rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
     letter-spacing: -.02rem;
-    font-size: .8rem;
-    color: #111;
-    font-weight: bold;
+    color: #222;
+    font-weight: 600;
+    line-height: 125%;
 }
 /****************************************
 *** Tables ***
