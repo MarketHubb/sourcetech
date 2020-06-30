@@ -143,6 +143,19 @@ ul.post-categories li {
 /****************************************
 *** Tables ***
 *****************************************/
+#tablepress-30 > thead tr th:not(:first-of-type) {
+    text-align: center;
+}
+.td-icon {
+    font-size: 2rem;
+    font-weight: bold;
+}
+.td-icon.yes {
+    color: darkgreen;
+}
+.td-icon.no {
+    color: darkred;
+}
 .tablepress .blog-table-sub {
     display: block;
     font-size: .8rem;
@@ -152,25 +165,27 @@ ul.post-categories li {
     border: 3px solid red;
 }
 .table-sub {
+    font-weight: bold;
     display: block;
     text-align: center;
     position: relative;
     bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+#tablepress-32_wrapper + p > .table-sub {
+    bottom: .5rem;
 }
 /****************************************
 *** Content ***
 *****************************************/
 .post-conclusion {
-    background-color: #d9edf7;
-    width: 106%;
-    padding-left: 3%;
-    padding-right: 3%;
-    position: relative;
-    right: 3%;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    border-radius: 3px;
-    margin: .5rem 0 1rem;
+    background-color: #f5f8fa;
+    margin-top: 1rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 20px -5px rgba(51,71,91,0.1);
+    line-height: 1.4;
+    border-left: 4px solid #0087c7;
+    padding: 1.25rem 1rem 1.25rem 3rem;
 }
 .post-callout {
     margin-top: 1rem;
