@@ -20,10 +20,13 @@
 	font-weight: bold;
 	margin-right: 1.5rem;
 	color: #0087c7;
-	font-size: .9rem;
+	font-size: 1rem;
 }
-.cta-card span i {
-	border-bottom: none;
+.cta-copy i {
+	display: none;
+	position: absolute;
+	top: 50%;
+	right: 10%;
 }
 .cta-lead-copy {
 	font-size: .65rem;
@@ -39,7 +42,7 @@
 	cursor: pointer;
 	text-decoration: underline;
 }
-	/* Layout: Colors */
+/* Layout: Colors */
 .text-white {
 	color: #fff;
 }
@@ -48,6 +51,9 @@
 }
 .bg-white {
 	background: #fff;
+}
+.bg-blue-dark {
+	background-color: #33475b;
 }
 .bg-light-blue {
 	background-color: #f5f8fa;
@@ -77,7 +83,6 @@ h1, h2, h3, h4, h5, h6 {
 	font-weight: bold;
 	font-size: 1.25rem;
 }
-
 /* Helper Classes */
 .inline-block {
 	display: inline-block;
@@ -112,7 +117,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Design Guidelines - Headings */
 h1.page-title, p.sub-title, h2.sub-heading {
-	color: #33475b !important;
+	color: #24292e !important;
 }
 h1.page-title {
 	font-family: "Open Sans Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
@@ -149,6 +154,9 @@ h2.sub-heading, h3.sub-heading {
 	border-bottom: 2px solid !important;
 }
 /* Global Elements */
+.custom-container-section {
+	padding: 3rem 0;
+}
 .text-center {
 	text-align: center !important;
 }
@@ -234,19 +242,15 @@ h2.sub-heading, h3.sub-heading {
 	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	letter-spacing: -.025rem;
 	font-weight: 600;
-	font-size: .9rem;
-	padding: .5rem 0;
-}
-.global-alert .alert-cta {
-	/*background: #0087c7;*/
-	/*padding: 2px 10px 3px;*/
-	/*border-radius: 100px;*/
-	/*margin-left: .25rem;*/
+	font-size: .85rem;
+	padding: .4rem 0;
 }
 .global-alert .alert-cta, .global-alert .alert-cta a {
-	color: #0087c7!important;
+	color: #fff !important;
 	font-weight: bolder;
-	border-bottom: 1px dashed;
+}
+.alert-cta a {
+	text-decoration: underline;
 }
 .breadcrumbs {
 	margin: 15px auto;
@@ -277,9 +281,6 @@ h2.sub-heading, h3.sub-heading {
 }
 .button.cart {
 	display: none !important;
-}
-#menu-item-766 {
-	background: #ea662b;
 }
 header #middle-column {
 	display: none;

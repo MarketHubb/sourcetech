@@ -16,11 +16,6 @@
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="profile" href="https://gmpg.org/xfn/11">
-	
-	
-	<?php if ( is_page(1574) || is_singular('servers') || is_singular('networking') || is_singular('post') || is_page(2055) || is_page(661) ) { ?>
-		<link rel="stylesheet" id="bootstrap-styles-css"  href="<?php echo get_stylesheet_directory_uri() . '/css/bootstrap.min.css?ver=5.2.3'; ?>" type="text/css" media="all" />
-	<?php } ?>
 
 	<?php wp_head(); ?>
 
@@ -80,8 +75,8 @@
 <body <?php body_class(); ?>>
 
     <!-- Global Alert Bar -->
-    <div class="bg-light-blue global-alert fixed shadow">
-        <p class="text-center">We're fully operational during COVID-19. Call us today <span class="alert-cta"><span class="icon icon-phone"></span><a href="tel:800-932-0657">800-932-0657</a></span> or email <span class="alert-cta"><a href="mailto:info@source-tech.net">team@source-tech.net</a></span></p>
+    <div class="bg-blue-dark global-alert fixed shadow">
+        <p class="text-center text-white">We're fully operational during COVID-19. Call us today at  <span class="alert-cta"><a href="tel:800-932-0657">800-932-0657</a></span> or email <span class="alert-cta"><a href="mailto:info@source-tech.net">team@source-tech.net</a></span></p>
     </div>
 
 	<div id="page" class="site">
@@ -187,20 +182,20 @@
 	}?>
 	
 	<?php if (is_singular('servers') || is_singular('networking')) { ?>
-		<div class="container-fluid model-page-header-cta">
-			<div class="row">
-				<div class="col">
-					<div class="alert alert-primary page-cta-alert" role="alert">
-					  <?php 
-					  $header_cta = get_field('global_server_cta_copy', 'option'); 
-					  $alert_field = 'global_' . $post->post_type . '_alert';
-					  $alert = replace_product_variable_in_string(get_field($alert_field, 'option'), $post->ID);
-					  echo '<i class="fas fa-angle-double-right"></i> ' . $alert . ' <i class="fas fa-angle-double-left"></i>';
-					  ?>
-					</div>
-				</div>
-			</div>
-		</div>
+<!--		<div class="container-fluid model-page-header-cta">-->
+<!--			<div class="row">-->
+<!--				<div class="col">-->
+<!--					<div class="alert alert-primary page-cta-alert" role="alert">-->
+<!--					  --><?php //
+//					  $header_cta = get_field('global_server_cta_copy', 'option');
+//					  $alert_field = 'global_' . $post->post_type . '_alert';
+//					  $alert = replace_product_variable_in_string(get_field($alert_field, 'option'), $post->ID);
+//					  echo '<i class="fas fa-angle-double-right"></i> ' . $alert . ' <i class="fas fa-angle-double-left"></i>';
+//					  ?>
+<!--					</div>-->
+<!--				</div>-->
+<!--			</div>-->
+<!--		</div>-->
 	<?php } ?>
 	
 	<?php if (is_page(777) || is_singular('networking') || is_singular('servers') || is_page(2055) || is_page(661) ){ ?>

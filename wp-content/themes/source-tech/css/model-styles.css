@@ -154,6 +154,7 @@
 .server-title-abstract {
 	color: #555;
 	font-size: 1rem;
+	font-style: italic;
 }
 .model-page-tags {
 	background-color: #0087c7;
@@ -251,7 +252,7 @@
 	border-color: #0087c7 #0087c7 #fff;
 }
 #model-page-tabs .nav .nav-item .nav-link.active {
-	color: #333;
+	color: #24292e;
 	border-color: #0087c7 #0087c7 #fff;
 	outline: 0;
 }
