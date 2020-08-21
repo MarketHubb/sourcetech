@@ -35,35 +35,11 @@
 	</footer><!-- #colophon -->
 </div><!-- #page -->
 
-<script>
-  // window.addEventListener('load',function(){
-  //   jQuery('[class="button request-quote"]').click(function(){
-  //     gtag('event', 'click', {
-  //       'event_category' : 'button',
-  //       'event_label' : window.location.pathname
-  //     });
-  //   })
-  // });
-</script>
-
 <?php wp_footer(); ?>
 
 <!-- Zoho Live Chat widget -->
 <script type="text/javascript">
 var $zoho=$zoho || {};$zoho.salesiq = $zoho.salesiq || {widgetcode:"00c1181641a8e8a370b3731ece5fb9e8aaf8fb161310d62c4552975ade569d50", values:{},ready:function(){}};var d=document;s=d.createElement("script");s.type="text/javascript";s.id="zsiqscript";s.defer=true;s.src="https://salesiq.zoho.com/widget";t=d.getElementsByTagName("script")[0];t.parentNode.insertBefore(s,t);d.write("<div id='zsiqwidget'></div>");
-</script>
-
-<!-- Zoho Customizations -->
-<script>
-
-$zoho.salesiq.ready=function(embedinfo)
-
-{
-   $zoho.salesiq.chatbutton.texts([["Get a quote in minutes.", "Talk to me to get started.", "Online"], ["Get a quote in minutes.", "Talk to me to get started.", "Online"]]);
-   $zoho.salesiq.floatwindow.onlinetitle('Live Support');
-   $zoho.salesiq.floatwindow.offlinetitle('Live Support');
-}
-
 </script>
 
 </body>
