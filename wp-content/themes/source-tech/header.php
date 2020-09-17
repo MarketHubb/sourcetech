@@ -80,30 +80,9 @@
     </div>
 
 	<div id="page" class="site">
-		<?php 
-		// Variant copy testing for primary CTA button on Server model pages
-		if (is_singular( 'product' )) {		
-			
-			$type = ri_get_single_post_type(get_the_ID());
-			
-			if ($type == 'Servers') {
-				$variants_array = array(
-					'Request a Quote',
-					'Configure this Server',
-					'Configure to Order'
-				);
-				$rand = rand(0, 2);
-				// $cta_copy = $variants_array[$rand];
-				$cta_copy = 'Request a Quote';
-				
-			} else {
-				$cta_copy = 'Request a Quote';
-			}
-		}
-		?>
 		<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'source-tech' ); ?></a>
 
-		<header id="masthead" class="site-header" data-buttonvariant="<?php echo $cta_copy; ?>">
+		<header id="masthead" class="site-header" data-buttonvariant="">
 <!--			<div class="row top-row">-->
 <!--				<div class="item">-->
 <!--					--><?php
