@@ -1,9 +1,4 @@
 <?php
-/**
- * WPSEO plugin file.
- *
- * @package Yoast\WP\SEO\Integrations\Third_Party
- */
 
 namespace Yoast\WP\SEO\Integrations\Third_Party;
 
@@ -18,7 +13,7 @@ use Yoast\WP\SEO\Presentations\Indexable_Presentation;
 use Yoast\WP\SEO\Repositories\Indexable_Repository;
 
 /**
- * Class WooCommerce
+ * WooCommerce integration.
  */
 class WooCommerce implements Integration_Interface {
 
@@ -233,7 +228,7 @@ class WooCommerce implements Integration_Interface {
 	 * @return int The ID of the set page.
 	 */
 	protected function get_shop_page_id() {
-		if ( ! function_exists( 'wc_get_page_id' ) ) {
+		if ( ! \function_exists( 'wc_get_page_id' ) ) {
 			return -1;
 		}
 

@@ -1,16 +1,11 @@
 <?php
-/**
- * Reindexation action for indexables.
- *
- * @package Yoast\WP\SEO\Actions\Indexation
- */
 
 namespace Yoast\WP\SEO\Actions\Indexation;
 
 use Yoast\WP\SEO\Repositories\Indexable_Repository;
 
 /**
- * Indexable_Misc_Indexation_Action class.
+ * General reindexation action for indexables.
  */
 class Indexable_General_Indexation_Action implements Indexation_Action_Interface {
 
@@ -36,7 +31,7 @@ class Indexable_General_Indexation_Action implements Indexation_Action_Interface
 	public function get_total_unindexed() {
 		$indexables_to_create = $this->query();
 
-		return count( $indexables_to_create );
+		return \count( $indexables_to_create );
 	}
 
 	/**

@@ -1,9 +1,4 @@
 <?php
-/**
- * WPSEO plugin file.
- *
- * @package Yoast\WP\SEO\Integrations\Front_End
- */
 
 namespace Yoast\WP\SEO\Integrations\Front_End;
 
@@ -13,7 +8,7 @@ use Yoast\WP\SEO\Integrations\Integration_Interface;
 use Yoast\WP\SEO\Wrappers\WP_Query_Wrapper;
 
 /**
- * Class Force_Rewrite_Title
+ * Class Force_Rewrite_Title.
  */
 class Force_Rewrite_Title implements Integration_Interface {
 
@@ -73,8 +68,8 @@ class Force_Rewrite_Title implements Integration_Interface {
 			return;
 		}
 
-		add_action( 'template_redirect', [ $this, 'force_rewrite_output_buffer' ], 99999 );
-		add_action( 'wp_footer', [ $this, 'flush_cache' ], -1 );
+		\add_action( 'template_redirect', [ $this, 'force_rewrite_output_buffer' ], 99999 );
+		\add_action( 'wp_footer', [ $this, 'flush_cache' ], -1 );
 	}
 
 	/**
@@ -93,7 +88,7 @@ class Force_Rewrite_Title implements Integration_Interface {
 		\wp_reset_query();
 
 		// When the file has the debug mark.
-		if ( preg_match( '/(?\'before\'.*)<!-- This site is optimized with the Yoast SEO.*<!-- \/ Yoast SEO( Premium)? plugin. -->(?\'after\'.*)/is', $content, $matches ) ) {
+		if ( \preg_match( '/(?\'before\'.*)<!-- This site is optimized with the Yoast SEO.*<!-- \/ Yoast SEO( Premium)? plugin. -->(?\'after\'.*)/is', $content, $matches ) ) {
 			$content = $this->replace_titles_from_content( $content, $matches );
 
 			unset( $matches );
@@ -123,7 +118,7 @@ class Force_Rewrite_Title implements Integration_Interface {
 	 * @return string The modified content.
 	 */
 	protected function replace_titles_from_content( $content, $parts_with_title ) {
-		if ( isset( $parts_with_title['before'] ) && is_string( $parts_with_title['before'] ) ) {
+		if ( isset( $parts_with_title['before'] ) && \is_string( $parts_with_title['before'] ) ) {
 			$content = $this->replace_title( $parts_with_title['before'], $content );
 		}
 
@@ -144,9 +139,9 @@ class Force_Rewrite_Title implements Integration_Interface {
 	 * @return string The altered content.
 	 */
 	protected function replace_title( $part_with_title, $content ) {
-		$part_without_title = preg_replace( '/<title.*?\/title>/i', '', $part_with_title );
+		$part_without_title = \preg_replace( '/<title.*?\/title>/i', '', $part_with_title );
 
-		return str_replace( $part_with_title, $part_without_title, $content );
+		return \str_replace( $part_with_title, $part_without_title, $content );
 	}
 
 	/**

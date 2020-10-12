@@ -1,9 +1,4 @@
 <?php
-/**
- * Yoast SEO Plugin File.
- *
- * @package Yoast\YoastSEO\Integrations
- */
 
 namespace Yoast\WP\SEO\Integrations\Third_Party;
 
@@ -11,9 +6,7 @@ use Yoast\WP\SEO\Conditionals\WPML_Conditional;
 use Yoast\WP\SEO\Integrations\Integration_Interface;
 
 /**
- * Class WPML
- *
- * @package Yoast\WP\SEO\Integration\Third_Party
+ * WPML integration.
  */
 class WPML implements Integration_Interface {
 
@@ -21,8 +14,8 @@ class WPML implements Integration_Interface {
 	 * @inheritDoc
 	 */
 	public function register_hooks() {
-		add_action( 'wpseo_home_url', [ $this, 'filter_home_url_before' ] );
-		add_filter( 'home_url', [ $this, 'filter_home_url_after' ], 100 );
+		\add_action( 'wpseo_home_url', [ $this, 'filter_home_url_before' ] );
+		\add_filter( 'home_url', [ $this, 'filter_home_url_after' ], 100 );
 	}
 
 	/**
@@ -36,7 +29,7 @@ class WPML implements Integration_Interface {
 	 * Adds a filter to WPML's wpml_get_home_url filter to ensure we get the unmanipulated home URL.
 	 */
 	public function filter_home_url_before() {
-		add_filter( 'wpml_get_home_url', [ $this, 'wpml_get_home_url' ], 10, 2 );
+		\add_filter( 'wpml_get_home_url', [ $this, 'wpml_get_home_url' ], 10, 2 );
 	}
 
 	/**
@@ -47,7 +40,7 @@ class WPML implements Integration_Interface {
 	 * @return string The unfiltered home URL.
 	 */
 	public function filter_home_url_after( $home_url ) {
-		remove_filter( 'wpml_get_home_url', [ $this, 'wpml_get_home_url' ], 10 );
+		\remove_filter( 'wpml_get_home_url', [ $this, 'wpml_get_home_url' ], 10 );
 
 		return $home_url;
 	}

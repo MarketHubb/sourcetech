@@ -1,12 +1,8 @@
 <?php
-/**
- * WPSEO plugin file.
- *
- * @package Yoast\WP\SEO\Integrations\Front_End
- */
 
 namespace Yoast\WP\SEO\Integrations\Front_End;
 
+use WP_Post;
 use Yoast\WP\SEO\Conditionals\Front_End_Conditional;
 use Yoast\WP\SEO\Conditionals\Open_Graph_Conditional;
 use Yoast\WP\SEO\Integrations\Integration_Interface;
@@ -55,10 +51,10 @@ class Open_Graph_OEmbed implements Integration_Interface {
 	/**
 	 * Open_Graph_OEmbed constructor.
 	 *
-	 * @param Meta_Surface $meta  The meta surface.
+	 * @param Meta_Surface $meta The meta surface.
 	 */
 	public function __construct( Meta_Surface $meta ) {
-		$this->meta  = $meta;
+		$this->meta = $meta;
 	}
 
 	/**
@@ -67,8 +63,8 @@ class Open_Graph_OEmbed implements Integration_Interface {
 	 * address the concern where some social channels/subscribed use oEmebed data over Open Graph data
 	 * if both are present.
 	 *
-	 * @param array    $data The oEmbed data.
-	 * @param \WP_Post $post The current Post object.
+	 * @param array   $data The oEmbed data.
+	 * @param WP_Post $post The current Post object.
 	 *
 	 * @return array $filter_data - An array of oEmbed data with modified values where appropriate.
 	 * @link https://developer.wordpress.org/reference/hooks/oembed_response_data/ for hook info.
@@ -112,7 +108,7 @@ class Open_Graph_OEmbed implements Integration_Interface {
 	 */
 	protected function set_image() {
 		$images = $this->meta->for_post( $this->post_id )->open_graph_images;
-		$image  = reset( $images );
+		$image  = \reset( $images );
 
 		if ( empty( $image ) ) {
 			return;
