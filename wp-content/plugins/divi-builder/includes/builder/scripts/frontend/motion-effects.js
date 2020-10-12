@@ -1,17 +1,15 @@
 // External dependencies
-import {
-  debounce,
-  endsWith,
-  filter,
-  forEach,
-  get,
-  groupBy,
-  isArray,
-  isEmpty,
-  isObject,
-  map,
-  size,
-} from 'lodash';
+import debounce from 'lodash/debounce';
+import endsWith from 'lodash/endsWith';
+import filter from 'lodash/filter';
+import forEach from 'lodash/forEach';
+import get from 'lodash/get';
+import groupBy from 'lodash/groupBy';
+import isArray from 'lodash/isArray';
+import isEmpty from 'lodash/isEmpty';
+import isObject from 'lodash/isObject';
+import map from 'lodash/map';
+import size from 'lodash/size';
 
 // Internal dependencies
 import * as DOM from '@frontend-builder/features/scroll-effects/fe/io/dom';
@@ -23,13 +21,14 @@ import { Window } from '@frontend-builder/features/scroll-effects/stores/window'
 import { top_window } from '@core/admin/js/frame-helpers';
 import { getContentAreaSelector } from 'gutenberg/utils/selectors';
 
-const isBlockEditor = $(top_window.document).find(getContentAreaSelector(top_window, true)).length > 0;
-const isBuilder     = isObject(window.ET_Builder) && size(window.ET_Builder) > 1 && !isBlockEditor;
 
-const getViewportWidth     = () => jQuery(window).width();
-const toItem               = (effects, id) => ({ id, effects: (effects || []).map(fromObject), });
-const getSelector          = (step, id) => `body[data-scroll-step="${step}"] ${id}`;
-const scrollEffects        = new ETBuilderScrollEffects(DOM, getSelector);
+const isBlockEditor = $(top_window.document).find(getContentAreaSelector(top_window, true)).length > 0;
+const isBuilder     = isObject(window.ET_Builder) && size(window.ET_Builder) > 1 && ! isBlockEditor;
+
+const getViewportWidth = () => jQuery(window).width();
+const toItem           = (effects, id) => ({ id, effects: (effects || []).map(fromObject) });
+const getSelector      = (step, id) => `body[data-scroll-step="${step}"] ${id}`;
+const scrollEffects    = new ETBuilderScrollEffects(DOM, getSelector);
 
 let motionEffectsLoaded = false;
 
@@ -37,23 +36,23 @@ const getMotionElementsFE = () => {
   const allMotionElements = window.et_pb_motion_elements || [];
 
   // We are on the real FE, so load all the motion elements.
-  if (!isBuilder || isEmpty(allMotionElements)) {
+  if (! isBuilder || isEmpty(allMotionElements)) {
     return allMotionElements;
   }
 
   /**
    * We're inside the Builder, but still need to render motion effects from the TB
-   * Get all the motion elements for TB parts of the layout
+   * Get all the motion elements for TB parts of the layout.
    */
-  const breakpoints = ['desktop', 'tablet', 'phone'];
-  let tb_motion_elements = {};
+  const breakpoints        = ['desktop', 'tablet', 'phone'];
+  const tb_motion_elements = {};
 
   forEach(breakpoints, breakpoint => {
-    tb_motion_elements[ breakpoint ] = filter(window.et_pb_motion_elements[ breakpoint ], (el) => (endsWith(el.id, '_tb_header') || endsWith(el.id, '_tb_body') || endsWith(el.id, '_tb_footer')));
+    tb_motion_elements[breakpoint] = filter(window.et_pb_motion_elements[breakpoint], el => (endsWith(el.id, '_tb_header') || endsWith(el.id, '_tb_body') || endsWith(el.id, '_tb_footer')));
   });
 
   return tb_motion_elements;
-}
+};
 
 const toggleMotionElements = (state = 'hide') => {
   const activeMotionElements = getMotionElementsFE();
@@ -72,13 +71,13 @@ const toggleMotionElements = (state = 'hide') => {
       $element.addClass('et_had_animation');
     }
   });
-}
+};
 
 /**
  * @param {number} width
- * @return {string}
+ * @returns {string}
  */
-const getDevice        = width => {
+const getDevice = width => {
   if (width <= ETBuilderOffsetsConst.responsiveLandscape.phone) {
     return 'phone';
   }
@@ -92,17 +91,17 @@ const getDevice        = width => {
 
 const getChildren = (element, effects) => {
   const childrenCount = parseInt(element.children_count);
-  let children = {};
+  const children      = {};
 
   if (childrenCount > 0) {
-    for(let i = 0; i < childrenCount; i++) {
-      const key = `.${element.module_type}_item_${element.module_index}_${i}`;
+    for (let i = 0; i < childrenCount; i++) {
+      const key     = `.${element.module_type}_item_${element.module_index}_${i}`;
       children[key] = effects;
     }
   }
 
   return children;
-}
+};
 
 /**
  * @param {[object]} elements
@@ -112,14 +111,14 @@ const updateItems = (elements, device) => {
   const groupedElements = groupBy(elements[device] || [], 'id');
   map(groupedElements, toItem)
     .forEach(({ id, effects }) => {
-      if (!isEmpty(effects) && isArray(effects)) {
+      if (! isEmpty(effects) && isArray(effects)) {
         const element        = get(groupedElements, [id, '0'], {});
         const start          = get(element, 'trigger_start', 'middle');
         const end            = start; // Use only one offset point right now. Update the value here if/when we add second point.
-        const motionTriggers = {start, end};
+        const motionTriggers = { start, end };
 
         if ('on' === element.grid_motion) {
-          if (!element.child_slug) {
+          if (! element.child_slug) {
             const children = getChildren(element, effects);
 
             forEach(children, (childModule, id) => {
@@ -135,7 +134,7 @@ const updateItems = (elements, device) => {
       }
     });
 
-  if (!motionEffectsLoaded) {
+  if (! motionEffectsLoaded) {
     motionEffectsLoaded = true;
     setTimeout(() => toggleMotionElements('show'), 200);
   }
@@ -143,7 +142,7 @@ const updateItems = (elements, device) => {
 
 const activeMotionElements = getMotionElementsFE();
 
-if (!isEmpty(activeMotionElements)) {
+if (! isEmpty(activeMotionElements)) {
   const $window     = $(window);
   const windowStore = new Window($window.width(), $window.height());
   const elements    = activeMotionElements;

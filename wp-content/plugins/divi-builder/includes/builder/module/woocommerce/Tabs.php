@@ -40,7 +40,7 @@ class ET_Builder_Module_Woocommerce_Tabs extends ET_Builder_Module_Tabs {
 
 		// Set WooCommerce Tabs specific toggle / options group.
 		$this->settings_modal_toggles['general']['toggles']['main_content'] = array(
-			'title'    => esc_html__( 'Content', 'et_builder' ),
+			'title'    => et_builder_i18n( 'Content' ),
 			'priority' => 10,
 		);
 
@@ -53,7 +53,7 @@ class ET_Builder_Module_Woocommerce_Tabs extends ET_Builder_Module_Tabs {
 
 		$this->help_videos = array(
 			array(
-				'id'   => esc_html( '7X03vBPYJ1o' ),
+				'id'   => '7X03vBPYJ1o',
 				'name' => esc_html__( 'Divi WooCommerce Modules', 'et_builder' ),
 			),
 		);
@@ -333,7 +333,7 @@ class ET_Builder_Module_Woocommerce_Tabs extends ET_Builder_Module_Tabs {
 
 		if ( $is_tb ) {
 			et_theme_builder_wc_set_global_objects();
-		} else if ( $overwrite_global ) {
+		} elseif ( $overwrite_global ) {
 			// Save current global variable for later reset.
 			$original_product  = $product;
 			$original_post     = $post;
@@ -360,7 +360,11 @@ class ET_Builder_Module_Woocommerce_Tabs extends ET_Builder_Module_Tabs {
 			if ( 'description' === $name ) {
 				if ( ! et_builder_tb_enabled() && ! et_pb_is_pagebuilder_used( $product_id ) ) {
 					// If selected product doesn't use builder, retrieve post content.
-					$tab_content = $post->post_content;
+					if ( et_theme_builder_overrides_layout( ET_THEME_BUILDER_BODY_LAYOUT_POST_TYPE ) ) {
+						$tab_content = apply_filters( 'et_builder_wc_description', $post->post_content );
+					} else {
+						$tab_content = $post->post_content;
+					}
 				} else {
 					/*
 					 * Description can't use built in callback data because it gets `the_content`
@@ -401,7 +405,7 @@ class ET_Builder_Module_Woocommerce_Tabs extends ET_Builder_Module_Tabs {
 		// Reset overwritten global variable.
 		if ( $is_tb ) {
 			et_theme_builder_wc_reset_global_objects();
-		} else if ( $overwrite_global ) {
+		} elseif ( $overwrite_global ) {
 			$product  = $original_product;
 			$post     = $original_post;
 			$wp_query = $original_wp_query;
@@ -423,12 +427,14 @@ class ET_Builder_Module_Woocommerce_Tabs extends ET_Builder_Module_Tabs {
 	public function get_multi_view_attrs() {
 		$multi_view = et_pb_multi_view_options( $this );
 
-		$multi_view_attrs = $multi_view->render_attrs( array(
-			'attrs'  => array(
-				'data-include_tabs' => '{{include_tabs}}',
-			),
-			'target' => '%%order_class%%',
-		) );
+		$multi_view_attrs = $multi_view->render_attrs(
+			array(
+				'attrs'  => array(
+					'data-include_tabs' => '{{include_tabs}}',
+				),
+				'target' => '%%order_class%%',
+			)
+		);
 
 		return $multi_view_attrs;
 	}

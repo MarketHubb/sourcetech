@@ -89,11 +89,11 @@ class ET_Builder_Theme_Compat_Twentyseventeen {
 			return $classes;
 		}
 
-		$blacklist = array( 'has-sidebar' );
+		$blocklist = array( 'has-sidebar' );
 		$filtered  = array();
 
 		foreach ( $classes as $class ) {
-			if ( ! in_array( $class, $blacklist, true ) ) {
+			if ( ! in_array( $class, $blocklist, true ) ) {
 				$filtered[] = $class;
 			}
 		}

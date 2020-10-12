@@ -278,7 +278,7 @@ endif;
 
 if ( ! function_exists( 'et_get_allowed_localization_html_elements' ) ) :
 	function et_get_allowed_localization_html_elements() {
-		$whitelisted_attributes = array(
+		$allowlisted_attributes = array(
 			'id'    => array(),
 			'class' => array(),
 			'style' => array(),
@@ -299,7 +299,7 @@ if ( ! function_exists( 'et_get_allowed_localization_html_elements' ) ) :
 		);
 
 		foreach ( $elements as $tag => $attributes ) {
-			$elements[ $tag ] = array_merge( $attributes, $whitelisted_attributes );
+			$elements[ $tag ] = array_merge( $attributes, $allowlisted_attributes );
 		}
 
 		return $elements;
