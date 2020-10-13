@@ -2,7 +2,7 @@
 /**
  * Template Loader
  *
- * @package WooCommerce\Classes
+ * @package WooCommerce/Classes
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -53,14 +53,14 @@ class WC_Template_Loader {
 	/**
 	 * Load a template.
 	 *
-	 * Handles template usage so that we can use our own templates instead of the theme's.
+	 * Handles template usage so that we can use our own templates instead of the themes.
 	 *
-	 * Templates are in the 'templates' folder. WooCommerce looks for theme
+	 * Templates are in the 'templates' folder. woocommerce looks for theme.
 	 * overrides in /theme/woocommerce/ by default.
 	 *
-	 * For beginners, it also looks for a woocommerce.php template first. If the user adds
-	 * this to the theme (containing a woocommerce() inside) this will be used for all
-	 * WooCommerce templates.
+	 * For beginners, it also looks for a woocommerce.php template first. If the user adds.
+	 * this to the theme (containing a woocommerce() inside) this will be used for all.
+	 * woocommerce templates.
 	 *
 	 * @param string $template Template to load.
 	 * @return string
@@ -127,16 +127,7 @@ class WC_Template_Loader {
 		$templates[] = 'woocommerce.php';
 
 		if ( is_page_template() ) {
-			$page_template = get_page_template_slug();
-
-			if ( $page_template ) {
-				$validated_file = validate_file( $page_template );
-				if ( 0 === $validated_file ) {
-					$templates[] = $page_template;
-				} else {
-					error_log( "WooCommerce: Unable to validate template path: \"$page_template\". Error Code: $validated_file." );
-				}
-			}
+			$templates[] = get_page_template_slug();
 		}
 
 		if ( is_singular( 'product' ) ) {
@@ -452,7 +443,7 @@ class WC_Template_Loader {
 			$args      = self::get_current_shop_view_args();
 			$shortcode = new WC_Shortcode_Products(
 				array_merge(
-					WC()->query->get_catalog_ordering_args(),
+					wc()->query->get_catalog_ordering_args(),
 					array(
 						'page'     => $args->page,
 						'columns'  => $args->columns,
@@ -463,16 +454,15 @@ class WC_Template_Loader {
 						'cache'    => false,
 					)
 				),
-				'products'
-			);
+			'products' );
 
 			// Allow queries to run e.g. layered nav.
-			add_action( 'pre_get_posts', array( WC()->query, 'product_query' ) );
+			add_action( 'pre_get_posts', array( wc()->query, 'product_query' ) );
 
 			$content = $content . $shortcode->get_content();
 
 			// Remove actions and self to avoid nested calls.
-			remove_action( 'pre_get_posts', array( WC()->query, 'product_query' ) );
+			remove_action( 'pre_get_posts', array( wc()->query, 'product_query' ) );
 			WC()->query->remove_ordering_args();
 		}
 

@@ -6,7 +6,7 @@
  *
  * @author      WooThemes
  * @category    Admin
- * @package     WooCommerce\Admin\Meta Boxes
+ * @package     WooCommerce/Admin/Meta Boxes
  * @version     2.1.0
  */
 
@@ -42,8 +42,7 @@ class WC_Meta_Box_Coupon_Data {
 			<ul class="coupon_data_tabs wc-tabs" style="display:none;">
 				<?php
 				$coupon_data_tabs = apply_filters(
-					'woocommerce_coupon_data_tabs',
-					array(
+					'woocommerce_coupon_data_tabs', array(
 						'general'           => array(
 							'label'  => __( 'General', 'woocommerce' ),
 							'target' => 'general_coupon_data',
@@ -91,7 +90,7 @@ class WC_Meta_Box_Coupon_Data {
 						'label'       => __( 'Coupon amount', 'woocommerce' ),
 						'placeholder' => wc_format_localized_price( 0 ),
 						'description' => __( 'Value of the coupon.', 'woocommerce' ),
-						'data_type'   => 'percent' === $coupon->get_discount_type( 'edit' ) ? 'decimal' : 'price',
+						'data_type'   => 'price',
 						'desc_tip'    => true,
 						'value'       => $coupon->get_amount( 'edit' ),
 					)
@@ -117,8 +116,7 @@ class WC_Meta_Box_Coupon_Data {
 						'value'             => esc_attr( $expiry_date ),
 						'label'             => __( 'Coupon expiry date', 'woocommerce' ),
 						'placeholder'       => 'YYYY-MM-DD',
-						'description'       => __( 'The coupon will expire at 00:00:00 of this date.', 'woocommerce' ),
-						'desc_tip'          => true,
+						'description'       => '',
 						'class'             => 'date-picker',
 						'custom_attributes' => array(
 							'pattern' => apply_filters( 'woocommerce_date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ),
@@ -194,7 +192,7 @@ class WC_Meta_Box_Coupon_Data {
 						foreach ( $product_ids as $product_id ) {
 							$product = wc_get_product( $product_id );
 							if ( is_object( $product ) ) {
-								echo '<option value="' . esc_attr( $product_id ) . '"' . selected( true, true, false ) . '>' . htmlspecialchars( wp_kses_post( $product->get_formatted_name() ) ) . '</option>';
+								echo '<option value="' . esc_attr( $product_id ) . '"' . selected( true, true, false ) . '>' . wp_kses_post( $product->get_formatted_name() ) . '</option>';
 							}
 						}
 						?>
@@ -212,7 +210,7 @@ class WC_Meta_Box_Coupon_Data {
 						foreach ( $product_ids as $product_id ) {
 							$product = wc_get_product( $product_id );
 							if ( is_object( $product ) ) {
-								echo '<option value="' . esc_attr( $product_id ) . '"' . selected( true, true, false ) . '>' . htmlspecialchars( wp_kses_post( $product->get_formatted_name() ) ) . '</option>';
+								echo '<option value="' . esc_attr( $product_id ) . '"' . selected( true, true, false ) . '>' . wp_kses_post( $product->get_formatted_name() ) . '</option>';
 							}
 						}
 						?>

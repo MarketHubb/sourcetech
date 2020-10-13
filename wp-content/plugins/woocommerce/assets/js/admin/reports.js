@@ -138,7 +138,7 @@ jQuery(function( $ ) {
 		var groupby       = $( this ) .data( 'groupby' );
 		var index_type    = $( this ).data( 'index_type' );
 		var export_format = $( this ).data( 'export' );
-		var csv_data      = '';
+		var csv_data      = 'data:text/csv;charset=utf-8,\uFEFF';
 		var s, series_data, d;
 
 		if ( 'table' === export_format ) {
@@ -222,13 +222,7 @@ jQuery(function( $ ) {
 					csv_data += '"' + index + '",';
 				} else {
 					if ( groupby === 'day' ) {
-						csv_data += '"' +
-							date.getUTCFullYear() +
-							'-' +
-							parseInt( date.getUTCMonth() + 1, 10 ) +
-							'-' +
-							date.getUTCDate() +
-							'",';
+						csv_data += '"' + date.getUTCFullYear() + '-' + parseInt( date.getUTCMonth() + 1, 10 ) + '-' + date.getUTCDate() + '",';
 					} else {
 						csv_data += '"' + date.getUTCFullYear() + '-' + parseInt( date.getUTCMonth() + 1, 10 ) + '",';
 					}
@@ -249,9 +243,8 @@ jQuery(function( $ ) {
 			} );
 		}
 
-		csv_data = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent( csv_data );
 		// Set data as href and return
-		$( this ).attr( 'href', csv_data );
+		$( this ).attr( 'href', encodeURI( csv_data ) );
 		return true;
 	});
 });

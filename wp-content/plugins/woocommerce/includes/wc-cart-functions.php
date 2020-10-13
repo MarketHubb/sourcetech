@@ -4,11 +4,9 @@
  *
  * Functions for cart specific things.
  *
- * @package WooCommerce\Functions
+ * @package WooCommerce/Functions
  * @version 2.5.0
  */
-
-use Automattic\Jetpack\Constants;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -109,7 +107,7 @@ function wc_add_to_cart_message( $products, $show_qty = false, $return = false )
 
 	foreach ( $products as $product_id => $qty ) {
 		/* translators: %s: product name */
-		$titles[] = apply_filters( 'woocommerce_add_to_cart_qty_html', ( $qty > 1 ? absint( $qty ) . ' &times; ' : '' ), $product_id ) . apply_filters( 'woocommerce_add_to_cart_item_name_in_quotes', sprintf( _x( '&ldquo;%s&rdquo;', 'Item name in quotes', 'woocommerce' ), strip_tags( get_the_title( $product_id ) ) ), $product_id );
+		$titles[] = ( $qty > 1 ? absint( $qty ) . ' &times; ' : '' ) . apply_filters( 'woocommerce_add_to_cart_item_name_in_quotes', sprintf( _x( '&ldquo;%s&rdquo;', 'Item name in quotes', 'woocommerce' ), strip_tags( get_the_title( $product_id ) ) ), $product_id );
 		$count   += $qty;
 	}
 
@@ -122,7 +120,7 @@ function wc_add_to_cart_message( $products, $show_qty = false, $return = false )
 		$return_to = apply_filters( 'woocommerce_continue_shopping_redirect', wc_get_raw_referer() ? wp_validate_redirect( wc_get_raw_referer(), false ) : wc_get_page_permalink( 'shop' ) );
 		$message   = sprintf( '<a href="%s" tabindex="1" class="button wc-forward">%s</a> %s', esc_url( $return_to ), esc_html__( 'Continue shopping', 'woocommerce' ), esc_html( $added_text ) );
 	} else {
-		$message = sprintf( '<a href="%s" tabindex="1" class="button wc-forward">%s</a> %s', esc_url( wc_get_cart_url() ), esc_html__( 'View cart', 'woocommerce' ), esc_html( $added_text ) );
+		$message = sprintf( '<a href="%s" tabindex="1" class="button wc-forward">%s</a> %s', esc_url( wc_get_page_permalink( 'cart' ) ), esc_html__( 'View cart', 'woocommerce' ), esc_html( $added_text ) );
 	}
 
 	if ( has_filter( 'wc_add_to_cart_message' ) ) {
@@ -135,7 +133,7 @@ function wc_add_to_cart_message( $products, $show_qty = false, $return = false )
 	if ( $return ) {
 		return $message;
 	} else {
-		wc_add_notice( $message, apply_filters( 'woocommerce_add_to_cart_notice_type', 'success' ) );
+		wc_add_notice( $message );
 	}
 }
 
@@ -205,8 +203,8 @@ function wc_cart_totals_subtotal_html() {
  * Get shipping methods.
  */
 function wc_cart_totals_shipping_html() {
-	$packages = WC()->shipping()->get_packages();
-	$first    = true;
+	$packages           = WC()->shipping->get_packages();
+	$first              = true;
 
 	foreach ( $packages as $i => $package ) {
 		$chosen_method = isset( WC()->session->chosen_shipping_methods[ $i ] ) ? WC()->session->chosen_shipping_methods[ $i ] : '';
@@ -225,7 +223,7 @@ function wc_cart_totals_shipping_html() {
 				'package'                  => $package,
 				'available_methods'        => $package['rates'],
 				'show_package_details'     => count( $packages ) > 1,
-				'show_shipping_calculator' => is_cart() && apply_filters( 'woocommerce_shipping_show_shipping_calculator', $first, $i, $package ),
+				'show_shipping_calculator' => is_cart() && $first,
 				'package_details'          => implode( ', ', $product_names ),
 				/* translators: %d: shipping package number */
 				'package_name'             => apply_filters( 'woocommerce_shipping_package_name', ( ( $i + 1 ) > 1 ) ? sprintf( _x( 'Shipping %d', 'shipping packages', 'woocommerce' ), ( $i + 1 ) ) : _x( 'Shipping', 'shipping packages', 'woocommerce' ), $i, $package ),
@@ -290,7 +288,7 @@ function wc_cart_totals_coupon_html( $coupon ) {
 	}
 
 	$discount_amount_html = apply_filters( 'woocommerce_coupon_discount_amount_html', $discount_amount_html, $coupon );
-	$coupon_html          = $discount_amount_html . ' <a href="' . esc_url( add_query_arg( 'remove_coupon', rawurlencode( $coupon->get_code() ), Constants::is_defined( 'WOOCOMMERCE_CHECKOUT' ) ? wc_get_checkout_url() : wc_get_cart_url() ) ) . '" class="woocommerce-remove-coupon" data-coupon="' . esc_attr( $coupon->get_code() ) . '">' . __( '[Remove]', 'woocommerce' ) . '</a>';
+	$coupon_html          = $discount_amount_html . ' <a href="' . esc_url( add_query_arg( 'remove_coupon', rawurlencode( $coupon->get_code() ), defined( 'WOOCOMMERCE_CHECKOUT' ) ? wc_get_checkout_url() : wc_get_cart_url() ) ) . '" class="woocommerce-remove-coupon" data-coupon="' . esc_attr( $coupon->get_code() ) . '">' . __( '[Remove]', 'woocommerce' ) . '</a>';
 
 	echo wp_kses( apply_filters( 'woocommerce_cart_totals_coupon_html', $coupon_html, $coupon, $discount_amount_html ), array_replace_recursive( wp_kses_allowed_html( 'post' ), array( 'a' => array( 'data-coupon' => true ) ) ) ); // phpcs:ignore PHPCompatibility.PHP.NewFunctions.array_replace_recursiveFound
 }
@@ -318,13 +316,8 @@ function wc_cart_totals_order_total_html() {
 			$taxable_address = WC()->customer->get_taxable_address();
 			/* translators: %s: country name */
 			$estimated_text = WC()->customer->is_customer_outside_base() && ! WC()->customer->has_calculated_shipping() ? sprintf( ' ' . __( 'estimated for %s', 'woocommerce' ), WC()->countries->estimated_for_prefix( $taxable_address[0] ) . WC()->countries->countries[ $taxable_address[0] ] ) : '';
-			$value .= '<small class="includes_tax">('
-						/* translators: includes tax information */
-						. esc_html__( 'includes', 'woocommerce' )
-						. ' '
-						. wp_kses_post( implode( ', ', $tax_string_array ) )
-						. esc_html( $estimated_text )
-						. ')</small>';
+			/* translators: %s: tax information */
+			$value .= '<small class="includes_tax">' . sprintf( __( '(includes %s)', 'woocommerce' ), implode( ', ', $tax_string_array ) . $estimated_text ) . '</small>';
 		}
 	}
 

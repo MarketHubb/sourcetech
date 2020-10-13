@@ -72,11 +72,16 @@
 			var changed = false;
 
 			$( 'input, textarea, select, checkbox' ).change( function() {
-				if ( ! changed ) {
+				changed = true;
+			});
+
+			$( '.woo-nav-tab-wrapper a' ).click( function() {
+				if ( changed ) {
 					window.onbeforeunload = function() {
 						return params.i18n_nav_warning;
 					};
-					changed = true;
+				} else {
+					window.onbeforeunload = '';
 				}
 			});
 
@@ -156,28 +161,12 @@
 				lastRow  = $( this ).find( 'tbody tr:last' ),
 				firstRow = $( this ).find( 'tbody tr:first' );
 
-			table.find( '.wc-item-reorder-nav .wc-move-disabled' ).removeClass( 'wc-move-disabled' )
-				.attr( { 'tabindex': '0', 'aria-hidden': 'false' } );
-			firstRow.find( '.wc-item-reorder-nav .wc-move-up' ).addClass( 'wc-move-disabled' )
-				.attr( { 'tabindex': '-1', 'aria-hidden': 'true' } );
-			lastRow.find( '.wc-item-reorder-nav .wc-move-down' ).addClass( 'wc-move-disabled' )
-				.attr( { 'tabindex': '-1', 'aria-hidden': 'true' } );
+			table.find( '.wc-item-reorder-nav .wc-move-disabled' ).removeClass( 'wc-move-disabled' ).attr( { 'tabindex': '0', 'aria-hidden': 'false' } );
+			firstRow.find( '.wc-item-reorder-nav .wc-move-up' ).addClass( 'wc-move-disabled' ).attr( { 'tabindex': '-1', 'aria-hidden': 'true' } );
+			lastRow.find( '.wc-item-reorder-nav .wc-move-down' ).addClass( 'wc-move-disabled' ).attr( { 'tabindex': '-1', 'aria-hidden': 'true' } );
 		} );
 
 		$( '.wc-item-reorder-nav').closest( 'table' ).trigger( 'updateMoveButtons' );
-
-
-		$( '.submit button' ).on( 'click', function() {
-			if (
-				$( 'select#woocommerce_allowed_countries' ).val() === 'specific' &&
-				! $( '[name="woocommerce_specific_allowed_countries[]"]' ).val()
-			) {
-				if ( window.confirm( woocommerce_settings_params.i18n_no_specific_countries_selected ) ) {
-					return true;
-				}
-				return false;
-			}
-		} );
 
 	});
 })( jQuery, woocommerce_settings_params, wp );

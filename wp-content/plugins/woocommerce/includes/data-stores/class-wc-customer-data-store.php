@@ -64,7 +64,6 @@ class WC_Customer_Data_Store extends WC_Data_Store_WP implements WC_Customer_Dat
 		'syntax_highlighting',
 		'_order_count',
 		'_money_spent',
-		'_woocommerce_tracks_anon_id',
 	);
 
 	/**
@@ -132,7 +131,7 @@ class WC_Customer_Data_Store extends WC_Data_Store_WP implements WC_Customer_Dat
 		$customer->set_date_modified( get_user_meta( $customer->get_id(), 'last_update', true ) );
 		$customer->save_meta_data();
 		$customer->apply_changes();
-		do_action( 'woocommerce_new_customer', $customer->get_id(), $customer );
+		do_action( 'woocommerce_new_customer', $customer->get_id() );
 	}
 
 	/**
@@ -209,7 +208,7 @@ class WC_Customer_Data_Store extends WC_Data_Store_WP implements WC_Customer_Dat
 		$customer->set_date_modified( get_user_meta( $customer->get_id(), 'last_update', true ) );
 		$customer->save_meta_data();
 		$customer->apply_changes();
-		do_action( 'woocommerce_update_customer', $customer->get_id(), $customer );
+		do_action( 'woocommerce_update_customer', $customer->get_id() );
 	}
 
 	/**
@@ -327,7 +326,7 @@ class WC_Customer_Data_Store extends WC_Data_Store_WP implements WC_Customer_Dat
 		global $wpdb;
 
 		$last_order = $wpdb->get_var(
-			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+			// phpcs:disable WordPress.WP.PreparedSQL.NotPrepared
 			"SELECT posts.ID
 			FROM $wpdb->posts AS posts
 			LEFT JOIN {$wpdb->postmeta} AS meta on posts.ID = meta.post_id
@@ -360,7 +359,7 @@ class WC_Customer_Data_Store extends WC_Data_Store_WP implements WC_Customer_Dat
 			global $wpdb;
 
 			$count = $wpdb->get_var(
-				// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+				// phpcs:disable WordPress.WP.PreparedSQL.NotPrepared
 				"SELECT COUNT(*)
 				FROM $wpdb->posts as posts
 				LEFT JOIN {$wpdb->postmeta} AS meta ON posts.ID = meta.post_id
@@ -395,7 +394,7 @@ class WC_Customer_Data_Store extends WC_Data_Store_WP implements WC_Customer_Dat
 
 			$statuses = array_map( 'esc_sql', wc_get_is_paid_statuses() );
 			$spent    = $wpdb->get_var(
-				// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+				// phpcs:disable WordPress.WP.PreparedSQL.NotPrepared
 				apply_filters(
 					'woocommerce_customer_get_total_spent_query',
 					"SELECT SUM(meta2.meta_value)
@@ -484,29 +483,5 @@ class WC_Customer_Data_Store extends WC_Data_Store_WP implements WC_Customer_Dat
 		}
 
 		return $results;
-	}
-
-	/**
-	 * Get all user ids who have `billing_email` set to any of the email passed in array.
-	 *
-	 * @param array $emails List of emails to check against.
-	 *
-	 * @return array
-	 */
-	public function get_user_ids_for_billing_email( $emails ) {
-		$emails = array_unique( array_map( 'strtolower', array_map( 'sanitize_email', $emails ) ) );
-		$users_query = new WP_User_Query(
-			array(
-				'fields'     => 'ID',
-				'meta_query' => array(
-					array(
-						'key'     => 'billing_email',
-						'value'   => $emails,
-						'compare' => 'IN',
-					),
-				),
-			)
-		);
-		return array_unique( $users_query->get_results() );
 	}
 }

@@ -1,0 +1,21 @@
+.breadcrumbs {
+    display: none;
+}
+.main-navigation {
+    background-color: #f9f9f9;
+}
+.main-navigation ul li a {
+    color: #333;
+}
+#custom-content h5.testimonial {
+    line-height: 150%;
+    font-weight: normal !important;
+    font-size: 1.15rem;
+}
+#banner-split h1, h2.section-title {
+    font-size: 2.5rem;
+}
+#banner-split img {
+    object-fit: fill;
+    max-width: inherit;
+}

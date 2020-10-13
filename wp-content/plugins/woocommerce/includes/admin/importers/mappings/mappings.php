@@ -11,5 +11,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require dirname( __FILE__ ) . '/default.php';
 require dirname( __FILE__ ) . '/generic.php';
-require dirname( __FILE__ ) . '/shopify.php';
 require dirname( __FILE__ ) . '/wordpress.php';

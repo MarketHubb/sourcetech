@@ -2,7 +2,7 @@
 /**
  * Layered nav widget
  *
- * @package WooCommerce\Widgets
+ * @package WooCommerce/Widgets
  * @version 2.6.0
  */
 
@@ -56,7 +56,6 @@ class WC_Widget_Layered_Nav extends WC_Widget {
 	 */
 	public function init_settings() {
 		$attribute_array      = array();
-		$std_attribute        = '';
 		$attribute_taxonomies = wc_get_attribute_taxonomies();
 
 		if ( ! empty( $attribute_taxonomies ) ) {
@@ -65,7 +64,6 @@ class WC_Widget_Layered_Nav extends WC_Widget {
 					$attribute_array[ $tax->attribute_name ] = $tax->attribute_name;
 				}
 			}
-			$std_attribute = current( $attribute_array );
 		}
 
 		$this->settings = array(
@@ -76,7 +74,7 @@ class WC_Widget_Layered_Nav extends WC_Widget {
 			),
 			'attribute'    => array(
 				'type'    => 'select',
-				'std'     => $std_attribute,
+				'std'     => '',
 				'label'   => __( 'Attribute', 'woocommerce' ),
 				'options' => $attribute_array,
 			),
@@ -102,50 +100,6 @@ class WC_Widget_Layered_Nav extends WC_Widget {
 	}
 
 	/**
-	 * Get this widgets taxonomy.
-	 *
-	 * @param array $instance Array of instance options.
-	 * @return string
-	 */
-	protected function get_instance_taxonomy( $instance ) {
-		if ( isset( $instance['attribute'] ) ) {
-			return wc_attribute_taxonomy_name( $instance['attribute'] );
-		}
-
-		$attribute_taxonomies = wc_get_attribute_taxonomies();
-
-		if ( ! empty( $attribute_taxonomies ) ) {
-			foreach ( $attribute_taxonomies as $tax ) {
-				if ( taxonomy_exists( wc_attribute_taxonomy_name( $tax->attribute_name ) ) ) {
-					return wc_attribute_taxonomy_name( $tax->attribute_name );
-				}
-			}
-		}
-
-		return '';
-	}
-
-	/**
-	 * Get this widgets query type.
-	 *
-	 * @param array $instance Array of instance options.
-	 * @return string
-	 */
-	protected function get_instance_query_type( $instance ) {
-		return isset( $instance['query_type'] ) ? $instance['query_type'] : 'and';
-	}
-
-	/**
-	 * Get this widgets display type.
-	 *
-	 * @param array $instance Array of instance options.
-	 * @return string
-	 */
-	protected function get_instance_display_type( $instance ) {
-		return isset( $instance['display_type'] ) ? $instance['display_type'] : 'list';
-	}
-
-	/**
 	 * Output widget.
 	 *
 	 * @see WP_Widget
@@ -159,18 +113,46 @@ class WC_Widget_Layered_Nav extends WC_Widget {
 		}
 
 		$_chosen_attributes = WC_Query::get_layered_nav_chosen_attributes();
-		$taxonomy           = $this->get_instance_taxonomy( $instance );
-		$query_type         = $this->get_instance_query_type( $instance );
-		$display_type       = $this->get_instance_display_type( $instance );
+		$taxonomy           = isset( $instance['attribute'] ) ? wc_attribute_taxonomy_name( $instance['attribute'] ) : $this->settings['attribute']['std'];
+		$query_type         = isset( $instance['query_type'] ) ? $instance['query_type'] : $this->settings['query_type']['std'];
+		$display_type       = isset( $instance['display_type'] ) ? $instance['display_type'] : $this->settings['display_type']['std'];
 
 		if ( ! taxonomy_exists( $taxonomy ) ) {
 			return;
 		}
 
-		$terms = get_terms( $taxonomy, array( 'hide_empty' => '1' ) );
+		$get_terms_args = array( 'hide_empty' => '1' );
+
+		$orderby = wc_attribute_orderby( $taxonomy );
+
+		switch ( $orderby ) {
+			case 'name':
+				$get_terms_args['orderby']    = 'name';
+				$get_terms_args['menu_order'] = false;
+				break;
+			case 'id':
+				$get_terms_args['orderby']    = 'id';
+				$get_terms_args['order']      = 'ASC';
+				$get_terms_args['menu_order'] = false;
+				break;
+			case 'menu_order':
+				$get_terms_args['menu_order'] = 'ASC';
+				break;
+		}
+
+		$terms = get_terms( $taxonomy, $get_terms_args );
 
 		if ( 0 === count( $terms ) ) {
 			return;
+		}
+
+		switch ( $orderby ) {
+			case 'name_num':
+				usort( $terms, '_wc_get_product_terms_name_num_usort_callback' );
+				break;
+			case 'parent':
+				usort( $terms, '_wc_get_product_terms_parent_usort_callback' );
+				break;
 		}
 
 		ob_start();
@@ -241,7 +223,7 @@ class WC_Widget_Layered_Nav extends WC_Widget {
 		if ( $taxonomy !== $this->get_current_taxonomy() ) {
 			$term_counts          = $this->get_filtered_term_product_counts( wp_list_pluck( $terms, 'term_id' ), $taxonomy, $query_type );
 			$_chosen_attributes   = WC_Query::get_layered_nav_chosen_attributes();
-			$taxonomy_filter_name = wc_attribute_taxonomy_slug( $taxonomy );
+			$taxonomy_filter_name = str_replace( 'pa_', '', $taxonomy );
 			$taxonomy_label       = wc_attribute_label( $taxonomy );
 
 			/* translators: %s: taxonomy name */
@@ -311,7 +293,7 @@ class WC_Widget_Layered_Nav extends WC_Widget {
 				if ( jQuery().selectWoo ) {
 					var wc_layered_nav_select = function() {
 						jQuery( '.dropdown_layered_nav_" . esc_js( $taxonomy_filter_name ) . "' ).selectWoo( {
-							placeholder: decodeURIComponent('" . rawurlencode( (string) wp_specialchars_decode( $any_label ) ) . "'),
+							placeholder: " . wp_json_encode( (string) wp_specialchars_decode( $any_label ) ) . ",
 							minimumResultsForSearch: 5,
 							width: '100%',
 							allowClear: " . ( $multiple ? 'false' : 'true' ) . ",
@@ -344,8 +326,8 @@ class WC_Widget_Layered_Nav extends WC_Widget {
 	protected function get_filtered_term_product_counts( $term_ids, $taxonomy, $query_type ) {
 		global $wpdb;
 
-		$tax_query  = $this->get_main_tax_query();
-		$meta_query = $this->get_main_meta_query();
+		$tax_query  = WC_Query::get_main_tax_query();
+		$meta_query = WC_Query::get_main_meta_query();
 
 		if ( 'or' === $query_type ) {
 			foreach ( $tax_query as $key => $query ) {
@@ -359,11 +341,10 @@ class WC_Widget_Layered_Nav extends WC_Widget {
 		$tax_query      = new WP_Tax_Query( $tax_query );
 		$meta_query_sql = $meta_query->get_sql( 'post', $wpdb->posts, 'ID' );
 		$tax_query_sql  = $tax_query->get_sql( $wpdb->posts, 'ID' );
-		$term_ids_sql   = '(' . implode( ',', array_map( 'absint', $term_ids ) ) . ')';
 
 		// Generate query.
 		$query           = array();
-		$query['select'] = "SELECT COUNT( DISTINCT {$wpdb->posts}.ID ) AS term_count, terms.term_id AS term_count_id";
+		$query['select'] = "SELECT COUNT( DISTINCT {$wpdb->posts}.ID ) as term_count, terms.term_id as term_count_id";
 		$query['from']   = "FROM {$wpdb->posts}";
 		$query['join']   = "
 			INNER JOIN {$wpdb->term_relationships} AS term_relationships ON {$wpdb->posts}.ID = term_relationships.object_id
@@ -373,21 +354,21 @@ class WC_Widget_Layered_Nav extends WC_Widget {
 
 		$query['where'] = "
 			WHERE {$wpdb->posts}.post_type IN ( 'product' )
-			AND {$wpdb->posts}.post_status = 'publish'
-			{$tax_query_sql['where']} {$meta_query_sql['where']}
-			AND terms.term_id IN $term_ids_sql";
+			AND {$wpdb->posts}.post_status = 'publish'"
+			. $tax_query_sql['where'] . $meta_query_sql['where'] .
+			'AND terms.term_id IN (' . implode( ',', array_map( 'absint', $term_ids ) ) . ')';
 
-		$search = $this->get_main_search_query_sql();
+		$search = WC_Query::get_main_search_query_sql();
 		if ( $search ) {
 			$query['where'] .= ' AND ' . $search;
 		}
 
 		$query['group_by'] = 'GROUP BY terms.term_id';
 		$query             = apply_filters( 'woocommerce_get_filtered_term_product_counts_query', $query );
-		$query_sql         = implode( ' ', $query );
+		$query             = implode( ' ', $query );
 
 		// We have a query - let's see if cached results of this query already exist.
-		$query_hash = md5( $query_sql );
+		$query_hash    = md5( $query );
 
 		// Maybe store a transient of the count values.
 		$cache = apply_filters( 'woocommerce_layered_nav_count_maybe_cache', true );
@@ -398,8 +379,7 @@ class WC_Widget_Layered_Nav extends WC_Widget {
 		}
 
 		if ( ! isset( $cached_counts[ $query_hash ] ) ) {
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			$results                      = $wpdb->get_results( $query_sql, ARRAY_A );
+			$results                      = $wpdb->get_results( $query, ARRAY_A ); // @codingStandardsIgnoreLine
 			$counts                       = array_map( 'absint', wp_list_pluck( $results, 'term_count', 'term_count_id' ) );
 			$cached_counts[ $query_hash ] = $counts;
 			if ( true === $cache ) {
@@ -408,36 +388,6 @@ class WC_Widget_Layered_Nav extends WC_Widget {
 		}
 
 		return array_map( 'absint', (array) $cached_counts[ $query_hash ] );
-	}
-
-	/**
-	 * Wrapper for WC_Query::get_main_tax_query() to ease unit testing.
-	 *
-	 * @since 4.4.0
-	 * @return array
-	 */
-	protected function get_main_tax_query() {
-		return WC_Query::get_main_tax_query();
-	}
-
-	/**
-	 * Wrapper for WC_Query::get_main_search_query_sql() to ease unit testing.
-	 *
-	 * @since 4.4.0
-	 * @return string
-	 */
-	protected function get_main_search_query_sql() {
-		return WC_Query::get_main_search_query_sql();
-	}
-
-	/**
-	 * Wrapper for WC_Query::get_main_search_queryget_main_meta_query to ease unit testing.
-	 *
-	 * @since 4.4.0
-	 * @return array
-	 */
-	protected function get_main_meta_query() {
-		return WC_Query::get_main_meta_query();
 	}
 
 	/**
@@ -455,7 +405,6 @@ class WC_Widget_Layered_Nav extends WC_Widget {
 		$term_counts        = $this->get_filtered_term_product_counts( wp_list_pluck( $terms, 'term_id' ), $taxonomy, $query_type );
 		$_chosen_attributes = WC_Query::get_layered_nav_chosen_attributes();
 		$found              = false;
-		$base_link          = $this->get_current_page_url();
 
 		foreach ( $terms as $term ) {
 			$current_values = isset( $_chosen_attributes[ $taxonomy ]['terms'] ) ? $_chosen_attributes[ $taxonomy ]['terms'] : array();
@@ -474,16 +423,15 @@ class WC_Widget_Layered_Nav extends WC_Widget {
 				continue;
 			}
 
-			$filter_name = 'filter_' . wc_attribute_taxonomy_slug( $taxonomy );
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$current_filter = isset( $_GET[ $filter_name ] ) ? explode( ',', wc_clean( wp_unslash( $_GET[ $filter_name ] ) ) ) : array();
+			$filter_name    = 'filter_' . str_replace( 'pa_', '', $taxonomy );
+			$current_filter = isset( $_GET[ $filter_name ] ) ? explode( ',', wc_clean( wp_unslash( $_GET[ $filter_name ] ) ) ) : array(); // WPCS: input var ok, CSRF ok.
 			$current_filter = array_map( 'sanitize_title', $current_filter );
 
 			if ( ! in_array( $term->slug, $current_filter, true ) ) {
 				$current_filter[] = $term->slug;
 			}
 
-			$link = remove_query_arg( $filter_name, $base_link );
+			$link = remove_query_arg( $filter_name, $this->get_current_page_url() );
 
 			// Add current filters to URL.
 			foreach ( $current_filter as $key => $value ) {
@@ -504,14 +452,14 @@ class WC_Widget_Layered_Nav extends WC_Widget {
 
 				// Add Query type Arg to URL.
 				if ( 'or' === $query_type && ! ( 1 === count( $current_filter ) && $option_is_set ) ) {
-					$link = add_query_arg( 'query_type_' . wc_attribute_taxonomy_slug( $taxonomy ), 'or', $link );
+					$link = add_query_arg( 'query_type_' . sanitize_title( str_replace( 'pa_', '', $taxonomy ) ), 'or', $link );
 				}
 				$link = str_replace( '%2C', ',', $link );
 			}
 
 			if ( $count > 0 || $option_is_set ) {
-				$link      = apply_filters( 'woocommerce_layered_nav_link', $link, $term, $taxonomy );
-				$term_html = '<a rel="nofollow" href="' . esc_url( $link ) . '">' . esc_html( $term->name ) . '</a>';
+				$link      = esc_url( apply_filters( 'woocommerce_layered_nav_link', $link, $term, $taxonomy ) );
+				$term_html = '<a rel="nofollow" href="' . $link . '">' . esc_html( $term->name ) . '</a>';
 			} else {
 				$link      = false;
 				$term_html = '<span>' . esc_html( $term->name ) . '</span>';
@@ -520,8 +468,7 @@ class WC_Widget_Layered_Nav extends WC_Widget {
 			$term_html .= ' ' . apply_filters( 'woocommerce_layered_nav_count', '<span class="count">(' . absint( $count ) . ')</span>', $count, $term );
 
 			echo '<li class="woocommerce-widget-layered-nav-list__item wc-layered-nav-term ' . ( $option_is_set ? 'woocommerce-widget-layered-nav-list__item--chosen chosen' : '' ) . '">';
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.EscapeOutput.OutputNotEscaped
-			echo apply_filters( 'woocommerce_layered_nav_term_html', $term_html, $term, $link, $count );
+			echo wp_kses_post( apply_filters( 'woocommerce_layered_nav_term_html', $term_html, $term, $link, $count ) );
 			echo '</li>';
 		}
 

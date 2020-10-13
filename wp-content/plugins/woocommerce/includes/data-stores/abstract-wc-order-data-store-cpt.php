@@ -2,10 +2,8 @@
 /**
  * Abstract_WC_Order_Data_Store_CPT class file.
  *
- * @package WooCommerce\Classes
+ * @package WooCommerce/Classes
  */
-
-use Automattic\Jetpack\Constants;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -56,11 +54,9 @@ abstract class Abstract_WC_Order_Data_Store_CPT extends WC_Data_Store_WP impleme
 	 * @param WC_Order $order Order object.
 	 */
 	public function create( &$order ) {
-		$order->set_version( Constants::get_constant( 'WC_VERSION' ) );
+		$order->set_version( WC_VERSION );
+		$order->set_date_created( current_time( 'timestamp', true ) );
 		$order->set_currency( $order->get_currency() ? $order->get_currency() : get_woocommerce_currency() );
-		if ( ! $order->get_date_created( 'edit' ) ) {
-			$order->set_date_created( time() );
-		}
 
 		$id = wp_insert_post(
 			apply_filters(
@@ -69,16 +65,15 @@ abstract class Abstract_WC_Order_Data_Store_CPT extends WC_Data_Store_WP impleme
 					'post_date'     => gmdate( 'Y-m-d H:i:s', $order->get_date_created( 'edit' )->getOffsetTimestamp() ),
 					'post_date_gmt' => gmdate( 'Y-m-d H:i:s', $order->get_date_created( 'edit' )->getTimestamp() ),
 					'post_type'     => $order->get_type( 'edit' ),
-					'post_status'   => $this->get_post_status( $order ),
+					'post_status'   => 'wc-' . ( $order->get_status( 'edit' ) ? $order->get_status( 'edit' ) : apply_filters( 'woocommerce_default_order_status', 'pending' ) ),
 					'ping_status'   => 'closed',
 					'post_author'   => 1,
 					'post_title'    => $this->get_post_title(),
-					'post_password' => $this->get_order_key( $order ),
+					'post_password' => wc_generate_order_key(),
 					'post_parent'   => $order->get_parent_id( 'edit' ),
 					'post_excerpt'  => $this->get_post_excerpt( $order ),
 				)
-			),
-			true
+			), true
 		);
 
 		if ( $id && ! is_wp_error( $id ) ) {
@@ -124,7 +119,7 @@ abstract class Abstract_WC_Order_Data_Store_CPT extends WC_Data_Store_WP impleme
 		 * stored. @todo When meta is flattened, handle this during migration.
 		 */
 		if ( version_compare( $order->get_version( 'edit' ), '2.3.7', '<' ) && $order->get_prices_include_tax( 'edit' ) ) {
-			$order->set_discount_total( (float) get_post_meta( $order->get_id(), '_cart_discount', true ) - (float) get_post_meta( $order->get_id(), '_cart_discount_tax', true ) );
+			$order->set_discount_total( (double) get_post_meta( $order->get_id(), '_cart_discount', true ) - (double) get_post_meta( $order->get_id(), '_cart_discount_tax', true ) );
 		}
 	}
 
@@ -135,10 +130,10 @@ abstract class Abstract_WC_Order_Data_Store_CPT extends WC_Data_Store_WP impleme
 	 */
 	public function update( &$order ) {
 		$order->save_meta_data();
-		$order->set_version( Constants::get_constant( 'WC_VERSION' ) );
+		$order->set_version( WC_VERSION );
 
 		if ( null === $order->get_date_created( 'edit' ) ) {
-			$order->set_date_created( time() );
+			$order->set_date_created( current_time( 'timestamp', true ) );
 		}
 
 		$changes = $order->get_changes();
@@ -148,7 +143,7 @@ abstract class Abstract_WC_Order_Data_Store_CPT extends WC_Data_Store_WP impleme
 			$post_data = array(
 				'post_date'         => gmdate( 'Y-m-d H:i:s', $order->get_date_created( 'edit' )->getOffsetTimestamp() ),
 				'post_date_gmt'     => gmdate( 'Y-m-d H:i:s', $order->get_date_created( 'edit' )->getTimestamp() ),
-				'post_status'       => $this->get_post_status( $order ),
+				'post_status'       => 'wc-' . ( $order->get_status( 'edit' ) ? $order->get_status( 'edit' ) : apply_filters( 'woocommerce_default_order_status', 'pending' ) ),
 				'post_parent'       => $order->get_parent_id(),
 				'post_excerpt'      => $this->get_post_excerpt( $order ),
 				'post_modified'     => isset( $changes['date_modified'] ) ? gmdate( 'Y-m-d H:i:s', $order->get_date_modified( 'edit' )->getOffsetTimestamp() ) : current_time( 'mysql' ),
@@ -215,36 +210,6 @@ abstract class Abstract_WC_Order_Data_Store_CPT extends WC_Data_Store_WP impleme
 	*/
 
 	/**
-	 * Get the status to save to the post object.
-	 *
-	 * Plugins extending the order classes can override this to change the stored status/add prefixes etc.
-	 *
-	 * @since 3.6.0
-	 * @param  WC_order $order Order object.
-	 * @return string
-	 */
-	protected function get_post_status( $order ) {
-		$order_status = $order->get_status( 'edit' );
-
-		if ( ! $order_status ) {
-			$order_status = apply_filters( 'woocommerce_default_order_status', 'pending' );
-		}
-
-		$post_status    = $order_status;
-		$valid_statuses = get_post_stati();
-
-		// Add a wc- prefix to the status, but exclude some core statuses which should not be prefixed.
-		// @todo In the future this should only happen based on `wc_is_order_status`, but in order to
-		// preserve back-compatibility this happens to all statuses except a select few. A doing_it_wrong
-		// Notice will be needed here, followed by future removal.
-		if ( ! in_array( $post_status, array( 'auto-draft', 'draft', 'trash' ), true ) && in_array( 'wc-' . $post_status, $valid_statuses, true ) ) {
-			$post_status = 'wc-' . $post_status;
-		}
-
-		return $post_status;
-	}
-
-	/**
 	 * Excerpt for post.
 	 *
 	 * @param  WC_order $order Order object.
@@ -264,17 +229,6 @@ abstract class Abstract_WC_Order_Data_Store_CPT extends WC_Data_Store_WP impleme
 		/* translators: %s: Order date */
 		return sprintf( __( 'Order &ndash; %s', 'woocommerce' ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'Order date parsed by strftime', 'woocommerce' ) ) );
 		// @codingStandardsIgnoreEnd
-	}
-
-	/**
-	 * Get order key.
-	 *
-	 * @since 4.3.0
-	 * @param WC_order $order Order object.
-	 * @return string
-	 */
-	protected function get_order_key( $order ) {
-		return wc_generate_order_key();
 	}
 
 	/**
@@ -334,15 +288,12 @@ abstract class Abstract_WC_Order_Data_Store_CPT extends WC_Data_Store_WP impleme
 
 		foreach ( $props_to_update as $meta_key => $prop ) {
 			$value = $order->{"get_$prop"}( 'edit' );
-			$value = is_string( $value ) ? wp_slash( $value ) : $value;
 
 			if ( 'prices_include_tax' === $prop ) {
 				$value = $value ? 'yes' : 'no';
 			}
 
-			$updated = $this->update_or_delete_post_meta( $order, $meta_key, $value );
-
-			if ( $updated ) {
+			if ( update_post_meta( $order->get_id(), $meta_key, $value ) ) {
 				$updated_props[] = $prop;
 			}
 		}

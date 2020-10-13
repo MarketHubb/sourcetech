@@ -22,7 +22,7 @@ jQuery( function( $ ) {
 			}
 		} else {
 			field.find( 'label .required' ).remove();
-			field.removeClass( 'validate-required woocommerce-invalid woocommerce-invalid-required-field' );
+			field.removeClass( 'validate-required' );
 
 			if ( field.find( 'label .optional' ).length === 0 ) {
 				field.find( 'label' ).append( '&nbsp;<span class="optional">(' + wc_address_i18n_params.i18n_optional_text + ')</span>' );
@@ -100,12 +100,6 @@ jQuery( function( $ ) {
 					} else {
 						field.show();
 					}
-				}
-
-				// Class changes.
-				if ( Array.isArray( fieldLocale.class ) ) {
-					field.removeClass( 'form-row-first form-row-last form-row-wide' );
-					field.addClass( fieldLocale.class.join( ' ' ) );
 				}
 			});
 
