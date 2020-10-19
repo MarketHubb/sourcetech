@@ -1,3 +1,24 @@
+/*region CTA */
+.server-cta-list {
+	margin-left: 0;
+}
+.server-cta-list li {
+	text-align: center;
+	border: none;
+}
+.server-cta-list li:not(:last-of-type) {
+	border-right: 1px solid rgba(0,0,0,.125);
+}
+.server-cta-btn {
+	background-color: #ea662b;
+	color: #fff;
+}
+.server-cta-btn-label {
+	font-weight: 900;
+	text-transform: uppercase;
+}
+
+/*endregion*/
 /* CTA Module */
 .cta-card {
 	position: relative;

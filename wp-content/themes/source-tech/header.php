@@ -75,8 +75,10 @@
 <body <?php body_class(); ?>>
 
     <!-- Global Alert Bar -->
-    <div class="bg-blue-dark global-alert fixed shadow">
-        <p class="text-center text-white">We're fully operational during COVID-19. Call us today at  <span class="alert-cta"><a href="tel:800-932-0657">800-932-0657</a></span> or email <span class="alert-cta"><a href="mailto:info@source-tech.net">team@source-tech.net</a></span></p>
+    <div class="bg-orange global-alert fixed shadow">
+        <p class="text-center text-white">Fully operational during COVID-19 with fast shipping & same-day quotes:
+            <span class="alert-cta" onclick='$zoho.salesiq.floatwindow.visible("show");'><i class="fas fa-comments-alt text-white"></i> Live Chat</span><span class="alert-cta"><a href="mailto:info@source-tech.net"><i class="fas fa-envelope"></i> info@source-tech.net</a></span><span class="alert-cta"><a href="tel:800-932-0657"><i class="fas fa-phone"></i> 800-932-0657</a></span>
+        </p>
     </div>
 
 	<div id="page" class="site">
@@ -177,7 +179,7 @@
 <!--		</div>-->
 	<?php } ?>
 	
-	<?php if (is_page(777) || is_singular('networking') || is_singular('servers') || is_page(2055) || is_page(661) ){ ?>
+	<?php if (is_page(777) || is_singular('networking') || is_singular('servers') || is_page(2055) || is_page(661) || is_page(2415)){ ?>
 		<div id="custom-content" class="custom-site-content">
 		<?php } else if (!is_singular('post')) { ?>
 			<div id="content" class="site-content">

@@ -167,7 +167,8 @@ function source_tech_scripts() {
     wp_enqueue_style( 'ri_custom_styles', get_stylesheet_directory_uri() . '/css/ri-styles.css' );
     wp_enqueue_style( 'ri_blog_styles', get_stylesheet_directory_uri() . '/css/ri-blog-styles.css' );
     wp_register_script( 'ri-blog-scripts', get_template_directory_uri() . '/js/ri-blog-scripts.js', array(), '', true );
-    wp_enqueue_style( 'ri_web_fonts', 'https://fonts.googleapis.com/css?family=Open+Sans:600,700&display=swap' );
+    wp_enqueue_style( 'ri_web_fonts', 'https://fonts.googleapis.com/css?family=Open+Sans:500,600,700&display=swap' );
+    wp_enqueue_style( 'ri_web_fonts_roboto', 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap' );
     wp_enqueue_style( 'fontello', get_template_directory_uri() . '/css/fontello.css');
     wp_enqueue_script( 'source-tech-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
     wp_enqueue_script( 'source-tech-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
@@ -177,6 +178,7 @@ function source_tech_scripts() {
     wp_enqueue_script( 'ri_custom_global_scripts' );
     wp_register_style( 'font-awesome-pro', get_stylesheet_directory_uri() . '/fontawesome/css/all.css' );
     wp_register_style( 'model-styles', get_stylesheet_directory_uri() . '/css/model-styles.css' );
+    wp_register_style( 'test-styles', get_stylesheet_directory_uri() . '/css/test.css' );
     wp_register_script( 'bootstrap-scripts', get_template_directory_uri() . '/js/bootstrap.min.js', array(), '', true );
 	wp_register_script( 'model-scripts', get_template_directory_uri() . '/js/model-scripts.js', array('bootstrap-scripts'), '', true );
 
@@ -206,10 +208,15 @@ function source_tech_scripts() {
 
 	if (is_page(726) || is_page(1234)) {
 		wp_enqueue_style( 'ri_custom_rfq_styles', get_stylesheet_directory_uri() . '/css/ri-rfq-styles.css' );
-		wp_enqueue_script( 'ri_custom_rfq_scripts' );
-	}
+        wp_enqueue_script( 'ri_custom_rfq_scripts' );
+    }
+    if (is_page(2415)) {
+        wp_enqueue_style( 'test-styles', get_stylesheet_directory_uri() . '/css/test.css' );
+        wp_enqueue_script( 'bootstrap-scripts' );
+    }
 	if (!is_admin()) {
 		wp_enqueue_style('font-awesome-pro');
+		wp_enqueue_style('ri_web_fonts_roboto');
 		wp_enqueue_style('boostrap-styles');
 	}
 }

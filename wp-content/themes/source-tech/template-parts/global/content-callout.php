@@ -1,33 +1,30 @@
 <?php
-$repeater = get_query_var('repeater');
-$repeater_field = get_query_var('repeater_field');
-$orientation = get_query_var('orientation');
-$image = get_query_var('image');
-$heading_main = get_query_var('heading_main');
-$heading_main = get_query_var('heading_main');
-$heading_sub = get_query_var('heading_sub');
-$description = get_query_var('description');
-$link_text = get_query_var('link_text');
-$link_url = get_query_var('link_url');
-?>
+$arg = wp_parse_args($args);
 
-<?php
-$test = get_query_var('test')
-?>
+// Check if callout data is coming from a repeater field
+if ($args['repeater'] && $args['repeater'] === true) {
 
-<header class="masthead">
-    <div class="container-fluid h-100">
-        <div class="wrapper">
-            <div class="row align-items-center h-100 pt-5">
-                <div class="col-md-12 col-lg-7 z-index-1 aos-init aos-animate pt-4 mt-1" data-aos="fade-right"
-                     data-aos-delay="300">
-                    <h1 class="text-white"><?php echo $test[0]; ?><br>
-                        <span class="font-weight-lighter">Low Prices from Dell &<br>HP.</span></h1>
-                    <p class="text-white">We carry new &amp; refurbished servers, storage & networking equipment
-                        from top brands like Dell, HP and Cisco.</p>
-                    <a href="#what" class="hero-btn">Shop Servers</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
+    if( have_rows($args['custom_field']) ):
+        $callout = '';
+        while ( have_rows($args['custom_field']) ) : the_row();
+
+            // Grab the specific callout from the repeater field
+            if (get_sub_field('page_home_callout_name') === $args['callout_name']) {
+                $orientation_class = $args['text_orientation'] == "left" ? '' : 'justify-content-end';
+                $callout .= '<header class="masthead-callout" style="background-image: url(' . get_sub_field('page_home_callout_image') . ');">
+                            <div class="container-fluid h-100">
+                            <div class="wrapper">';
+                $callout .= '<div class="row align-items-center h-100 py-2 ' . $orientation_class . '">';
+                $callout .= '<div class="col-md-12 col-lg-7 z-index-1 py-5 px-md-3 px-lg-5">';
+                $callout .= '<h1 class="text-white mb-0">' . get_sub_field('page_home_callout_heading_main');
+                $callout .= '<span class="font-weight-lighter block">' . get_sub_field('page_home_callout_heading_sub') . '</span></h1>';
+                $callout .= '<p class="text-white">' . get_sub_field('page_home_callout_description') . '</p>';
+                $callout .= '<a href="' . get_sub_field('page_home_callout_link_url') . '" class="hero-btn">';
+                $callout .= get_sub_field('page_home_callout_link_text') . '</a>';
+                $callout .= '</div></div></div></div></header>';
+            }
+        endwhile;
+        echo $callout;
+    endif;
+}
+?>

@@ -4,8 +4,30 @@ get_header(); ?>
 
 <?php get_template_part('template-parts/global/content', 'hero-split'); ?>
 
-<!-- What We do -->
 <div class="container-fluid content-section">
+    <div class="wrapper">
+        <div class="row">
+            <div class="col">
+                <ul class="list-group list-group-horizontal">
+                    <?php
+                    if( have_rows('page_home_logos') ):
+                        $logos = '';
+                        while ( have_rows('page_home_logos') ) : the_row();
+                            $logos .= '<li class="list-group-item flex-fill no-border">';
+                            $logos .= '<img src="' . get_sub_field('page_home_logos_logo') . '" />';
+                            $logos .= '</li>';
+                        endwhile;
+                        echo $logos;
+                    endif;
+                    ?>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- What We do -->
+<div class="container-fluid content-section bg-color bg-light-blue">
     <div class="wrapper">
         <div class="row justify-content-center content-heading">
             <div class="col-md-8 text-center">
@@ -40,21 +62,17 @@ get_header(); ?>
     </div>
 </div>
 
-<header class="masthead">
-    <div class="container-fluid h-100">
-        <div class="wrapper">
-            <div class="row align-items-center h-100 pt-5">
-                <div class="col-md-12 col-lg-7 z-index-1 aos-init aos-animate pt-4 mt-1" data-aos="fade-right"
-                     data-aos-delay="300">
-                    <h1 class="text-white mb-0">New &amp; Refurbished Servers<br>
-                        <span class="font-weight-lighter">Dell PowerEdge & HP ProLiant</span></h1>
-                    <p class="text-white">Save thousands on top brands of new & refurbished servers + <br>all servers comes with a FREE 2-year warranty. </p>
-                    <a href="/refurbished-servers/" class="hero-btn">Shop Servers</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
+<?php
+$server_callout_args = array(
+    'repeater' => true,
+    'custom_field' => 'page_home_callouts',
+    'callout_name' => 'Servers',
+    'text_orientation' => 'left'
+
+);
+
+get_template_part('template-parts/global/content-callout', null, $server_callout_args);
+?>
 
 <!-- Testimonial -->
 <div class="container-fluid content-section">
@@ -68,61 +86,72 @@ get_header(); ?>
     </div>
 </div>
 
-<header class="masthead masthead-2">
-    <div class="container-fluid h-100">
-        <div class="wrapper">
-            <div class="row align-items-center justify-content-end h-100 pt-5">
-                <div class="col-md-12 col-lg-7 z-index-1 aos-init aos-animate pt-4 mt-1" data-aos="fade-right"
-                     data-aos-delay="300">
-                    <h1 class="text-white mb-0">Cisco Network Equipment<br>
-                        <span class="font-weight-lighter">Routers & Switches</span></h1>
-                    <p class="text-white">We have you covered for your new and refurbished Cisco equipment purchases, upgrades and maintenance needs.</p>
-                    <a href="/product-category/networking/" class="hero-btn">Shop Cisco</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
+<?php
+$server_callout_args = array(
+    'repeater' => true,
+    'custom_field' => 'page_home_callouts',
+    'callout_name' => 'Networking',
+    'text_orientation' => 'right'
+
+);
+
+get_template_part('template-parts/global/content-callout', null, $server_callout_args);
+?>
+
+<?php get_template_part('template-parts/global/content-faq'); ?>
+
+<!--Service-->
+<?php
+$server_callout_args = array(
+    'repeater' => true,
+    'custom_field' => 'page_home_callouts',
+    'callout_name' => 'Service',
+    'text_orientation' => 'left'
+
+);
+
+get_template_part('template-parts/global/content-callout', null, $server_callout_args);
+?>
 
 <div class="container-fluid content-section">
     <div class="wrapper">
         <div class="row justify-content-center content-heading">
             <div class="col-md-8 text-center">
-                <h2 class="section-title">Why SourceTech</h2>
-                <p>Whether you manage a one-person office or an enterprise-level data center, we'll provide exceptional customer service and the lowest possible prices on IT hardware.</p>
+                <h2 class="section-title">3 Easy Ways to Get a Quote</h2>
+                <p>We make ordering Enterprise IT equipment fast and easy. Forget being forced to by what's on the shelf, or having to use complicated shopping carts.</p>
             </div>
         </div>
         <div class="row row-eq-height content-section why-us">
             <div class="col-md-4 text-center content-panels">
                 <div class="card no-border h-100">
                     <div class="card-header no-border bg-blue-light">
-                        <i class="blue shadow py-2 fas fa-award fa-3x"></i>
+                        <i class="blue py-2 fas fa-comments-alt fa-3x"></i>
                     </div>
                     <div class="card-body">
-                        <h4 class="mt-2">Exceptional<br>Service</h4>
-                        <p>We choose to serve, not to sell. Whether you need to place a large order, or help with a configuration detail - our team is here to help.</p>
+                        <h4 class="mt-2">Chat</h4>
+                        <p>Chat with real humans 24x7. Our IT hardware equipment experts are 100% U.S.A. based and we never user bots.</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 text-center content-panels">
                 <div class="card no-border h-100">
                     <div class="card-header no-border bg-blue-light">
-                        <i class="blue shadow py-2 fas fa-file-invoice-dollar fa-3x"></i>
+                        <i class="blue py-2 fas fa-phone fa-3x"></i>
                     </div>
                     <div class="card-body">
-                        <h4 class="mt-2">Lowest<br>Prices</h4>
-                        <p>Our servers, storage & networking equipment are factory tested, configured to order & often costs thousands less than the OEM.</p>
+                        <h4 class="mt-2">Call</h4>
+                        <p>Our sales and support staff have the expert knowledge required to help you find the right products and services.</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 text-center content-panels">
                 <div class="card no-border h-100">
                     <div class="card-header no-border bg-blue-light">
-                        <i class="blue shadow py-2 fas fa-server fa-3x"></i>
+                        <i class="blue py-2 fas fa-envelope-open-text fa-3x"></i>
                     </div>
                     <div class="card-body">
-                        <h4 class="mt-2">Unbeatable<br>Selection</h4>
-                        <p>Most resellers push what they have on the shelf - not us. We custom-build every server to order so you only get what you need. </p>
+                        <h4 class="mt-2">Email</h4>
+                        <p>We answer most emails within one business day. Send us a competitor's quote and we'll try and beat their price!</p>
                     </div>
                 </div>
             </div>
@@ -130,27 +159,10 @@ get_header(); ?>
     </div>
 </div>
 
-<!--Service-->
-<header class="masthead masthead-3">
-    <div class="container-fluid h-100">
-        <div class="wrapper">
-            <div class="row align-items-center h-100 pt-5">
-                <div class="col-md-12 col-lg-7 z-index-1 aos-init aos-animate pt-4 mt-1" data-aos="fade-right"
-                     data-aos-delay="300">
-                    <h1 class="text-white mb-0">24x7 Service & Support<br>
-                        <span class="font-weight-lighter">Nation-wide Network</span></h1>
-                    <p class="text-white">With our support services, your equipment can be serviced by our certified IT personnel 24 hours a day, 365 days a year</p>
-                    <a href="/maintenance-installation/" class="hero-btn">Learn More</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
 <!-- Testimonial -->
 <div class="container-fluid content-section">
-    <div class="wrapper">
-        <div class="row justify-content-center my-5">
+    <div class="wrapper ">
+        <div class="row justify-content-center py-5 my-5">
             <div class="col-md-7 text-center">
                 <p class="testimonial">"Excellent service! I've been very pleased with the quality of service and hardware I've received.  Shipping the equipment to Canada, all custom paperwork was well managed. I'd highly recommend them!"</p>
                 <p class="author mb-0">- Michel Bouchard</p>
